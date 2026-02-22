@@ -42,7 +42,7 @@ async function sendMessage() {
   addMessage("Thinking...", "bot");
 
   try {
-    const response = await fetch("/chat", {
+    const response = await fetch("https://brainrack.onrender.com", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -85,7 +85,7 @@ if (generateBtn) {
     imageResult.innerHTML = "<p class='loading'>Generating futuristic image... ⚡</p>";
 
     try {
-      const res = await fetch("/generate-image", {
+      const res = await fetch("https://brainrack.onrender.com/generate-image", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
