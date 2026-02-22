@@ -2,7 +2,6 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-const fetch = require("node-fetch"); // if using Node.js 18+, optional
 
 const app = express();
 
@@ -10,7 +9,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-// ---------------- Routes ----------------
 app.get("/", (req, res) => {
   res.send("Brainrack Backend Working 🚀");
 });
@@ -22,7 +20,7 @@ app.post("/chat", async (req, res) => {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
+        "Authorization": Bearer ${process.env.OPENROUTER_KEY},
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -50,17 +48,21 @@ app.post("/chat", async (req, res) => {
   }
 });
 
+app.listen(3000, () => {
+
 app.post("/generate-image", async (req, res) => {
   try {
     const prompt = req.body.prompt;
-    if (!prompt) return res.status(400).json({ error: "No prompt provided" });
+    if (!prompt) {
+      return res.status(400).json({ error: "No prompt provided" });
+    }
 
     console.log("Generating image for:", prompt);
 
     const response = await fetch("https://api.openrouter.ai/v1/images/generations", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "Authorization": Bearer ${process.env.OPENROUTER_API_KEY},
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -80,7 +82,9 @@ app.post("/generate-image", async (req, res) => {
 
     const imageUrl = data.data?.[0]?.url;
 
-    if (!imageUrl) return res.status(500).json({ error: "No image returned" });
+    if (!imageUrl) {
+      return res.status(500).json({ error: "No image returned" });
+    }
 
     res.json({ imageUrl });
 
@@ -90,8 +94,5 @@ app.post("/generate-image", async (req, res) => {
   }
 });
 
-// ---------------- Start Server ----------------
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Brainrack Backend Running on Port ${PORT} 🔥`);
+  console.log("Brainrack Backend Running on Port 3000 🔥");
 });
