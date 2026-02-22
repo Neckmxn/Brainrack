@@ -2,7 +2,9 @@ const chatBox = document.getElementById("chat-box");
 const inputField = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 
-sendBtn.addEventListener("click", sendMessage);
+if (sendBtn) {
+  sendBtn.addEventListener("click", sendMessage);
+}
 
 inputField.addEventListener("keypress", function (e) {
   if (e.key === "Enter") {
@@ -16,6 +18,18 @@ function addMessage(text, className) {
   messageDiv.innerText = text;
   chatBox.appendChild(messageDiv);
   chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+const bg = document.getElementById("animated-bg");
+
+for (let i = 0; i < 50; i++) {
+  const circuit = document.createElement("div");
+  circuit.className = "circuit";
+  circuit.style.left = Math.random() * window.innerWidth + "px";
+  circuit.style.height = 50 + Math.random() * 150 + "px";
+  circuit.style.animationDuration = 5 + Math.random() * 10 + "s";
+  circuit.style.opacity = Math.random();
+  bg.appendChild(circuit);
 }
 
 async function sendMessage() {
@@ -52,4 +66,47 @@ async function sendMessage() {
     chatBox.lastChild.remove();
     addMessage("Server error. Check backend.", "bot");
   }
+}
+// ================= IMAGE GENERATION PAGE =================
+
+const generateBtn = document.getElementById("generate-image-btn");
+
+if (generateBtn) {
+  generateBtn.addEventListener("click", async () => {
+
+    console.log("Image button clicked");
+
+    const imagePrompt = document.getElementById("image-prompt");
+    const imageResult = document.getElementById("image-result");
+
+    const prompt = imagePrompt.value.trim();
+    if (!prompt) return;
+
+    imageResult.innerHTML = "<p class='loading'>Generating futuristic image... ⚡</p>";
+
+    try {
+      const res = await fetch("/generate-image", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ prompt })
+      });
+
+      const data = await res.json();
+
+      if (data.imageUrl) {
+        imageResult.innerHTML = `
+          <img src="${data.imageUrl}" class="generated-image"/>
+        `;
+      } else {
+        imageResult.innerHTML = "Image generation failed ❌";
+      }
+
+    } catch (error) {
+      console.error(error);
+      imageResult.innerHTML = "Server error ❌";
+    }
+
+  });
 }
