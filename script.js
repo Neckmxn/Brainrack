@@ -24,14 +24,16 @@ if (sendBtn && inputField && chatBox) {
 
 const bg = document.getElementById("animated-bg");
 
-for (let i = 0; i < 50; i++) {
-  const circuit = document.createElement("div");
-  circuit.className = "circuit";
-  circuit.style.left = Math.random() * window.innerWidth + "px";
-  circuit.style.height = 50 + Math.random() * 150 + "px";
-  circuit.style.animationDuration = 5 + Math.random() * 10 + "s";
-  circuit.style.opacity = Math.random();
-  bg.appendChild(circuit);
+if (bg) {
+  for (let i = 0; i < 50; i++) {
+    const circuit = document.createElement("div");
+    circuit.className = "circuit";
+    circuit.style.left = Math.random() * window.innerWidth + "px";
+    circuit.style.height = 50 + Math.random() * 150 + "px";
+    circuit.style.animationDuration = 5 + Math.random() * 10 + "s";
+    circuit.style.opacity = Math.random();
+    bg.appendChild(circuit);
+  }
 }
 
 async function sendMessage() {
