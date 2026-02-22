@@ -42,7 +42,7 @@ async function sendMessage() {
   addMessage("Thinking...", "bot");
 
   try {
-    const response = await fetch("https://brainrack.onrender.com", {
+    const response = await fetch("https://brainrack.onrender.com/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
