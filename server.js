@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const fetch = require("node-fetch"); // if using Node.js 18+, optional
 
 const app = express();
 
@@ -9,6 +10,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
+// ---------------- Routes ----------------
 app.get("/", (req, res) => {
   res.send("Brainrack Backend Working 🚀");
 });
@@ -48,14 +50,10 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-
 app.post("/generate-image", async (req, res) => {
   try {
     const prompt = req.body.prompt;
-    if (!prompt) {
-      return res.status(400).json({ error: "No prompt provided" });
-    }
+    if (!prompt) return res.status(400).json({ error: "No prompt provided" });
 
     console.log("Generating image for:", prompt);
 
@@ -82,9 +80,7 @@ app.post("/generate-image", async (req, res) => {
 
     const imageUrl = data.data?.[0]?.url;
 
-    if (!imageUrl) {
-      return res.status(500).json({ error: "No image returned" });
-    }
+    if (!imageUrl) return res.status(500).json({ error: "No image returned" });
 
     res.json({ imageUrl });
 
@@ -94,5 +90,8 @@ app.post("/generate-image", async (req, res) => {
   }
 });
 
-  console.log("Brainrack Backend Running on Port 3000 🔥");
+// ---------------- Start Server ----------------
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Brainrack Backend Running on Port ${PORT} 🔥`);
 });
