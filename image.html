@@ -2,25 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Brainrack - AI Image Generator</title>
+  <title>Brainrack AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
+  <!-- Navigation -->
   <div class="navbar">
     <a href="index.html">⬅ Back to Chat</a>
   </div>
 
+  <!-- Page Title -->
   <h1>Brainrack AI Image Generator</h1>
 
+  <!-- Image Generator Container -->
   <div class="image-page-container">
-    <input type="text" id="image-prompt" placeholder="Describe your image...">
-    <button id="generate-image-btn">Generate Image</button>
-    <img id="image-result">
+
+    <input 
+      type="text" 
+      id="image-prompt" 
+      placeholder="Describe your image..."
+      autocomplete="off"
+    >
+
+    <button id="generate-image-btn">
+      Generate Image ⚡
+    </button>
+
+    <!-- Image Result Will Appear Here -->
+    <div id="image-result"></div>
+
   </div>
 
-  <div id="image-result"></div>
+  <!-- Script Must Be At Bottom -->
+  <script src="script.js"></script>
 
 </body>
-  <script src="script.js"></script>
 </html>
