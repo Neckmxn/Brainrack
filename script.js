@@ -2,22 +2,24 @@ const chatBox = document.getElementById("chat-box");
 const inputField = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 
-if (sendBtn) {
+if (sendBtn && inputField && chatBox) {
+
   sendBtn.addEventListener("click", sendMessage);
-}
 
-inputField.addEventListener("keypress", function (e) {
-  if (e.key === "Enter") {
-    sendMessage();
+  inputField.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  });
+
+  function addMessage(text, className) {
+    const messageDiv = document.createElement("div");
+    messageDiv.classList.add("message", className);
+    messageDiv.innerText = text;
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
   }
-});
 
-function addMessage(text, className) {
-  const messageDiv = document.createElement("div");
-  messageDiv.classList.add("message", className);
-  messageDiv.innerText = text;
-  chatBox.appendChild(messageDiv);
-  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 const bg = document.getElementById("animated-bg");
