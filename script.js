@@ -114,3 +114,17 @@ if (generateBtn) {
 
   });
 }
+
+// Three Dot Toggle
+function toggleMenu() {
+  const menu = document.getElementById("dropdownMenu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
+document.addEventListener("click", function (event) {
+  const menu = document.getElementById("dropdownMenu");
+  const icon = document.querySelector(".menu-icon");
+
+  if (!icon.contains(event.target) && !menu.contains(event.target)) {
+    menu.style.display = "none";
+  }
+});

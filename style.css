@@ -232,3 +232,54 @@ input[type="text"]:focus, textarea:focus {
   font-size: 18px;
   color: #0fffb0;
 }
+
+/* ================= THREE DOT MENU ================= */
+
+.menu-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2000;
+}
+
+.menu-icon {
+  font-size: 30px;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: #0fffb0;
+  box-shadow: 0 0 15px #0fffb0;
+  transition: 0.3s ease;
+}
+
+.menu-icon:hover {
+  background: #0fffb0;
+  color: black;
+  transform: scale(1.1);
+}
+
+.dropdown-menu {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: rgba(0,0,0,0.9);
+  border-radius: 15px;
+  overflow: hidden;
+  min-width: 160px;
+  box-shadow: 0 0 25px rgba(0,255,255,0.5);
+}
+
+.dropdown-menu a {
+  padding: 12px 15px;
+  text-decoration: none;
+  color: #0fffb0;
+  transition: 0.3s;
+}
+
+.dropdown-menu a:hover {
+  background: #0fffb0;
+  color: black;
+}

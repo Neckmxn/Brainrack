@@ -6,15 +6,30 @@
 </head>
 <body>
 
-<div class="container">
-<div id="animated-bg"></div>
-  <div class="header">Brainrack AI</div>
+<!-- Three Dot Menu -->
+<div class="menu-container">
+  <div class="menu-icon" onclick="toggleMenu()">&#8942;</div>
 
-<div class="nav-link">
-  <a href="image.html">
-    <button>Go to Image Generator</button>
-  </a>
+  <div class="dropdown-menu" id="dropdownMenu">
+    <a href="index.html">Chat</a>
+    <a href="image.html">Image</a>
+    <a href="video.html">Video</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="about.html">About</a>
+  </div>
 </div>
+
+<div class="container">
+
+  <div id="animated-bg"></div>
+
+  <h1>Brainrack AI</h1>
+
+  <div class="nav-link">
+    <a href="image.html">
+      <button>Go to Image Generator</button>
+    </a>
+  </div>
 
   <div id="chat-box" class="chat-box"></div>
 
@@ -22,8 +37,10 @@
     <input type="text" id="user-input" placeholder="Ask anything...">
     <button id="send-btn">Send</button>
   </div>
+
 </div>
 
 <script src="script.js"></script>
+
 </body>
 </html>
