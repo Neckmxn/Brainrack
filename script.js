@@ -82,7 +82,7 @@ if (generateBtn) {
     const prompt = imagePrompt.value.trim();
     if (!prompt) return;
 
-    imageResult.innerHTML = "<p class='loading'>Generating futuristic image... ⚡</p>";
+    imageResult.innerHTML = "<p class='loading'>Generating the image...⚡</p>";
 
     try {
       const res = await fetch("https://brainrack.onrender.com/generate-image", {
