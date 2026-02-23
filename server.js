@@ -54,7 +54,7 @@ app.post("/generate-image", async (req, res) => {
 
     console.log("Generating image for:", prompt);
 
-    const response = await fetch("https://api.openrouter.ai/v1/images/generations", {
+    const response = await fetch("https://api.openrouter.ai/api/v1/images/generations", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
@@ -64,6 +64,7 @@ app.post("/generate-image", async (req, res) => {
         model: "openai/dall-e-3",
         prompt: prompt,
         size: "1024x1024"
+        n: 1
       })
     });
 
