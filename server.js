@@ -65,40 +65,32 @@ app.post("/generate-image", async (req, res) => {
   try {
     const prompt = req.body.prompt;
 
+    if (!prompt) {
+      return res.status(400).json({ error: "No prompt provided" });
+    }
+
     const response = await fetch(
-      "https://openrouter.ai/api/v1/images/generations",
+      `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024`,
       {
-        method: "POST",
         headers: {
-          "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": "https://brainrack.onrender.com",
-          "X-Title": "Brainrack"
-        },
-        body: JSON.stringify({
-          model: "black-forest-labs/flux-1-schnell",
-          prompt: prompt,
-          size: "1024x1024"
-        })
+          Authorization: `Bearer ${process.env.POLLINATIONS_API_KEY}`
+        }
       }
     );
 
-    const data = await response.json();
-
-    console.log("IMAGE STATUS:", response.status);
-    console.log("IMAGE RAW:", data);
-
     if (!response.ok) {
-      return res.status(response.status).json(data);
+      const errorText = await response.text();
+      return res.status(response.status).send(errorText);
     }
 
-    // ✅ Send image URL back to frontend
+    const imageBuffer = await response.buffer();
+    const base64Image = imageBuffer.toString("base64");
+
     res.json({
-      image: data.data[0].url
+      image: `data:image/png;base64,${base64Image}`
     });
 
   } catch (error) {
-    console.error("IMAGE ERROR:", error);
     res.status(500).json({ error: error.message });
   }
 });
