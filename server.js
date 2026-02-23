@@ -58,7 +58,7 @@ app.post("/generate-image", async (req, res) => {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
         "HTTP-Referer": "https://brainrack.onrender.com",
         "X-Title": "Brainrack"
       },
