@@ -43,19 +43,23 @@ app.post("/chat", async (req, res) => {
       }
     );
 
-    const data = await response.json();
+    const raw = await response.text();
+
+    console.log("CHAT STATUS:", response.status);
+    console.log("CHAT RAW:", raw);
 
     if (!response.ok) {
-      console.log("Chat Error:", data);
-      return res.status(response.status).json(data);
+      return res.status(response.status).send(raw);
     }
 
+    const data = JSON.parse(raw);
+
     res.json({
-      reply: data.choices[0].message.content
+      reply: data.choices?.[0]?.message?.content || "No reply"
     });
 
   } catch (error) {
-    console.error("Chat Server Error:", error);
+    console.error("Chat error:", error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -82,6 +86,7 @@ app.post("/generate-image", async (req, res) => {
         method: "POST",
         headers: {
           Authorization: `Bearer ${process.env.STABILITY_API_KEY}`,
+          Accept: "image/png", // 🔥 IMPORTANT FIX
           ...formData.getHeaders()
         },
         body: formData
@@ -94,8 +99,8 @@ app.post("/generate-image", async (req, res) => {
       return res.status(response.status).send(errorText);
     }
 
-    const imageBuffer = await response.arrayBuffer();
-    const base64Image = Buffer.from(imageBuffer).toString("base64");
+    const imageBuffer = await response.buffer(); // ✅ better for node-fetch v2
+    const base64Image = imageBuffer.toString("base64");
 
     res.json({
       image: `data:image/png;base64,${base64Image}`
