@@ -25,7 +25,7 @@ app.post("/chat", async (req, res) => {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
         "Content-Type": "application/json",
         "HTTP-Referer": "https://brainrack.onrender.com",
         "X-Title": "Brainrack"
@@ -79,7 +79,7 @@ app.post("/generate-image", async (req, res) => {
         method: "POST",
         headers: {
           Authorization: `Bearer ${process.env.STABILITY_API_KEY}`,
-          Accept: "image/png", // 🔥 IMPORTANT FIX
+          Accept: "image/*",   // 🔥 THIS IS THE FIX
           ...formData.getHeaders()
         },
         body: formData
@@ -92,7 +92,7 @@ app.post("/generate-image", async (req, res) => {
       return res.status(response.status).send(errorText);
     }
 
-    const imageBuffer = await response.buffer(); // ✅ better for node-fetch v2
+    const imageBuffer = await response.buffer();
     const base64Image = imageBuffer.toString("base64");
 
     res.json({
