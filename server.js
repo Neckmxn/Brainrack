@@ -69,25 +69,10 @@ app.post("/generate-image", async (req, res) => {
       return res.status(400).json({ error: "No prompt provided" });
     }
 
-    const response = await fetch(
-      `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.POLLINATIONS_API_KEY}`
-        }
-      }
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      return res.status(response.status).send(errorText);
-    }
-
-    const imageBuffer = await response.buffer();
-    const base64Image = imageBuffer.toString("base64");
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
 
     res.json({
-      image: `data:image/png;base64,${base64Image}`
+      image: imageUrl
     });
 
   } catch (error) {
