@@ -74,7 +74,7 @@ app.post("/generate-image", async (req, res) => {
       {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
           "Content-Type": "application/json",
           "HTTP-Referer": "https://brainrack.onrender.com",
           "X-Title": "Brainrack"
@@ -87,7 +87,8 @@ app.post("/generate-image", async (req, res) => {
       }
     );
 
-    const data = await response.json();
+    const text = await response.text();
+    console.log("IMAGE RAW RESPONSE:", text);
 
     console.log("IMAGE STATUS:", response.status);
     console.log("IMAGE RAW:", JSON.stringify(data, null, 2));
