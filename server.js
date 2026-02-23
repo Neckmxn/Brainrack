@@ -69,42 +69,16 @@ app.post("/generate-image", async (req, res) => {
       return res.status(400).json({ error: "No prompt provided" });
     }
 
-    const formData = new FormData();
-    formData.append("prompt", prompt);
-    formData.append("output_format", "png");
-
-    const response = await fetch(
-      "https://api.stability.ai/v2beta/stable-image/generate/sd3",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.STABILITY_API_KEY}`,
-          Accept: "image/*",   // 🔥 THIS IS THE FIX
-          ...formData.getHeaders()
-        },
-        body: formData
-      }
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.log("Stability Error:", errorText);
-      return res.status(response.status).send(errorText);
-    }
-
-    const imageBuffer = await response.buffer();
-    const base64Image = imageBuffer.toString("base64");
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
 
     res.json({
-      image: `data:image/png;base64,${base64Image}`
+      image: imageUrl
     });
 
   } catch (error) {
-    console.error("Image generation error:", error);
     res.status(500).json({ error: error.message });
   }
 });
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT} 🔥`);
