@@ -65,10 +65,6 @@ app.post("/generate-image", async (req, res) => {
   try {
     const prompt = req.body.prompt;
 
-    if (!prompt) {
-      return res.status(400).json({ error: "No prompt provided" });
-    }
-
     const response = await fetch(
       "https://openrouter.ai/api/v1/images/generations",
       {
@@ -87,27 +83,27 @@ app.post("/generate-image", async (req, res) => {
       }
     );
 
-    const text = await response.text();
-    console.log("IMAGE RAW RESPONSE:", text);
+    const data = await response.json();
 
     console.log("IMAGE STATUS:", response.status);
-    console.log("IMAGE RAW:", JSON.stringify(data, null, 2));
+    console.log("IMAGE RAW:", data);
 
     if (!response.ok) {
       return res.status(response.status).json(data);
     }
 
+    // ✅ Send image URL back to frontend
     res.json({
       image: data.data[0].url
     });
 
   } catch (error) {
-    console.error("Image error:", error);
+    console.error("IMAGE ERROR:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, () =
   console.log(`Server running on port ${PORT} 🔥`);
 });
