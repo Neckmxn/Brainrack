@@ -52,24 +52,27 @@ app.post("/generate-image", async (req, res) => {
       return res.status(400).json({ error: "No prompt provided" });
     }
 
-    const response = await fetch(
-      "https://openrouter.ai/api/v1/images/generations",
-      {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": "https://brainrack.onrender.com",
-          "X-Title": "Brainrack"
-        },
-        body: JSON.stringify({
-          model: "openai/dall-e-3",
-          prompt: prompt,
-          size: "1024x1024",
-          n: 1
-        })
-      }
-    );
+const response = await fetch(
+  "https://openrouter.ai/api/v1/chat/completions",
+  {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
+      "Content-Type": "application/json",
+      "HTTP-Referer": "https://brainrack.onrender.com",
+      "X-Title": "Brainrack"
+    },
+    body: JSON.stringify({
+      model: "stability-ai/sdxl",
+      messages: [
+        {
+          role: "user",
+          content: prompt
+        }
+      ]
+    })
+  }
+);
 
     // 🔥 IMPORTANT — DO NOT PARSE JSON YET
     const raw = await response.text();
