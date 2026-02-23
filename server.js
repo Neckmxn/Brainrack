@@ -63,7 +63,7 @@ const response = await fetch(
       "X-Title": "Brainrack"
     },
     body: JSON.stringify({
-      model: "stability-ai/sdxl",
+      model: "openai/dall-e-3",
       messages: [
         {
           role: "user",
