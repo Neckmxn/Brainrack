@@ -20,43 +20,36 @@ app.get("/", (req, res) => {
 
 app.post("/chat", async (req, res) => {
   try {
-    const message = req.body.message;
+    const userMessage = req.body.message;
 
-    if (!message) {
-      return res.status(400).json({ error: "No message provided" });
-    }
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://brainrack.onrender.com",
+        "X-Title": "Brainrack"
+      },
+      body: JSON.stringify({
+        model: "openai/gpt-3.5-turbo",
+        messages: [
+          { role: "user", content: userMessage }
+        ]
+      })
+    });
 
-    const response = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": "https://brainrack.onrender.com",
-          "X-Title": "Brainrack"
-        },
-        body: JSON.stringify({
-          model: "openai/gpt-3.5-turbo",
-          messages: [{ role: "user", content: message }]
-        })
-      }
-    );
-
-    const raw = await response.text();
+    const data = await response.json();
 
     console.log("CHAT STATUS:", response.status);
-    console.log("CHAT RAW:", raw);
+    console.log("CHAT RAW:", data);
 
     if (!response.ok) {
-      return res.status(response.status).send(raw);
+      return res.status(response.status).json(data);
     }
 
-    const data = JSON.parse(raw);
+    const aiReply = data.choices[0].message.content;
 
-    res.json({
-      reply: data.choices?.[0]?.message?.content || "No reply"
-    });
+    res.json({ reply: aiReply });
 
   } catch (error) {
     console.error("Chat error:", error);
