@@ -58,14 +58,13 @@ async function sendMessage() {
 
     chatBox.lastChild.remove();
 
-    if (Array.isArray(data)) {
-      addMessage(data[0]?.generated_text || "No response", "bot");
+    if (data.reply) {
+       addMessage(data.reply, "bot");
     } else if (data.error) {
-      addMessage("Error: " + data.error, "bot");
+       addMessage("Error: " + data.error, "bot");
     } else {
-      addMessage("No response from AI.", "bot");
-    }
-
+       addMessage("No response from AI.", "bot");
+}
   } catch (error) {
     chatBox.lastChild.remove();
     addMessage("Server error. Check backend.", "bot");
@@ -99,10 +98,10 @@ if (generateBtn) {
 
       const data = await res.json();
 
-      if (data.imageUrl) {
-        imageResult.innerHTML = `
-          <img src="${data.imageUrl}" class="generated-image"/>
-        `;
+      if (data.image) {
+         imageResult.innerHTML = `
+            <img src="${data.image}" class="generated-image"/>
+      `;
       } else {
         imageResult.innerHTML = "Image generation failed ❌";
       }
