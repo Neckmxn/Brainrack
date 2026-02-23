@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const fetch = require("node-fetch");
 
 const app = express();
 
@@ -8,79 +9,95 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-// Test route
 app.get("/", (req, res) => {
-  res.send("Brainrack Backend Working 🚀");
+  res.send("Brainrack Backend Running 🚀");
 });
 
-// Chat route
+/* ===========================
+   CHAT ROUTE (OpenRouter)
+=========================== */
+
 app.post("/chat", async (req, res) => {
   try {
-    const userMessage = req.body.message;
+    const message = req.body.message;
 
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "openai/gpt-3.5-turbo",
-        messages: [{ role: "user", content: userMessage }]
-      })
-    });
+    if (!message) {
+      return res.status(400).json({ error: "No message provided" });
+    }
+
+    const response = await fetch(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://brainrack.onrender.com",
+          "X-Title": "Brainrack"
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-3.5-turbo",
+          messages: [{ role: "user", content: message }]
+        })
+      }
+    );
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.log("OpenRouter Error:", data);
-      return res.status(400).json({ error: "AI request failed", details: data });
+      console.log("Chat Error:", data);
+      return res.status(response.status).json(data);
     }
 
-    res.json([{ generated_text: data.choices[0].message.content }]);
+    res.json({
+      reply: data.choices[0].message.content
+    });
+
   } catch (error) {
-    console.error("Server Error:", error);
-    res.status(500).json({ error: "Server crashed" });
+    console.error("Chat Server Error:", error);
+    res.status(500).json({ error: error.message });
   }
 });
 
-// Image generation route
+/* ===========================
+   IMAGE ROUTE (Stability AI)
+=========================== */
+
 app.post("/generate-image", async (req, res) => {
   try {
     const prompt = req.body.prompt;
+
     if (!prompt) {
       return res.status(400).json({ error: "No prompt provided" });
     }
 
-const response = await fetch(
-  "https://openrouter.ai/api/v1/chat/completions",
-  {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
-      "Content-Type": "application/json",
-      "HTTP-Referer": "https://brainrack.onrender.com",
-      "X-Title": "Brainrack"
-    },
-    body: JSON.stringify({
-      model: "openai/dall-e-3",
-      messages: [
-        {
-          role: "user",
-          content: prompt
-        }
-      ]
-    })
-  }
-);
+    const response = await fetch(
+      "https://api.stability.ai/v2beta/stable-image/generate/sd3",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.STABILITY_API_KEY}`,
+          Accept: "image/*"
+        },
+        body: new URLSearchParams({
+          prompt: prompt,
+          output_format: "png"
+        })
+      }
+    );
 
-    // 🔥 IMPORTANT — DO NOT PARSE JSON YET
-    const raw = await response.text();
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.log("Stability Error:", errorText);
+      return res.status(response.status).send(errorText);
+    }
 
-    console.log("STATUS:", response.status);
-    console.log("RAW RESPONSE:", raw);
+    const imageBuffer = await response.arrayBuffer();
+    const base64Image = Buffer.from(imageBuffer).toString("base64");
 
-    return res.status(response.status).send(raw);
+    res.json({
+      image: `data:image/png;base64,${base64Image}`
+    });
 
   } catch (error) {
     console.error("Image generation error:", error);
@@ -88,7 +105,7 @@ const response = await fetch(
   }
 });
 
-// Start server
-app.listen(3000, () => {
-  console.log("Brainrack Backend Running on Port 3000 🔥");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT} 🔥`);
 });
