@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const FormData = require("form-data");
 const fetch = require("node-fetch");
 
 const app = express();
@@ -71,18 +72,19 @@ app.post("/generate-image", async (req, res) => {
       return res.status(400).json({ error: "No prompt provided" });
     }
 
+    const formData = new FormData();
+    formData.append("prompt", prompt);
+    formData.append("output_format", "png");
+
     const response = await fetch(
       "https://api.stability.ai/v2beta/stable-image/generate/sd3",
       {
         method: "POST",
         headers: {
           Authorization: `Bearer ${process.env.STABILITY_API_KEY}`,
-          Accept: "image/*"
+          ...formData.getHeaders()
         },
-        body: new URLSearchParams({
-          prompt: prompt,
-          output_format: "png"
-        })
+        body: formData
       }
     );
 
