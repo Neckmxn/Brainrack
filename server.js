@@ -63,8 +63,8 @@ app.post("/generate-image", async (req, res) => {
       body: JSON.stringify({
         model: "openai/dall-e-3",
         prompt: prompt,
-        size: "1024x1024"
-        n: 1
+        size: "1024x1024",
+        n : 1
       })
     });
 
