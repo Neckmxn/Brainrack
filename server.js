@@ -59,12 +59,14 @@ app.post("/generate-image", async (req, res) => {
       headers: {
         "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
         "Content-Type": "application/json"
+        "HTTP-Referer": "https://brainrack.onrender.com",
+        "X-Title": "Brainrack"
       },
       body: JSON.stringify({
         model: "openai/dall-e-3",
         prompt: prompt,
         size: "1024x1024",
-        n : 1
+        n: 1
       })
     });
 
