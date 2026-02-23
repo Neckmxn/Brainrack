@@ -54,10 +54,10 @@ app.post("/generate-image", async (req, res) => {
 
     console.log("Generating image for:", prompt);
 
-    const response = await fetch("https://api.openrouter.ai/api/v1/images/generations", {
+    const response = await fetch("https://openrouter.ai/api/v1/images/generations", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
