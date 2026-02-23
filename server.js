@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const FormData = require("form-data");
 const fetch = require("node-fetch");
 
 const app = express();
@@ -15,70 +14,119 @@ app.get("/", (req, res) => {
 });
 
 /* ===========================
-   CHAT ROUTE (OpenRouter)
+   CHAT ROUTE
 =========================== */
 
 app.post("/chat", async (req, res) => {
   try {
-    const userMessage = req.body.message;
+    if (!process.env.OPENROUTER_KEY) {
+      return res.status(500).json({ error: "API key not found" });
+    }
 
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
-        "Content-Type": "application/json",
-        "HTTP-Referer": "https://brainrack.onrender.com",
-        "X-Title": "Brainrack"
-      },
-      body: JSON.stringify({
-        model: "openai/gpt-3.5-turbo",
-        messages: [
-          { role: "user", content: userMessage }
-        ]
-      })
-    });
+    const response = await fetch(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://brainrack.onrender.com",
+          "X-Title": "Brainrack"
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-3.5-turbo",
+          messages: [
+            { role: "user", content: req.body.message }
+          ]
+        })
+      }
+    );
 
-    const data = await response.json();
+    const text = await response.text();
 
-    console.log("CHAT STATUS:", response.status);
-    console.log("CHAT RAW:", data);
+    if (!response.headers.get("content-type")?.includes("application/json")) {
+      return res.status(500).json({
+        error: "Non-JSON response from OpenRouter",
+        raw: text.slice(0, 200)
+      });
+    }
+
+    const data = JSON.parse(text);
 
     if (!response.ok) {
       return res.status(response.status).json(data);
     }
 
-    const aiReply = data.choices[0].message.content;
+    res.json({
+      reply: data.choices?.[0]?.message?.content || "No response"
+    });
 
-    res.json({ reply: aiReply });
-
-  } catch (error) {
-    console.error("Chat error:", error);
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
   }
 });
 
 /* ===========================
-   IMAGE ROUTE (Stability AI)
+   IMAGE ROUTE
 =========================== */
 
 app.post("/generate-image", async (req, res) => {
   try {
-    const prompt = req.body.prompt;
-
-    if (!prompt) {
-      return res.status(400).json({ error: "No prompt provided" });
+    if (!process.env.OPENROUTER_KEY) {
+      return res.status(500).json({ error: "API key not found" });
     }
 
-    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
+    const response = await fetch(
+      "https://openrouter.ai/api/v1/images/generations",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://brainrack.onrender.com",
+          "X-Title": "Brainrack"
+        },
+        body: JSON.stringify({
+          model: "black-forest-labs/flux-1-schnell",
+          prompt: req.body.prompt,
+          size: "1024x1024"
+        })
+      }
+    );
+
+    const text = await response.text();
+
+    if (!response.headers.get("content-type")?.includes("application/json")) {
+      return res.status(500).json({
+        error: "Non-JSON response from OpenRouter",
+        raw: text.slice(0, 200)
+      });
+    }
+
+    const data = JSON.parse(text);
+
+    if (!response.ok) {
+      return res.status(response.status).json(data);
+    }
+
+    if (!data.data || !data.data[0]?.url) {
+      return res.status(500).json({ error: "Invalid image response format" });
+    }
 
     res.json({
-      image: imageUrl
+      image: data.data[0].url
     });
 
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
   }
 });
+
+/* ===========================
+   SERVER START
+=========================== */
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
