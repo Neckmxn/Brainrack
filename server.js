@@ -52,38 +52,33 @@ app.post("/generate-image", async (req, res) => {
       return res.status(400).json({ error: "No prompt provided" });
     }
 
-    console.log("Generating image for:", prompt);
+    const response = await fetch(
+      "https://openrouter.ai/api/v1/images/generations",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://brainrack.onrender.com",
+          "X-Title": "Brainrack"
+        },
+        body: JSON.stringify({
+          model: "openai/dall-e-3",
+          prompt: prompt,
+          size: "1024x1024",
+          n: 1
+        })
+      }
+    );
 
-    const response = await fetch("https://openrouter.ai/api/v1/images/generations", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
-        "Content-Type": "application/json",
-        "HTTP-Referer": "https://brainrack.onrender.com",
-        "X-Title": "Brainrack"
-      },
-      body: JSON.stringify({
-        model: "openai/dall-e-3",
-        prompt: prompt,
-        size: "1024x1024",
-        n: 1
-      })
-    });
+    // 🔥 IMPORTANT — DO NOT PARSE JSON YET
+    const raw = await response.text();
 
-    const data = await response.json();
-    console.log("OpenRouter response:", data);
+    console.log("STATUS:", response.status);
+    console.log("RAW RESPONSE:", raw);
 
-    if (!response.ok) {
-      return res.status(500).json({ error: data });
-    }
+    return res.status(response.status).send(raw);
 
-    const imageUrl = data.data?.[0]?.url;
-
-    if (!imageUrl) {
-      return res.status(500).json({ error: "No image returned" });
-    }
-
-    res.json({ imageUrl });
   } catch (error) {
     console.error("Image generation error:", error);
     res.status(500).json({ error: error.message });
