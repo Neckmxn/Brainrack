@@ -65,20 +65,36 @@ app.post("/generate-image", async (req, res) => {
   try {
     const prompt = req.body.prompt;
 
-    if (!prompt) {
-      return res.status(400).json({ error: "No prompt provided" });
+    const response = await fetch("https://openrouter.ai/api/v1/images/generations", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://brainrack.onrender.com",
+        "X-Title": "Brainrack"
+      },
+      body: JSON.stringify({
+        model: "black-forest-labs/flux-1-schnell",
+        prompt: prompt,
+        size: "1024x1024"
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(response.status).json(data);
     }
 
-    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
-
     res.json({
-      image: imageUrl
+      image: data.data[0].url
     });
 
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT} 🔥`);
