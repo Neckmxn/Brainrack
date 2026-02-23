@@ -104,17 +104,16 @@ if (generateBtn) {
     imageResult.innerHTML = "<p class='loading'>Generating image... ⚡</p>";
 
     try {
-      const res = await fetch("https://brainrack.onrender.com/generate-image", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ prompt })
-      });
+const res = await fetch("/generate-image", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ prompt })
+});
 
-      const data = await res.json();
+const blob = await res.blob();
+const imageUrl = URL.createObjectURL(blob);
 
-      console.log("IMAGE RESPONSE:", data);
+imageResult.innerHTML = `<img src="${imageUrl}" class="generated-image"/>`;
 
       if (!res.ok) {
         imageResult.innerHTML =

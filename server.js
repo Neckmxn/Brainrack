@@ -71,56 +71,51 @@ app.post("/chat", async (req, res) => {
    IMAGE ROUTE
 =========================== */
 
+async function generateHFImage(prompt, retries = 3) {
+  const response = await fetch(
+    "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.HF_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        inputs: prompt,
+        options: { wait_for_model: true }
+      }),
+    }
+  );
+
+  if (response.status === 503 && retries > 0) {
+    console.log("Model loading... retrying...");
+    await new Promise(res => setTimeout(res, 5000));
+    return generateHFImage(prompt, retries - 1);
+  }
+
+  return response;
+}
+
 app.post("/generate-image", async (req, res) => {
   try {
-    if (!process.env.OPENROUTER_KEY) {
-      return res.status(500).json({ error: "API key not found" });
+    if (!process.env.HF_TOKEN) {
+      return res.status(500).json({ error: "HF_TOKEN not found" });
     }
 
-    const response = await fetch(
-      "https://openrouter.ai/api/v1/images/generations",
-      {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${process.env.OPENROUTER_KEY}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": "https://brainrack.onrender.com",
-          "X-Title": "Brainrack"
-        },
-        body: JSON.stringify({
-          model: "black-forest-labs/flux-1-schnell",
-          prompt: req.body.prompt,
-          size: "1024x1024"
-        })
-      }
-    );
-
-    const text = await response.text();
-
-    if (!response.headers.get("content-type")?.includes("application/json")) {
-      return res.status(500).json({
-        error: "Non-JSON response from OpenRouter",
-        raw: text.slice(0, 200)
-      });
-    }
-
-    const data = JSON.parse(text);
+    const response = await generateHFImage(req.body.prompt);
 
     if (!response.ok) {
-      return res.status(response.status).json(data);
+      const errorText = await response.text();
+      return res.status(response.status).json({ error: errorText });
     }
 
-    if (!data.data || !data.data[0]?.url) {
-      return res.status(500).json({ error: "Invalid image response format" });
-    }
+    const imageBuffer = await response.arrayBuffer();
 
-    res.json({
-      image: data.data[0].url
-    });
+    res.set("Content-Type", "image/png");
+    res.send(Buffer.from(imageBuffer));
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
