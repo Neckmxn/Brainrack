@@ -1,49 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Brainrack AI</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- Three Dot Menu -->
-<div class="menu-container">
-  <div class="menu-icon" onclick="toggleMenu()">&#8942;</div>
+<!-- ================= SIDEBAR ================= -->
 
-  <div class="dropdown-menu" id="dropdownMenu">
-    <a href="index.html">AI Chat</a>
-    <a href="image.html">Image Generator</a>
-    <a href="document.html">AI Document Solver</a>
-    <a href="video.html">Video Generator</a>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="about.html">About Brainrack</a>
+<div class="sidebar">
+  <div class="logo">Brainrack</div>
+
+  <button onclick="newChat()">+ New Chat</button>
+
+  <div id="historyList" class="history"></div>
+
+  <div class="sidebar-links">
+    <a href="image.html">🎨 Image Generator</a>
+    <a href="document.html">📄 Document Solver</a>
   </div>
 </div>
 
-<div class="container">
+<!-- ================= MAIN ================= -->
 
-  <div id="animated-bg"></div>
+<div class="main">
 
-  <h1>Brainrack AI</h1>
+  <div id="chat-box"></div>
 
-  <div class="nav-link">
-    <a href="image.html">
-      <button>Go to Image Generator</button>
-    </a>
-  </div>
-
-  <div id="chat-box" class="chat-box"></div>
-
-  <div class="input-area">
+  <!-- Fixed Input -->
+  <div class="input-bar">
     <input type="text" id="user-input" placeholder="Ask anything...">
     <button id="send-btn">Send</button>
   </div>
 
 </div>
 
-
-
 <script src="script.js"></script>
-
 </body>
 </html>
