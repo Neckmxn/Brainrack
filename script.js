@@ -19,37 +19,35 @@ function addMessage(text, className) {
 }
 
 async function sendMessage() {
-  const message = inputField.value.trim();
-  if (!message) return;
+  const input = document.getElementById("userInput");
+  const chatBox = document.getElementById("chatBox");
 
-  addMessage(message, "user");
-  inputField.value = "";
+  const userText = input.value;
+  chatBox.innerHTML += `<p><b>You:</b> ${userText}</p>`;
 
-  addMessage("Thinking...", "bot");
+  const response = await fetch("/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: userText })
+  });
 
-  try {
-    const response = await fetch("/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ message })
-    });
+  const data = await response.json();
+  chatBox.innerHTML += `<p><b>AI:</b> ${data.reply}</p>`;
+  input.value = "";
+}
 
-    const data = await response.json();
+async function generateImage() {
+  const prompt = document.getElementById("imagePrompt").value;
+  const imageResult = document.getElementById("imageResult");
 
-    chatBox.lastChild.remove();
+  imageResult.innerHTML = "Generating...";
 
-    if (Array.isArray(data)) {
-      addMessage(data[0]?.generated_text || "No response", "bot");
-    } else if (data.error) {
-      addMessage("Error: " + data.error, "bot");
-    } else {
-      addMessage("No response from AI.", "bot");
-    }
+  const response = await fetch("/image", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt })
+  });
 
-  } catch (error) {
-    chatBox.lastChild.remove();
-    addMessage("Server error. Check backend.", "bot");
-  }
+  const data = await response.json();
+  imageResult.innerHTML = `<img src="${data.image}" width="400"/>`;
 }
