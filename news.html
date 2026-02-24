@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>News - Brainrack</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+  <h2>News</h2>
+  <div id="menuBtn" class="menu-btn">⋮</div>
+</div>
+
+<div style="text-align:center;">
+  <button onclick="loadNews('general')">Latest</button>
+  <button onclick="loadNews('sports')">Sports</button>
+  <button onclick="loadNews('entertainment')">Entertainment</button>
+  <button onclick="loadNews('business')">Business</button>
+  <button onclick="Notification.requestPermission()">Notify about real-time-news</button>
+</div>
+
+<div id="newsContainer" class="card"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

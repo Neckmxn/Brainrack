@@ -1,39 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Brainrack AI</title>
+  <title>AI Chat - Brainrack</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ================= SIDEBAR ================= -->
-
-<div class="sidebar">
-  <div class="logo">Brainrack</div>
-
-  <button onclick="newChat()">+ New Chat</button>
-
-  <div id="historyList" class="history"></div>
-
-  <div class="sidebar-links">
-    <a href="image.html">🎨 Image Generator</a>
-    <a href="document.html">📄 Document Solver</a>
-  </div>
+<div class="navbar">
+  <h2>AI Chat</h2>
+  <div id="menuBtn" class="menu-btn">⋮</div>
 </div>
 
-<!-- ================= MAIN ================= -->
+<div id="menu" class="menu">
+  <a href="dashboard.html">Dashboard</a>
+  <a href="image.html">AI Image</a>
+  <a href="document.html">Documents</a>
+  <a href="business.html">Business</a>
+  <a href="weather.html">Weather</a>
+  <a href="news.html">News</a>
+  <a onclick="toggleTheme()">Toggle Theme</a>
+</div>
 
-<div class="main">
+<div id="chatBox" class="chat-box"></div>
 
-  <div id="chat-box"></div>
-
-  <!-- Fixed Input -->
-  <div class="input-bar">
-    <input type="text" id="user-input" placeholder="Ask anything...">
-    <button id="send-btn">Send</button>
-  </div>
-
+<div class="input-area">
+  <input type="text" id="userInput" placeholder="Ask anything...">
+  <button onclick="sendMessage()">Send</button>
+  <button onclick="startVoiceInput()">🎤</button>
 </div>
 
 <script src="script.js"></script>

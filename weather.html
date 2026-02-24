@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Weather - Brainrack</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+  <h2>Weather</h2>
+  <div id="menuBtn" class="menu-btn">⋮</div>
+</div>
+
+<div class="weather-box">
+  <input type="text" id="cityInput" placeholder="Enter city">
+  <button onclick="loadWeather(document.getElementById('cityInput').value)">Search</button>
+  <h2 id="weatherTemp"></h2>
+  <p id="weatherDesc"></p>
+  <button onclick="enableWeatherNotification()">Notify about real-time-weather</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
