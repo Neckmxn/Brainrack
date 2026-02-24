@@ -17,16 +17,18 @@ let voices = [];
 
 /* ========= INIT ========= */
 
-window.onload = () => {
+window.addEventListener("load", () => {
   loadVoices();
   setupMenu();
   loadTheme();
-};
+  registerServiceWorker();
+});
 
-/* ========= LOAD AVAILABLE VOICES ========= */
+/* ========= LOAD VOICES ========= */
 
 function loadVoices() {
   voices = speechSynthesis.getVoices();
+
   if (!voices.length) {
     speechSynthesis.onvoiceschanged = () => {
       voices = speechSynthesis.getVoices();
@@ -42,23 +44,24 @@ function setupMenu() {
 
   if (!menuBtn || !menu) return;
 
-  menuBtn.onclick = (e) => {
+  menuBtn.addEventListener("click", (e) => {
     e.stopPropagation();
     menu.style.display =
       menu.style.display === "block" ? "none" : "block";
-  };
+  });
 
-  document.onclick = (e) => {
+  document.addEventListener("click", (e) => {
     if (!menu.contains(e.target)) {
       menu.style.display = "none";
     }
-  };
+  });
 }
 
-/* ========= THEME TOGGLE ========= */
+/* ========= THEME ========= */
 
 function toggleTheme() {
   document.body.classList.toggle("light");
+
   localStorage.setItem(
     "theme",
     document.body.classList.contains("light") ? "light" : "dark"
@@ -77,6 +80,7 @@ function loadTheme() {
 function typeEffect(element, text) {
   let i = 0;
   element.innerHTML = "";
+
   const interval = setInterval(() => {
     element.innerHTML += text.charAt(i);
     i++;
@@ -84,16 +88,17 @@ function typeEffect(element, text) {
   }, 15);
 }
 
-/* ========= SPEECH (TEXT TO VOICE) ========= */
+/* ========= TEXT TO SPEECH ========= */
 
 function speak(text) {
   if (!speakMode) return;
 
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.voice = voices[voiceSettings.voiceIndex];
-  utterance.rate = voiceSettings.rate;
-  utterance.pitch = voiceSettings.pitch;
-  utterance.volume = voiceSettings.volume;
+
+  utterance.voice = voices[voiceSettings.voiceIndex] || null;
+  utterance.rate = Number(voiceSettings.rate);
+  utterance.pitch = Number(voiceSettings.pitch);
+  utterance.volume = Number(voiceSettings.volume);
 
   speechSynthesis.speak(utterance);
 }
@@ -102,32 +107,39 @@ function speak(text) {
 
 function updateVoiceSettings() {
   voiceSettings.voiceIndex =
-    document.getElementById("voiceSelect").value;
+    Number(document.getElementById("voiceSelect")?.value || 0);
+
   voiceSettings.rate =
-    document.getElementById("rateRange").value;
+    Number(document.getElementById("rateRange")?.value || 1);
+
   voiceSettings.pitch =
-    document.getElementById("pitchRange").value;
+    Number(document.getElementById("pitchRange")?.value || 1);
+
   voiceSettings.volume =
-    document.getElementById("volumeRange").value;
+    Number(document.getElementById("volumeRange")?.value || 1);
 }
 
 /* ========= VOICE INPUT ========= */
 
-const recognition =
-  window.SpeechRecognition ||
-  window.webkitSpeechRecognition
-    ? new (window.SpeechRecognition ||
-        window.webkitSpeechRecognition)()
-    : null;
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+const recognition = SpeechRecognition
+  ? new SpeechRecognition()
+  : null;
 
 if (recognition) {
   recognition.continuous = false;
   recognition.interimResults = false;
-  recognition.lang = "auto";
+  recognition.lang = navigator.language || "en-US";
 
   recognition.onresult = (event) => {
     const text = event.results[0][0].transcript;
     document.getElementById("userInput").value = text;
+  };
+
+  recognition.onerror = (err) => {
+    console.error("Speech recognition error:", err);
   };
 }
 
@@ -148,61 +160,90 @@ async function sendMessage() {
   addMessage(message, "user");
   input.value = "";
 
-  const res = await fetch("/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message })
-  });
+  try {
+    const res = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message })
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  const aiMsg = document.createElement("div");
-  aiMsg.className = "ai";
-  chatBox.appendChild(aiMsg);
+    const aiMsg = document.createElement("div");
+    aiMsg.className = "ai";
+    chatBox.appendChild(aiMsg);
 
-  typeEffect(aiMsg, data.reply);
+    typeEffect(aiMsg, data.reply);
+    speak(data.reply);
 
-  speak(data.reply);
+    chatBox.scrollTop = chatBox.scrollHeight;
 
-  chatBox.scrollTop = chatBox.scrollHeight;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 /* ========= ADD MESSAGE ========= */
 
 function addMessage(text, sender) {
   const chatBox = document.getElementById("chatBox");
+
   const msg = document.createElement("div");
   msg.className = sender;
   msg.innerText = text;
+
   chatBox.appendChild(msg);
 }
 
 /* ========= IMAGE GENERATOR ========= */
 
 async function generateImage() {
-  const prompt = document.getElementById("imagePrompt").value;
+  const prompt =
+    document.getElementById("imagePrompt").value;
 
-  const res = await fetch("/generate-image", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt })
+  try {
+    const res = await fetch("/generate-image", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
+
+    const data = await res.json();
+
+    document.getElementById("imageResult").src =
+      data.image;
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/* ========= WEATHER (AUTO LOCATION) ========= */
+
+async function loadWeatherAuto() {
+  if (!navigator.geolocation) return;
+
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    try {
+      const res = await fetch(
+        `/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`
+      );
+
+      const data = await res.json();
+
+      document.getElementById("weatherTemp").innerText =
+        data.main.temp + "°C";
+
+      document.getElementById("weatherDesc").innerText =
+        data.weather[0].description;
+
+    } catch (err) {
+      console.error(err);
+    }
   });
-
-  const data = await res.json();
-  document.getElementById("imageResult").src = data.image;
 }
 
-/* ========= WEATHER ========= */
-
-async function loadWeather(city) {
-  const res = await fetch(`/weather/${city}`);
-  const data = await res.json();
-
-  document.getElementById("weatherTemp").innerText =
-    data.main.temp + "°C";
-  document.getElementById("weatherDesc").innerText =
-    data.weather[0].description;
-}
+/* ========= WEATHER NOTIFICATION ========= */
 
 function enableWeatherNotification() {
   Notification.requestPermission();
@@ -210,32 +251,52 @@ function enableWeatherNotification() {
 
 function notifyWeather(text) {
   if (Notification.permission === "granted") {
-    new Notification("Weather Update", { body: text });
+    new Notification("Brainrack Weather", {
+      body: text
+    });
   }
 }
 
 /* ========= NEWS ========= */
 
-async function loadNews(category) {
-  const res = await fetch(`/news/${category}`);
-  const data = await res.json();
+async function loadNews() {
+  try {
+    const res = await fetch("/news");
+    const data = await res.json();
 
-  const container = document.getElementById("newsContainer");
-  container.innerHTML = "";
+    const container =
+      document.getElementById("newsContainer");
 
-  data.articles.slice(0, 5).forEach((article) => {
-    const div = document.createElement("div");
-    div.className = "news-card";
-    div.innerHTML = `
-      <h3>${article.title}</h3>
-      <p>${article.description || ""}</p>
-    `;
-    container.appendChild(div);
-  });
+    container.innerHTML = "";
+
+    data.articles.slice(0, 5).forEach((article) => {
+      const div = document.createElement("div");
+      div.className = "news-card";
+
+      div.innerHTML = `
+        <h3>${article.title}</h3>
+        <p>${article.description || ""}</p>
+      `;
+
+      container.appendChild(div);
+    });
+
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-function notifyNews(title) {
-  if (Notification.permission === "granted") {
-    new Notification("News Alert", { body: title });
+/* ========= SERVICE WORKER ========= */
+
+function registerServiceWorker() {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then(() =>
+        console.log("Service Worker Registered")
+      )
+      .catch((err) =>
+        console.error("SW Error:", err)
+      );
   }
 }
