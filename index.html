@@ -1,27 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Brainrack AI - Chat</title>
+  <title>Brainrack AI</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <nav>
-    <h2>Brainrack AI</h2>
-    <div>
-      <a href="index.html">Chat</a>
-      <a href="image.html">Image</a>
-    </div>
-  </nav>
+<div class="container">
+  <div class="header">Brainrack AI</div>
 
-  <div class="container">
-    <div id="chatBox"></div>
+  <div id="chat-box" class="chat-box"></div>
 
-    <div class="inputBox">
-      <input type="text" id="userInput" placeholder="Ask anything...">
-      <button onclick="sendMessage()">Send</button>
-    </div>
+  <div class="input-area">
+    <input type="text" id="user-input" placeholder="Ask anything...">
+    <button id="send-btn">Send</button>
   </div>
+</div>
 
 <script src="script.js"></script>
 </body>

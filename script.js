@@ -1,33 +1,55 @@
-async function sendMessage() {
-  const input = document.getElementById("userInput");
-  const chatBox = document.getElementById("chatBox");
+const chatBox = document.getElementById("chat-box");
+const inputField = document.getElementById("user-input");
+const sendBtn = document.getElementById("send-btn");
 
-  const userText = input.value;
-  chatBox.innerHTML += `<p><b>You:</b> ${userText}</p>`;
+sendBtn.addEventListener("click", sendMessage);
 
-  const res = await fetch("/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: userText })
-  });
+inputField.addEventListener("keypress", function (e) {
+  if (e.key === "Enter") {
+    sendMessage();
+  }
+});
 
-  const data = await res.json();
-  chatBox.innerHTML += `<p><b>AI:</b> ${data.reply}</p>`;
-  input.value = "";
+function addMessage(text, className) {
+  const messageDiv = document.createElement("div");
+  messageDiv.classList.add("message", className);
+  messageDiv.innerText = text;
+  chatBox.appendChild(messageDiv);
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-async function generateImage() {
-  const prompt = document.getElementById("imagePrompt").value;
-  const result = document.getElementById("imageResult");
+async function sendMessage() {
+  const message = inputField.value.trim();
+  if (!message) return;
 
-  result.innerHTML = "Generating...";
+  addMessage(message, "user");
+  inputField.value = "";
 
-  const res = await fetch("/image", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt })
-  });
+  addMessage("Thinking...", "bot");
 
-  const data = await res.json();
-  result.innerHTML = `<img src="${data.image}" width="400">`;
+  try {
+    const response = await fetch("/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message })
+    });
+
+    const data = await response.json();
+
+    chatBox.lastChild.remove();
+
+    if (Array.isArray(data)) {
+      addMessage(data[0]?.generated_text || "No response", "bot");
+    } else if (data.error) {
+      addMessage("Error: " + data.error, "bot");
+    } else {
+      addMessage("No response from AI.", "bot");
+    }
+
+  } catch (error) {
+    chatBox.lastChild.remove();
+    addMessage("Server error. Check backend.", "bot");
+  }
 }
