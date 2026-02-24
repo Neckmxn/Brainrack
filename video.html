@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weather - Brainrack AI</title>
+  <title>AI Video - Brainrack AI</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body data-page="weather">
+<body data-page="video">
 
   <nav class="navbar">
     <div class="navbar-brand" onclick="goHome()">
@@ -43,38 +43,49 @@
     <div class="tool-container">
 
       <div class="page-header" style="padding:20px 0; text-align:center; border-bottom:1px solid var(--border-color); margin-bottom:24px;">
-        <h1 style="font-size:1.5rem; color:var(--accent-light);"><i class="fas fa-cloud-sun"></i> Weather</h1>
-        <p style="color:var(--text-secondary); font-size:0.85rem; margin-top:4px;">Real-time weather data, forecasts, and air quality</p>
+        <h1 style="font-size:1.5rem; color:var(--accent-light);"><i class="fas fa-video"></i> AI Video Creator</h1>
+        <p style="color:var(--text-secondary); font-size:0.85rem; margin-top:4px;">Generate detailed video storyboards, scripts, and production plans</p>
       </div>
 
-      <!-- Search & Notification -->
-      <div style="display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap; align-items:center;">
-        <div class="weather-search" style="flex:1; min-width:200px;">
-          <input type="text" id="weatherSearch" placeholder="Search city..." onkeydown="if(event.key==='Enter') searchWeather()">
-          <button class="btn btn-primary" onclick="searchWeather()"><i class="fas fa-search"></i></button>
-        </div>
-        <button class="notify-btn" id="weatherNotifyBtn" onclick="toggleWeatherNotify()">
-          <i class="fas fa-bell"></i> Notify about real-time weather
-        </button>
-        <button class="btn btn-secondary" onclick="detectLocation()">
-          <i class="fas fa-location-crosshairs"></i> My Location
-        </button>
-      </div>
-
-      <!-- Current Weather -->
-      <div class="weather-main" id="weatherMain">
-        <div class="loading"><div class="spinner"></div></div>
-      </div>
-
-      <!-- Air Quality -->
-      <div id="airQuality" style="margin-bottom:24px;"></div>
-
-      <!-- Forecast -->
       <div class="tool-section">
-        <h2><i class="fas fa-calendar-week"></i> Forecast</h2>
-        <div id="forecastContainer">
-          <div class="loading"><div class="spinner"></div></div>
+        <h2><i class="fas fa-film"></i> Video Concept</h2>
+
+        <div class="form-group">
+          <label>Describe your video concept</label>
+          <textarea class="form-textarea" id="videoPrompt" placeholder="A 30-second product launch video for a new smartphone, featuring sleek transitions and modern music..."></textarea>
         </div>
+
+        <div class="form-group">
+          <label>Duration</label>
+          <select class="form-select" id="videoDuration">
+            <option value="15 seconds">15 Seconds</option>
+            <option value="30 seconds" selected>30 Seconds</option>
+            <option value="1 minute">1 Minute</option>
+            <option value="2 minutes">2 Minutes</option>
+            <option value="5 minutes">5 Minutes</option>
+            <option value="10 minutes">10 Minutes</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Style</label>
+          <select class="form-select" id="videoStyle">
+            <option value="cinematic">Cinematic</option>
+            <option value="documentary">Documentary</option>
+            <option value="commercial">Commercial</option>
+            <option value="tutorial">Tutorial</option>
+            <option value="animation">Animation</option>
+            <option value="music-video">Music Video</option>
+            <option value="social-media">Social Media</option>
+            <option value="corporate">Corporate</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" id="videoBtn" onclick="generateVideo()">
+          <i class="fas fa-film"></i> Generate Video Concept
+        </button>
+
+        <div class="result-area" id="videoResult"></div>
       </div>
 
     </div>

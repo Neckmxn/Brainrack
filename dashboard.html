@@ -1,53 +1,238 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Brainrack AI - Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brainrack AI - Your Intelligent AI Platform</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
+<body data-page="dashboard">
 
-<div class="navbar">
-  <h2>Brainrack AI</h2>
-  <div id="menuBtn" class="menu-btn">⋮</div>
-</div>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand" onclick="goHome()">
+      <div class="logo">🧠</div>
+      <span>Brainrack AI</span>
+    </div>
+    <div class="navbar-right">
+      <button class="nav-btn" onclick="toggleTheme()" title="Toggle Theme">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="nav-btn" onclick="toggleMenu()" title="Menu">
+        <i class="fas fa-ellipsis-vertical"></i>
+      </button>
+    </div>
+  </nav>
 
-<div id="menu" class="menu">
-  <a href="dashboard.html">Dashboard</a>
-  <a href="index.html">AI Chat</a>
-  <a href="image.html">AI Image</a>
-  <a href="document.html">AI Documents</a>
-  <a href="business.html">Business / Startup</a>
-  <a href="weather.html">Weather</a>
-  <a href="news.html">News</a>
-  <a href="contactus.html">Contact</a>
-  <hr>
-  <a onclick="toggleTheme()">Toggle Light/Dark</a>
-</div>
+  <!-- Menu Overlay -->
+  <div class="menu-overlay" onclick="closeMenu()"></div>
 
-<div class="card">
-  <h1>Welcome to Brainrack AI</h1>
-  <p>
-    Brainrack AI is an all-in-one intelligent assistant platform built to help users
-    solve problems, generate ideas, analyze documents, create images,
-    get weather updates, and stay informed with real-time news.
-  </p>
-  <p>
-    Mission: To build an accessible AI super-platform for everyone.
-  </p>
-  <p>
-    Developer: Aaratrik Ghosh
-  </p>
-</div>
+  <!-- Three Dot Menu -->
+  <div class="three-dot-menu" id="mainMenu">
+    <button class="menu-item" onclick="navigateTo('/')"><i class="fas fa-home"></i> Dashboard</button>
+    <button class="menu-item" onclick="navigateTo('/index.html')"><i class="fas fa-comments"></i> AI Chat</button>
+    <button class="menu-item" onclick="navigateTo('/image.html')"><i class="fas fa-image"></i> AI Image</button>
+    <button class="menu-item" onclick="navigateTo('/document.html')"><i class="fas fa-file-alt"></i> Document AI</button>
+    <button class="menu-item" onclick="navigateTo('/video.html')"><i class="fas fa-video"></i> AI Video</button>
+    <button class="menu-item" onclick="navigateTo('/business.html')"><i class="fas fa-briefcase"></i> Business AI</button>
+    <button class="menu-item" onclick="navigateTo('/startup.html')"><i class="fas fa-rocket"></i> Startup Ideas</button>
+    <button class="menu-item" onclick="navigateTo('/news.html')"><i class="fas fa-newspaper"></i> News</button>
+    <button class="menu-item" onclick="navigateTo('/weather.html')"><i class="fas fa-cloud-sun"></i> Weather</button>
+    <button class="menu-item" onclick="navigateTo('/contactus.html')"><i class="fas fa-envelope"></i> Contact Us</button>
+    <div class="menu-divider"></div>
+    <button class="menu-item" onclick="openProfile()"><i class="fas fa-user"></i> Profile</button>
+    <button class="menu-item" onclick="toggleTheme()"><i class="fas fa-palette"></i> Toggle Theme</button>
+    <button class="menu-item" onclick="openSettings()"><i class="fas fa-cog"></i> Settings</button>
+  </div>
 
-<div style="text-align:center;">
-  <div class="dashboard-btn" onclick="location.href='index.html'">AI Chat</div>
-  <div class="dashboard-btn" onclick="location.href='image.html'">Image Generator</div>
-  <div class="dashboard-btn" onclick="location.href='document.html'">Document AI</div>
-  <div class="dashboard-btn" onclick="location.href='business.html'">Business Solver</div>
-  <div class="dashboard-btn" onclick="location.href='weather.html'">Weather</div>
-  <div class="dashboard-btn" onclick="location.href='news.html'">News</div>
-</div>
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="dashboard">
 
-<script src="script.js"></script>
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <h1>Brainrack AI</h1>
+        <p>Your all-in-one intelligent platform powered by cutting-edge AI. Chat, create, analyze, and innovate — all in one place.</p>
+      </section>
+
+      <!-- About Section -->
+      <section class="about-section">
+        <h2><i class="fas fa-info-circle"></i> About Brainrack AI</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">
+          Brainrack AI is a comprehensive AI-powered platform designed to supercharge your productivity, creativity, and decision-making. 
+          Built with the latest AI models, we offer tools for communication, content creation, business intelligence, and more.
+        </p>
+        <div class="about-grid">
+          <div class="about-card">
+            <h3>🎯 Our Mission</h3>
+            <p>To democratize AI technology and make powerful AI tools accessible to everyone. We believe AI should empower individuals and businesses to achieve more with less effort.</p>
+          </div>
+          <div class="about-card">
+            <h3>💡 What We Offer</h3>
+            <p>AI Chat, Image Generation & Enhancement, Document Analysis, Video Storyboarding, Business Problem Solving, Startup Ideation, Real-time News, and Weather — all through one unified platform.</p>
+          </div>
+          <div class="about-card">
+            <h3>👨‍💻 Developer</h3>
+            <p>Built with passion by the Brainrack team. We're a group of AI enthusiasts, engineers, and designers committed to creating the most intuitive AI experience possible.</p>
+          </div>
+          <div class="about-card">
+            <h3>🔒 Privacy First</h3>
+            <p>Your data stays yours. We don't store conversations, documents, or personal information. All processing happens in real-time with enterprise-grade security.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section>
+        <h2 style="font-size: 1.5rem; margin-bottom: 8px; text-align: center; color: var(--accent-light);">
+          <i class="fas fa-th-large"></i> Explore Features
+        </h2>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 20px; font-size: 0.9rem;">
+          Click on any feature to get started
+        </p>
+
+        <div class="features-grid">
+          <a href="/index.html" class="feature-card" tabindex="0">
+            <div class="feature-icon"><i class="fas fa-comments"></i></div>
+            <h3>AI Chat</h3>
+            <p>Intelligent conversations with streaming responses & voice support</p>
+          </a>
+
+          <a href="/image.html" class="feature-card" tabindex="0">
+            <div class="feature-icon"><i class="fas fa-image"></i></div>
+            <h3>AI Image</h3>
+            <p>Generate & enhance images with AI-powered tools</p>
+          </a>
+
+          <a href="/document.html" class="feature-card" tabindex="0">
+            <div class="feature-icon"><i class="fas fa-file-alt"></i></div>
+            <h3>Document AI</h3>
+            <p>Analyze, summarize & solve document problems</p>
+          </a>
+
+          <a href="/video.html" class="feature-card" tabindex="0">
+            <div class="feature-icon"><i class="fas fa-video"></i></div>
+            <h3>AI Video</h3>
+            <p>Create video storyboards & production plans</p>
+          </a>
+
+          <a href="/business.html" class="feature-card" tabindex="0">
+            <div class="feature-icon"><i class="fas fa-briefcase"></i></div>
+            <h3>Business AI</h3>
+            <p>Solve complex business problems with AI strategy</p>
+          </a>
+
+          <a href="/startup.html" class="feature-card" tabindex="0">
+            <div class="feature-icon"><i class="fas fa-rocket"></i></div>
+            <h3>Startup Ideas</h3>
+            <p>Generate innovative startup concepts & business plans</p>
+          </a>
+
+          <a href="/news.html" class="feature-card" tabindex="0">
+            <div class="feature-icon"><i class="fas fa-newspaper"></i></div>
+            <h3>Live News</h3>
+            <p>Real-time news with categories & notifications</p>
+          </a>
+
+          <a href="/weather.html" class="feature-card" tabindex="0">
+            <div class="feature-icon"><i class="fas fa-cloud-sun"></i></div>
+            <h3>Weather</h3>
+            <p>Real-time weather with forecasts & air quality</p>
+          </a>
+
+          <a href="/contactus.html" class="feature-card" tabindex="0">
+            <div class="feature-icon"><i class="fas fa-envelope"></i></div>
+            <h3>Contact Us</h3>
+            <p>Get in touch with us for support & feedback</p>
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+      <h2>
+        <span><i class="fas fa-cog"></i> Settings</span>
+        <button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button>
+      </h2>
+
+      <div class="settings-group">
+        <h3>Voice Model</h3>
+        <div class="form-group">
+          <select class="form-select" id="voiceModel" onchange="updateVoiceSetting('model', this.value)">
+            <option value="0">Default Voice</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h3>Voice Speed</h3>
+        <div class="range-group">
+          <input type="range" id="voiceSpeed" min="0.5" max="2" step="0.1" value="1" onchange="updateVoiceSetting('speed', this.value)" oninput="updateVoiceSetting('speed', this.value)">
+          <span class="range-value" id="speedValue">1x</span>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h3>Voice Pitch</h3>
+        <div class="range-group">
+          <input type="range" id="voicePitch" min="0.5" max="2" step="0.1" value="1" onchange="updateVoiceSetting('pitch', this.value)" oninput="updateVoiceSetting('pitch', this.value)">
+          <span class="range-value" id="pitchValue">1</span>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h3>Voice Volume</h3>
+        <div class="range-group">
+          <input type="range" id="voiceVolume" min="0" max="1" step="0.1" value="1" onchange="updateVoiceSetting('volume', this.value)" oninput="updateVoiceSetting('volume', this.value)">
+          <span class="range-value" id="volumeValue">100%</span>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h3>Theme</h3>
+        <div class="btn-group">
+          <button class="btn btn-secondary" onclick="applyTheme('dark')"><i class="fas fa-moon"></i> Dark</button>
+          <button class="btn btn-secondary" onclick="applyTheme('light')"><i class="fas fa-sun"></i> Light</button>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="showToast('Settings saved!', 'success'); closeModal('settingsModal')" style="width:100%; margin-top: 12px;">
+        <i class="fas fa-save"></i> Save Settings
+      </button>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal">
+      <h2>
+        <span><i class="fas fa-user"></i> Profile</span>
+        <button class="modal-close" onclick="closeModal('profileModal')"><i class="fas fa-times"></i></button>
+      </h2>
+
+      <div class="profile-avatar">👤</div>
+
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" class="form-input" id="profileName" placeholder="Your name">
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" class="form-input" id="profileEmail" placeholder="Your email">
+      </div>
+
+      <button class="btn btn-primary" onclick="saveProfile()" style="width:100%; margin-top: 8px;">
+        <i class="fas fa-save"></i> Save Profile
+      </button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

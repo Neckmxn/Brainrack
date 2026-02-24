@@ -2,61 +2,139 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Brainrack AI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Image - Brainrack AI</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
+<body data-page="image">
 
-<body>
+  <nav class="navbar">
+    <div class="navbar-brand" onclick="goHome()">
+      <div class="logo">🧠</div>
+      <span>Brainrack AI</span>
+    </div>
+    <div class="navbar-right">
+      <button class="nav-btn" onclick="toggleTheme()" title="Toggle Theme"><i class="fas fa-moon"></i></button>
+      <button class="nav-btn" onclick="toggleMenu()" title="Menu"><i class="fas fa-ellipsis-vertical"></i></button>
+    </div>
+  </nav>
 
-<!-- Three Dot Menu -->
-<div class="menu-container">
-  <div class="menu-icon" onclick="toggleMenu()">&#8942;</div>
-
-  <div class="dropdown-menu" id="dropdownMenu">
-    <a href="index.html">Chat</a>
-    <a href="image.html">Image</a>
-    <a href="video.html">Video</a>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="about.html">About</a>
-  </div>
-</div>
-
-<!-- Your normal page content below -->
-<h1>Welcome to Brainrack</h1>
-
-</body>
-</html>
-
-  <!-- Navigation -->
-  <div class="navbar">
-    <a href="index.html">⬅ Back to Chat</a>
-  </div>
-
-  <!-- Page Title -->
-  <h1>Brainrack AI Image Generator</h1>
-
-  <!-- Image Generator Container -->
-  <div class="image-page-container">
-
-    <input 
-      type="text" 
-      id="image-prompt" 
-      placeholder="Describe your image..."
-      autocomplete="off"
-    >
-
-    <button id="generate-image-btn">
-      Generate Image ⚡
-    </button>
-
-    <!-- Image Result Will Appear Here -->
-    <div id="image-result"></div>
-
+  <div class="menu-overlay" onclick="closeMenu()"></div>
+  <div class="three-dot-menu" id="mainMenu">
+    <button class="menu-item" onclick="navigateTo('/')"><i class="fas fa-home"></i> Dashboard</button>
+    <button class="menu-item" onclick="navigateTo('/index.html')"><i class="fas fa-comments"></i> AI Chat</button>
+    <button class="menu-item" onclick="navigateTo('/image.html')"><i class="fas fa-image"></i> AI Image</button>
+    <button class="menu-item" onclick="navigateTo('/document.html')"><i class="fas fa-file-alt"></i> Document AI</button>
+    <button class="menu-item" onclick="navigateTo('/video.html')"><i class="fas fa-video"></i> AI Video</button>
+    <button class="menu-item" onclick="navigateTo('/business.html')"><i class="fas fa-briefcase"></i> Business AI</button>
+    <button class="menu-item" onclick="navigateTo('/startup.html')"><i class="fas fa-rocket"></i> Startup Ideas</button>
+    <button class="menu-item" onclick="navigateTo('/news.html')"><i class="fas fa-newspaper"></i> News</button>
+    <button class="menu-item" onclick="navigateTo('/weather.html')"><i class="fas fa-cloud-sun"></i> Weather</button>
+    <button class="menu-item" onclick="navigateTo('/contactus.html')"><i class="fas fa-envelope"></i> Contact Us</button>
+    <div class="menu-divider"></div>
+    <button class="menu-item" onclick="openProfile()"><i class="fas fa-user"></i> Profile</button>
+    <button class="menu-item" onclick="toggleTheme()"><i class="fas fa-palette"></i> Toggle Theme</button>
+    <button class="menu-item" onclick="openSettings()"><i class="fas fa-cog"></i> Settings</button>
   </div>
 
-  <!-- Script Must Be At Bottom -->
+  <div class="main-content">
+    <div class="tool-container">
+
+      <div class="page-header" style="padding:20px 0; text-align:center; border-bottom:1px solid var(--border-color); margin-bottom:24px;">
+        <h1 style="font-size:1.5rem; color:var(--accent-light);"><i class="fas fa-image"></i> AI Image Studio</h1>
+        <p style="color:var(--text-secondary); font-size:0.85rem; margin-top:4px;">Generate and enhance images with AI</p>
+      </div>
+
+      <!-- Image Generator -->
+      <div class="tool-section">
+        <h2><i class="fas fa-magic"></i> Image Generator</h2>
+
+        <div class="form-group">
+          <label>Describe the image you want to create</label>
+          <textarea class="form-textarea" id="imagePrompt" placeholder="A futuristic cityscape at sunset with flying cars and neon lights..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Style</label>
+          <select class="form-select" id="imageStyle">
+            <option value="realistic">Realistic</option>
+            <option value="artistic">Artistic</option>
+            <option value="cartoon">Cartoon</option>
+            <option value="abstract">Abstract</option>
+            <option value="minimalist">Minimalist</option>
+            <option value="cyberpunk">Cyberpunk</option>
+            <option value="watercolor">Watercolor</option>
+            <option value="3d-render">3D Render</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" id="generateBtn" onclick="generateImage()">
+          <i class="fas fa-magic"></i> Generate Image
+        </button>
+
+        <div class="result-area" id="imageResult"></div>
+      </div>
+
+      <!-- Image Enhancer -->
+      <div class="tool-section">
+        <h2><i class="fas fa-wand-magic-sparkles"></i> Image Enhancer</h2>
+
+        <div class="form-group">
+          <div class="file-upload">
+            <input type="file" id="enhanceFile" accept="image/*" onchange="updateFileName('enhanceFile','enhanceFileName')">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Click or drag an image to upload</p>
+            <div class="file-name" id="enhanceFileName"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Enhancement Type</label>
+          <select class="form-select" id="enhanceType">
+            <option value="general">General Improvement</option>
+            <option value="color-correction">Color Correction</option>
+            <option value="sharpening">Sharpening & Detail</option>
+            <option value="lighting">Lighting Enhancement</option>
+            <option value="composition">Composition Analysis</option>
+            <option value="portrait">Portrait Enhancement</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" id="enhanceBtn" onclick="enhanceImage()">
+          <i class="fas fa-wand-magic-sparkles"></i> Enhance Image
+        </button>
+
+        <div class="result-area" id="enhanceResult"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+      <h2><span><i class="fas fa-cog"></i> Settings</span><button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button></h2>
+      <div class="settings-group"><h3>Voice Model</h3><div class="form-group"><select class="form-select" id="voiceModel" onchange="updateVoiceSetting('model', this.value)"><option value="0">Default</option></select></div></div>
+      <div class="settings-group"><h3>Voice Speed</h3><div class="range-group"><input type="range" id="voiceSpeed" min="0.5" max="2" step="0.1" value="1" oninput="updateVoiceSetting('speed', this.value)"><span class="range-value" id="speedValue">1x</span></div></div>
+      <div class="settings-group"><h3>Voice Pitch</h3><div class="range-group"><input type="range" id="voicePitch" min="0.5" max="2" step="0.1" value="1" oninput="updateVoiceSetting('pitch', this.value)"><span class="range-value" id="pitchValue">1</span></div></div>
+      <div class="settings-group"><h3>Voice Volume</h3><div class="range-group"><input type="range" id="voiceVolume" min="0" max="1" step="0.1" value="1" oninput="updateVoiceSetting('volume', this.value)"><span class="range-value" id="volumeValue">100%</span></div></div>
+      <div class="settings-group"><h3>Theme</h3><div class="btn-group"><button class="btn btn-secondary" onclick="applyTheme('dark')"><i class="fas fa-moon"></i> Dark</button><button class="btn btn-secondary" onclick="applyTheme('light')"><i class="fas fa-sun"></i> Light</button></div></div>
+      <button class="btn btn-primary" onclick="showToast('Settings saved!','success');closeModal('settingsModal')" style="width:100%;margin-top:12px"><i class="fas fa-save"></i> Save</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal">
+      <h2><span><i class="fas fa-user"></i> Profile</span><button class="modal-close" onclick="closeModal('profileModal')"><i class="fas fa-times"></i></button></h2>
+      <div class="profile-avatar">👤</div>
+      <div class="form-group"><label>Name</label><input type="text" class="form-input" id="profileName" placeholder="Your name"></div>
+      <div class="form-group"><label>Email</label><input type="email" class="form-input" id="profileEmail" placeholder="Your email"></div>
+      <button class="btn btn-primary" onclick="saveProfile()" style="width:100%;margin-top:8px"><i class="fas fa-save"></i> Save Profile</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
-
 </body>
 </html>
