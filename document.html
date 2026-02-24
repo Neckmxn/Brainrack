@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Brainrack - Document Solver</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Animated Background -->
+  <div id="animated-bg"></div>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <h1>Brainrack 📄</h1>
+
+    <div class="menu-icon" onclick="toggleMenu()">⋮</div>
+
+    <div id="dropdownMenu" class="dropdown-menu">
+      <a href="index.html">💬 Chat</a>
+      <a href="image.html">🖼 Image Generator</a>
+      <a href="document.html">📄 Document Solver</a>
+    </div>
+  </div>
+
+
+  <!-- DOCUMENT SOLVER SECTION -->
+  <div class="container">
+
+    <h2>📄 AI Document Solver</h2>
+    <p>Upload PDF or DOCX and ask any question.</p>
+
+    <form id="docForm" enctype="multipart/form-data">
+
+      <input 
+        type="file" 
+        name="file" 
+        accept=".pdf,.docx" 
+        required
+      />
+
+      <input 
+        type="text" 
+        name="question" 
+        placeholder="Ask about this document (leave empty for summary)..."
+      />
+
+      <button type="submit">Analyze Document 🚀</button>
+
+    </form>
+
+    <div id="docResult" class="doc-result"></div>
+
+  </div>
+
+
+  <script src="script.js"></script>
+</body>
+</html>

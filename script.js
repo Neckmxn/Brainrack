@@ -6,6 +6,7 @@ const chatBox = document.getElementById("chat-box");
 const inputField = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 const generateBtn = document.getElementById("generate-image-btn");
+const docForm = document.getElementById("docForm");
 
 
 /* ===============================
@@ -32,10 +33,17 @@ async function sendMessage() {
   addMessage(message, "user");
   inputField.value = "";
 
-  addMessage("Thinking...", "bot");
+  const thinkingDiv = document.createElement("div");
+  thinkingDiv.classList.add("message", "bot");
+  thinkingDiv.innerHTML = `
+  <div class="typing">
+    <span>.</span><span>.</span><span>.</span>
+  </div>
+`;
+  chatBox.appendChild(thinkingDiv);
 
   try {
-    const response = await fetch("https://brainrack.onrender.com/chat", {
+    const response = await fetch("/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -45,31 +53,18 @@ async function sendMessage() {
 
     const data = await response.json();
 
-    console.log("CHAT RESPONSE:", data);
-
-    // Remove "Thinking..."
-    if (chatBox.lastChild) {
-      chatBox.lastChild.remove();
-    }
+    thinkingDiv.remove();
 
     if (!response.ok) {
       addMessage("Error: " + (data.error || "Something went wrong"), "bot");
       return;
     }
 
-    if (data.reply) {
-      addMessage(data.reply, "bot");
-    } else {
-      addMessage("No response from AI.", "bot");
-    }
+    addMessage(data.reply || "No response from AI.", "bot");
 
   } catch (error) {
     console.error("CHAT ERROR:", error);
-
-    if (chatBox.lastChild) {
-      chatBox.lastChild.remove();
-    }
-
+    thinkingDiv.remove();
     addMessage("Server error. Check backend.", "bot");
   }
 }
@@ -87,7 +82,7 @@ if (sendBtn && inputField) {
 
 
 /* ===============================
-   IMAGE GENERATION
+   IMAGE GENERATION (FIXED)
 ================================ */
 
 if (generateBtn) {
@@ -101,39 +96,77 @@ if (generateBtn) {
     const prompt = imagePrompt.value.trim();
     if (!prompt) return;
 
-    imageResult.innerHTML = "<p class='loading'>Generating image... ⚡</p>";
+    imageResult.innerHTML = '<div class="spinner"></div>';
 
     try {
-const res = await fetch("/generate-image", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ prompt })
-});
 
-const blob = await res.blob();
-const imageUrl = URL.createObjectURL(blob);
-
-imageResult.innerHTML = `<img src="${imageUrl}" class="generated-image"/>`;
+      const res = await fetch("/generate-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt })
+      });
 
       if (!res.ok) {
+        const errorData = await res.json();
         imageResult.innerHTML =
           "<p style='color:red;'>Error: " +
-          (data.error || "Image generation failed ❌") +
+          (errorData.error || "Image generation failed ❌") +
           "</p>";
         return;
       }
 
-      if (data.image) {
-        imageResult.innerHTML = `
-          <img src="${data.image}" class="generated-image"/>
-        `;
-      } else {
-        imageResult.innerHTML = "Image generation failed ❌";
-      }
+      const blob = await res.blob();
+      const imageUrl = URL.createObjectURL(blob);
+
+      imageResult.innerHTML = `
+        <img src="${imageUrl}" class="generated-image"/>
+      `;
 
     } catch (error) {
       console.error("IMAGE ERROR:", error);
       imageResult.innerHTML = "Server error ❌";
+    }
+  });
+}
+
+
+/* ===============================
+   DOCUMENT SOLVER (PDF + DOCX)
+================================ */
+
+if (docForm) {
+  docForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const docResult = document.getElementById("docResult");
+    const formData = new FormData(docForm);
+
+    if (docResult) {
+      docResult.innerHTML = '<div class="spinner"></div>';
+    }
+
+    try {
+      const response = await fetch("/solve-document", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        docResult.innerHTML =
+          "<p style='color:red;'>Error: " +
+          (data.error || "Document analysis failed ❌") +
+          "</p>";
+        return;
+      }
+
+      docResult.innerText =
+        data.solution || "No solution generated.";
+
+    } catch (error) {
+      console.error("DOCUMENT ERROR:", error);
+      docResult.innerHTML = "Server error ❌";
     }
   });
 }
@@ -166,7 +199,8 @@ function toggleMenu() {
   const menu = document.getElementById("dropdownMenu");
   if (!menu) return;
 
-  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+  menu.style.display =
+    menu.style.display === "flex" ? "none" : "flex";
 }
 
 document.addEventListener("click", function (event) {
@@ -175,7 +209,12 @@ document.addEventListener("click", function (event) {
 
   if (!menu || !icon) return;
 
-  if (!icon.contains(event.target) && !menu.contains(event.target)) {
+  if (!icon.contains(event.target) &&
+      !menu.contains(event.target)) {
     menu.style.display = "none";
+
+function toggleTheme() {
+  document.body.classList.toggle("light-mode");
+}
   }
 });

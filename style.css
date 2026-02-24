@@ -1,9 +1,11 @@
-/* ------------- Global ------------- */
+/* ================= GLOBAL ================= */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: 'Orbitron', 'Poppins', sans-serif;
+  transition: all 0.3s ease;
 }
 
 body {
@@ -18,79 +20,82 @@ body {
   position: relative;
 }
 
-/* ------------- Animated Background Circuits ------------- */
-#animated-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
+/* ================= LIGHT MODE ================= */
+
+body.light-mode {
+  background: radial-gradient(circle at center, #e0f7ff, #cceeff, #ffffff);
+  color: #111;
 }
 
-.circuit {
-  position: absolute;
-  width: 2px;
-  height: 100px;
-  background: linear-gradient(180deg, #00f0ff, #0fffb0);
-  animation: moveCircuit linear infinite;
-  opacity: 0.7;
+body.light-mode .container,
+body.light-mode #chat-box {
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(15px);
 }
 
-@keyframes moveCircuit {
-  0% { transform: translateY(-200px); }
-  100% { transform: translateY(110vh); }
+/* ================= GLASS EFFECT ================= */
+
+.container,
+#chat-box {
+  backdrop-filter: blur(15px);
+  background: rgba(0,0,0,0.4);
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(0,255,255,0.3);
 }
 
-/* ------------- Headings ------------- */
-h1, h2 {
-  text-align: center;
+/* ================= ANIMATED LOGO ================= */
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
   color: #0fffb0;
   text-shadow: 0 0 10px #0fffb0, 0 0 20px #00f0ff;
-  margin: 20px 0;
-  letter-spacing: 2px;
+  animation: glowPulse 2s infinite alternate;
 }
 
-/* ------------- Buttons ------------- */
+@keyframes glowPulse {
+  from { text-shadow: 0 0 10px #0fffb0; }
+  to { text-shadow: 0 0 30px #00f0ff; }
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+/* ================= BUTTONS ================= */
+
 button {
   padding: 12px 25px;
-  margin: 10px;
   border: none;
   border-radius: 15px;
   cursor: pointer;
   font-weight: bold;
   color: #fff;
-  background: linear-gradient(45deg, #0fffb0, #00f0ff, #0a0c12);
-  background-size: 200% 200%;
-  animation: gradientBtn 5s ease infinite;
-  box-shadow: 0 0 20px #0fffb0, 0 0 30px #00f0ff;
-  transition: transform 0.3s ease;
+  background: linear-gradient(45deg, #0fffb0, #00f0ff);
+  box-shadow: 0 0 20px #0fffb0;
 }
 
 button:hover {
   transform: scale(1.1);
-  box-shadow: 0 0 30px #0fffb0, 0 0 40px #00f0ff;
+  box-shadow: 0 0 40px #00f0ff;
 }
 
-@keyframes gradientBtn {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+/* ================= CHAT ================= */
 
-/* ------------- Chat Box ------------- */
 #chat-box {
   width: 90%;
-  max-width: 600px;
-  min-height: 400px;
-  background: rgba(0,0,0,0.4);
-  border-radius: 20px;
+  max-width: 650px;
+  min-height: 450px;
   padding: 25px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 40px rgba(0,255,255,0.4);
 }
 
 .message {
@@ -104,182 +109,152 @@ button:hover {
 .message.user {
   background: rgba(0,255,255,0.2);
   align-self: flex-end;
-  text-align: right;
 }
 
 .message.bot {
   background: rgba(0,255,255,0.1);
   align-self: flex-start;
-  text-align: left;
 }
 
-/* Fade-in animation */
 @keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(10px); }
-  100% { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ------------- Input Fields ------------- */
-input[type="text"], textarea {
-  width: 300px;
+/* ================= TYPING DOTS ================= */
+
+.typing {
+  display: inline-block;
+}
+
+.typing span {
+  animation: blink 1.4s infinite both;
+}
+
+.typing span:nth-child(2) { animation-delay: .2s; }
+.typing span:nth-child(3) { animation-delay: .4s; }
+
+@keyframes blink {
+  0% { opacity: .2; }
+  20% { opacity: 1; }
+  100% { opacity: .2; }
+}
+
+/* ================= INPUT ================= */
+
+input, textarea {
   padding: 12px 15px;
-  margin: 10px 0;
-  border: none;
   border-radius: 15px;
+  border: none;
   background: rgba(0,0,0,0.3);
   color: #0fffb0;
   outline: none;
-  font-size: 16px;
+  margin: 10px 0;
   box-shadow: 0 0 15px rgba(0,255,255,0.3);
-  backdrop-filter: blur(5px);
 }
 
-input[type="text"]:focus, textarea:focus {
-  background: rgba(0,0,0,0.5);
-  transform: scale(1.02);
+/* ================= DOCUMENT PAGE ================= */
+
+.container {
+  margin-top: 60px;
+  width: 90%;
+  max-width: 700px;
+  padding: 30px;
+  text-align: center;
 }
 
-/* ------------- Voice Button ------------- */
-#voice-btn {
-  font-size: 18px;
-  background: linear-gradient(45deg, #0fffb0, #00f0ff, #0a0c12);
-  background-size: 200% 200%;
-  animation: gradientBtn 5s ease infinite;
-  padding: 12px 20px;
+.doc-result {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(0,0,0,0.6);
   border-radius: 15px;
-  border: none;
-  cursor: pointer;
-  color: #fff;
+  white-space: pre-wrap;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
-#voice-btn:hover {
-  transform: scale(1.1);
-}
-
-/* ------------- Scrollbar ------------- */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(0,255,255,0.4);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0.1);
-}
-/* ================= NAVBAR ================= */
-
-.navbar {
-  width: 100%;
-  padding: 15px;
-}
-
-.navbar a {
-  text-decoration: none;
-  color: #0fffb0;
-  font-weight: bold;
-}
-
-/* ================= IMAGE PAGE ================= */
-
-.image-page-container {
-  margin-top: 40px;
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-#image-prompt {
-  width: 400px;
-  padding: 15px;
-  border-radius: 15px;
-  border: none;
-  background: rgba(0,0,0,0.5);
-  color: #0fffb0;
-  font-size: 16px;
-  box-shadow: 0 0 20px rgba(0,255,255,0.3);
-}
-
-#generate-image-btn {
-  padding: 15px 25px;
-  border-radius: 15px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  background: linear-gradient(45deg, #0fffb0, #00f0ff);
-  color: black;
-  transition: 0.3s;
-}
-
-#generate-image-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 30px #0fffb0;
-}
+/* ================= IMAGE ================= */
 
 .generated-image {
-  margin-top: 40px;
+  margin-top: 30px;
   width: 400px;
   border-radius: 20px;
-  box-shadow: 0 0 50px rgba(0,255,255,0.5);
-  animation: fadeIn 0.8s ease;
+  box-shadow: 0 0 40px #00f0ff;
 }
 
-.loading {
-  margin-top: 30px;
-  font-size: 18px;
-  color: #0fffb0;
+/* ================= LOADING SPINNER ================= */
+
+.spinner {
+  border: 5px solid rgba(255,255,255,0.1);
+  border-top: 5px solid #0fffb0;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
 }
 
-/* ================= THREE DOT MENU ================= */
-
-.menu-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 2000;
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
+
+/* ================= MENU ================= */
 
 .menu-icon {
-  font-size: 30px;
+  font-size: 28px;
   cursor: pointer;
-  padding: 10px 15px;
+  padding: 10px;
   border-radius: 50%;
   background: rgba(0,0,0,0.6);
-  color: #0fffb0;
   box-shadow: 0 0 15px #0fffb0;
-  transition: 0.3s ease;
-}
-
-.menu-icon:hover {
-  background: #0fffb0;
-  color: black;
-  transform: scale(1.1);
 }
 
 .dropdown-menu {
   display: none;
   flex-direction: column;
   position: absolute;
-  top: 55px;
-  right: 0;
-  background: rgba(0,0,0,0.9);
+  top: 70px;
+  right: 20px;
+  background: rgba(0,0,0,0.95);
   border-radius: 15px;
   overflow: hidden;
-  min-width: 160px;
+  min-width: 180px;
   box-shadow: 0 0 25px rgba(0,255,255,0.5);
 }
 
 .dropdown-menu a {
-  padding: 12px 15px;
+  padding: 12px;
   text-decoration: none;
   color: #0fffb0;
-  transition: 0.3s;
 }
 
 .dropdown-menu a:hover {
   background: #0fffb0;
   color: black;
+}
+
+/* ================= PAGE TRANSITION ================= */
+
+body {
+  animation: pageFade 0.6s ease;
+}
+
+@keyframes pageFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+
+  #chat-box,
+  .container {
+    width: 95%;
+  }
+
+  .generated-image {
+    width: 95%;
+  }
+
 }
