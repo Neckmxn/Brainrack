@@ -13,11 +13,8 @@ body {
   background: radial-gradient(circle at center, #0b0f1a, #0a0c12, #07080a);
   overflow-x: hidden;
   color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  position: relative;
+  margin: 0;
+  padding-top: 90px; /* space for fixed navbar */
 }
 
 /* ================= LIGHT MODE ================= */
@@ -27,23 +24,23 @@ body.light-mode {
   color: #111;
 }
 
-body.light-mode .container,
-body.light-mode #chat-box {
-  background: rgba(255,255,255,0.6);
-  backdrop-filter: blur(15px);
+/* ================= NAVBAR ================= */
+
+.navbar {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px 20px;
+  z-index: 1000;
 }
 
-/* ================= GLASS EFFECT ================= */
-
-.container,
-#chat-box {
-  backdrop-filter: blur(15px);
-  background: rgba(0,0,0,0.4);
-  border-radius: 20px;
-  box-shadow: 0 0 40px rgba(0,255,255,0.3);
-}
-
-/* ================= ANIMATED LOGO ================= */
+/* ================= LOGO ================= */
 
 .logo {
   font-size: 28px;
@@ -58,52 +55,69 @@ body.light-mode #chat-box {
   to { text-shadow: 0 0 30px #00f0ff; }
 }
 
-/* ================= NAVBAR ================= */
+/* ================= MENU ICON ================= */
 
-.navbar {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-}
-
-/* ================= BUTTONS ================= */
-
-button {
-  padding: 12px 25px;
-  border: none;
-  border-radius: 15px;
+.menu-icon {
+  font-size: 26px;
   cursor: pointer;
-  font-weight: bold;
-  color: #fff;
-  background: linear-gradient(45deg, #0fffb0, #00f0ff);
-  box-shadow: 0 0 20px #0fffb0;
+  padding: 10px 15px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  box-shadow: 0 0 15px #0fffb0;
 }
 
-button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 40px #00f0ff;
+/* ================= DROPDOWN ================= */
+
+.dropdown-menu {
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  background: rgba(0,0,0,0.95);
+  border-radius: 15px;
+  overflow: hidden;
+  min-width: 180px;
+  box-shadow: 0 0 25px rgba(0,255,255,0.5);
+  z-index: 1000;
 }
 
-/* ================= CHAT ================= */
+.dropdown-menu a {
+  padding: 12px;
+  text-decoration: none;
+  color: #0fffb0;
+}
+
+.dropdown-menu a:hover {
+  background: #0fffb0;
+  color: black;
+}
+
+/* ================= CHAT BOX ================= */
 
 #chat-box {
   width: 90%;
   max-width: 650px;
   min-height: 450px;
   padding: 25px;
+  margin: 0 auto;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  backdrop-filter: blur(15px);
+  background: rgba(0,0,0,0.4);
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(0,255,255,0.3);
 }
+
+/* ================= MESSAGE ================= */
 
 .message {
   padding: 12px 18px;
   margin: 10px 0;
   border-radius: 20px;
   max-width: 80%;
-  animation: fadeIn 0.5s ease;
+  animation: fadeIn 0.4s ease;
 }
 
 .message.user {
@@ -117,50 +131,61 @@ button:hover {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ================= TYPING DOTS ================= */
+/* ================= INPUT AREA ================= */
 
-.typing {
-  display: inline-block;
+.input-area {
+  width: 90%;
+  max-width: 650px;
+  margin: 20px auto;
+  display: flex;
+  gap: 10px;
 }
-
-.typing span {
-  animation: blink 1.4s infinite both;
-}
-
-.typing span:nth-child(2) { animation-delay: .2s; }
-.typing span:nth-child(3) { animation-delay: .4s; }
-
-@keyframes blink {
-  0% { opacity: .2; }
-  20% { opacity: 1; }
-  100% { opacity: .2; }
-}
-
-/* ================= INPUT ================= */
 
 input, textarea {
+  flex: 1;
   padding: 12px 15px;
   border-radius: 15px;
   border: none;
   background: rgba(0,0,0,0.3);
   color: #0fffb0;
   outline: none;
-  margin: 10px 0;
   box-shadow: 0 0 15px rgba(0,255,255,0.3);
+}
+
+/* ================= BUTTONS ================= */
+
+button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(45deg, #0fffb0, #00f0ff);
+  box-shadow: 0 0 20px #0fffb0;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px #00f0ff;
 }
 
 /* ================= DOCUMENT PAGE ================= */
 
 .container {
-  margin-top: 60px;
   width: 90%;
   max-width: 700px;
+  margin: 40px auto;
   padding: 30px;
   text-align: center;
+  backdrop-filter: blur(15px);
+  background: rgba(0,0,0,0.4);
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(0,255,255,0.3);
 }
 
 .doc-result {
@@ -178,11 +203,12 @@ input, textarea {
 .generated-image {
   margin-top: 30px;
   width: 400px;
+  max-width: 100%;
   border-radius: 20px;
   box-shadow: 0 0 40px #00f0ff;
 }
 
-/* ================= LOADING SPINNER ================= */
+/* ================= SPINNER ================= */
 
 .spinner {
   border: 5px solid rgba(255,255,255,0.1);
@@ -198,50 +224,19 @@ input, textarea {
   to { transform: rotate(360deg); }
 }
 
-/* ================= MENU ================= */
+/* ================= TYPING DOTS ================= */
 
-.menu-icon {
-  font-size: 28px;
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.6);
-  box-shadow: 0 0 15px #0fffb0;
+.typing span {
+  animation: blink 1.4s infinite both;
 }
 
-.dropdown-menu {
-  display: none;
-  flex-direction: column;
-  position: absolute;
-  top: 70px;
-  right: 20px;
-  background: rgba(0,0,0,0.95);
-  border-radius: 15px;
-  overflow: hidden;
-  min-width: 180px;
-  box-shadow: 0 0 25px rgba(0,255,255,0.5);
-}
+.typing span:nth-child(2) { animation-delay: .2s; }
+.typing span:nth-child(3) { animation-delay: .4s; }
 
-.dropdown-menu a {
-  padding: 12px;
-  text-decoration: none;
-  color: #0fffb0;
-}
-
-.dropdown-menu a:hover {
-  background: #0fffb0;
-  color: black;
-}
-
-/* ================= PAGE TRANSITION ================= */
-
-body {
-  animation: pageFade 0.6s ease;
-}
-
-@keyframes pageFade {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes blink {
+  0% { opacity: .2; }
+  20% { opacity: 1; }
+  100% { opacity: .2; }
 }
 
 /* ================= RESPONSIVE ================= */
@@ -249,12 +244,13 @@ body {
 @media (max-width: 768px) {
 
   #chat-box,
+  .input-area,
   .container {
     width: 95%;
   }
 
   .generated-image {
-    width: 95%;
+    width: 100%;
   }
 
 }

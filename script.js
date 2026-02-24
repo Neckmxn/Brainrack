@@ -36,10 +36,10 @@ async function sendMessage() {
   const thinkingDiv = document.createElement("div");
   thinkingDiv.classList.add("message", "bot");
   thinkingDiv.innerHTML = `
-  <div class="typing">
-    <span>.</span><span>.</span><span>.</span>
-  </div>
-`;
+    <div class="typing">
+      <span>.</span><span>.</span><span>.</span>
+    </div>
+  `;
   chatBox.appendChild(thinkingDiv);
 
   try {
@@ -52,7 +52,6 @@ async function sendMessage() {
     });
 
     const data = await response.json();
-
     thinkingDiv.remove();
 
     if (!response.ok) {
@@ -69,7 +68,11 @@ async function sendMessage() {
   }
 }
 
-/* Attach chat listeners */
+
+/* ===============================
+   CHAT LISTENERS
+================================ */
+
 if (sendBtn && inputField) {
   sendBtn.addEventListener("click", sendMessage);
 
@@ -82,7 +85,7 @@ if (sendBtn && inputField) {
 
 
 /* ===============================
-   IMAGE GENERATION (FIXED)
+   IMAGE GENERATION
 ================================ */
 
 if (generateBtn) {
@@ -131,7 +134,7 @@ if (generateBtn) {
 
 
 /* ===============================
-   DOCUMENT SOLVER (PDF + DOCX)
+   DOCUMENT SOLVER
 ================================ */
 
 if (docForm) {
@@ -212,9 +215,14 @@ document.addEventListener("click", function (event) {
   if (!icon.contains(event.target) &&
       !menu.contains(event.target)) {
     menu.style.display = "none";
+  }
+});
+
+
+/* ===============================
+   THEME TOGGLE
+================================ */
 
 function toggleTheme() {
   document.body.classList.toggle("light-mode");
 }
-  }
-});
