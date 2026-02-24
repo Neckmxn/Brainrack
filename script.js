@@ -1,31 +1,27 @@
-/* ===============================
-   GLOBAL ELEMENTS
-================================ */
-
 const chatBox = document.getElementById("chat-box");
 const inputField = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
-const generateBtn = document.getElementById("generate-image-btn");
-const docForm = document.getElementById("docForm");
+const historyList = document.getElementById("historyList");
 
+let currentChat = [];
 
-/* ===============================
-   CHAT FUNCTIONS
-================================ */
+/* ================= MESSAGE ================= */
 
-function addMessage(text, className) {
-  if (!chatBox) return;
+function addMessage(text, sender) {
 
   const messageDiv = document.createElement("div");
-  messageDiv.classList.add("message", className);
+  messageDiv.classList.add("message", sender);
   messageDiv.innerText = text;
 
   chatBox.appendChild(messageDiv);
   chatBox.scrollTop = chatBox.scrollHeight;
+
+  currentChat.push({ sender, text });
 }
 
+/* ================= SEND MESSAGE ================= */
+
 async function sendMessage() {
-  if (!inputField) return;
 
   const message = inputField.value.trim();
   if (!message) return;
@@ -33,196 +29,91 @@ async function sendMessage() {
   addMessage(message, "user");
   inputField.value = "";
 
-  const thinkingDiv = document.createElement("div");
-  thinkingDiv.classList.add("message", "bot");
-  thinkingDiv.innerHTML = `
-    <div class="typing">
-      <span>.</span><span>.</span><span>.</span>
-    </div>
-  `;
-  chatBox.appendChild(thinkingDiv);
+  const thinking = document.createElement("div");
+  thinking.classList.add("message", "bot");
+  thinking.innerText = "Thinking...";
+  chatBox.appendChild(thinking);
 
   try {
+
     const response = await fetch("/chat", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message })
     });
 
     const data = await response.json();
-    thinkingDiv.remove();
+    thinking.remove();
 
-    if (!response.ok) {
-      addMessage("Error: " + (data.error || "Something went wrong"), "bot");
-      return;
-    }
-
-    addMessage(data.reply || "No response from AI.", "bot");
+    addMessage(data.reply || "No response", "bot");
 
   } catch (error) {
-    console.error("CHAT ERROR:", error);
-    thinkingDiv.remove();
-    addMessage("Server error. Check backend.", "bot");
+    thinking.remove();
+    addMessage("Server error", "bot");
   }
 }
 
+/* ================= NEW CHAT ================= */
 
-/* ===============================
-   CHAT LISTENERS
-================================ */
-
-if (sendBtn && inputField) {
-  sendBtn.addEventListener("click", sendMessage);
-
-  inputField.addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-      sendMessage();
-    }
-  });
-}
-
-
-/* ===============================
-   IMAGE GENERATION
-================================ */
-
-if (generateBtn) {
-  generateBtn.addEventListener("click", async () => {
-
-    const imagePrompt = document.getElementById("image-prompt");
-    const imageResult = document.getElementById("image-result");
-
-    if (!imagePrompt || !imageResult) return;
-
-    const prompt = imagePrompt.value.trim();
-    if (!prompt) return;
-
-    imageResult.innerHTML = '<div class="spinner"></div>';
-
-    try {
-
-      const res = await fetch("/generate-image", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt })
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        imageResult.innerHTML =
-          "<p style='color:red;'>Error: " +
-          (errorData.error || "Image generation failed ❌") +
-          "</p>";
-        return;
-      }
-
-      const blob = await res.blob();
-      const imageUrl = URL.createObjectURL(blob);
-
-      imageResult.innerHTML = `
-        <img src="${imageUrl}" class="generated-image"/>
-      `;
-
-    } catch (error) {
-      console.error("IMAGE ERROR:", error);
-      imageResult.innerHTML = "Server error ❌";
-    }
-  });
-}
-
-
-/* ===============================
-   DOCUMENT SOLVER
-================================ */
-
-if (docForm) {
-  docForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const docResult = document.getElementById("docResult");
-    const formData = new FormData(docForm);
-
-    if (docResult) {
-      docResult.innerHTML = '<div class="spinner"></div>';
-    }
-
-    try {
-      const response = await fetch("/solve-document", {
-        method: "POST",
-        body: formData
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        docResult.innerHTML =
-          "<p style='color:red;'>Error: " +
-          (data.error || "Document analysis failed ❌") +
-          "</p>";
-        return;
-      }
-
-      docResult.innerText =
-        data.solution || "No solution generated.";
-
-    } catch (error) {
-      console.error("DOCUMENT ERROR:", error);
-      docResult.innerHTML = "Server error ❌";
-    }
-  });
-}
-
-
-/* ===============================
-   ANIMATED BACKGROUND
-================================ */
-
-const bg = document.getElementById("animated-bg");
-
-if (bg) {
-  for (let i = 0; i < 50; i++) {
-    const circuit = document.createElement("div");
-    circuit.className = "circuit";
-    circuit.style.left = Math.random() * window.innerWidth + "px";
-    circuit.style.height = 50 + Math.random() * 150 + "px";
-    circuit.style.animationDuration = 5 + Math.random() * 10 + "s";
-    circuit.style.opacity = Math.random();
-    bg.appendChild(circuit);
+function newChat() {
+  if (currentChat.length > 0) {
+    saveChat();
   }
+
+  chatBox.innerHTML = "";
+  currentChat = [];
 }
 
+/* ================= SAVE CHAT ================= */
 
-/* ===============================
-   THREE DOT MENU
-================================ */
+function saveChat() {
 
-function toggleMenu() {
-  const menu = document.getElementById("dropdownMenu");
-  if (!menu) return;
+  const chats = JSON.parse(localStorage.getItem("brainrack_chats")) || [];
+  chats.push(currentChat);
+  localStorage.setItem("brainrack_chats", JSON.stringify(chats));
 
-  menu.style.display =
-    menu.style.display === "flex" ? "none" : "flex";
+  loadHistory();
 }
 
-document.addEventListener("click", function (event) {
-  const menu = document.getElementById("dropdownMenu");
-  const icon = document.querySelector(".menu-icon");
+/* ================= LOAD HISTORY ================= */
 
-  if (!menu || !icon) return;
+function loadHistory() {
 
-  if (!icon.contains(event.target) &&
-      !menu.contains(event.target)) {
-    menu.style.display = "none";
-  }
+  const chats = JSON.parse(localStorage.getItem("brainrack_chats")) || [];
+  historyList.innerHTML = "";
+
+  chats.forEach((chat, index) => {
+
+    const item = document.createElement("div");
+    item.classList.add("history-item");
+    item.innerText = chat[0]?.text.slice(0, 30) || "Chat";
+
+    item.onclick = () => loadChat(index);
+
+    historyList.appendChild(item);
+  });
+}
+
+function loadChat(index) {
+
+  const chats = JSON.parse(localStorage.getItem("brainrack_chats")) || [];
+  currentChat = chats[index];
+
+  chatBox.innerHTML = "";
+
+  currentChat.forEach(msg => {
+    addMessage(msg.text, msg.sender);
+  });
+}
+
+/* ================= LISTENERS ================= */
+
+sendBtn.addEventListener("click", sendMessage);
+
+inputField.addEventListener("keypress", function(e) {
+  if (e.key === "Enter") sendMessage();
 });
 
+/* ================= INIT ================= */
 
-/* ===============================
-   THEME TOGGLE
-================================ */
-
-function toggleTheme() {
-  document.body.classList.toggle("light-mode");
-}
+loadHistory();
