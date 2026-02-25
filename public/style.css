@@ -1,126 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BrainRack AI</title>
-
-<style>
-/* ===== GLOBAL ===== */
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #050c1b, #0a1f44, #0d2c6b);
-  overflow: hidden;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
   color: white;
 }
 
-/* ===== ANIMATED CIRCUIT BACKGROUND ===== */
-body::before {
-  content: "";
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  background-image: 
-    linear-gradient(rgba(0,255,255,0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,255,0.08) 1px, transparent 1px);
-  background-size: 60px 60px;
-  animation: moveGrid 20s linear infinite;
-  z-index: 0;
-}
-
-@keyframes moveGrid {
-  0% { transform: translate(0,0); }
-  100% { transform: translate(-60px,-60px); }
-}
-
-/* ===== MAIN CONTAINER ===== */
-.container {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  padding-top: 100px;
-}
-
-/* ===== TITLE ===== */
-h1 {
-  font-size: 3rem;
-  background: linear-gradient(90deg, #00f2ff, #4facfe);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 40px;
-  letter-spacing: 2px;
-}
-
-/* ===== INPUT ===== */
-input {
-  padding: 15px;
-  width: 300px;
-  border-radius: 30px;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  background: rgba(255,255,255,0.1);
-  color: white;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 10px rgba(0,255,255,0.3);
-}
-
-/* ===== BUTTON ===== */
-button {
+nav {
+  display: flex;
+  justify-content: space-between;
   padding: 15px 30px;
-  margin: 20px 10px;
-  border-radius: 30px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
+  background: #1e293b;
+}
+
+nav a {
   color: white;
-  background: linear-gradient(90deg, #00f2ff, #007bff);
-  transition: all 0.3s ease;
-  box-shadow: 0 0 15px rgba(0,255,255,0.5);
+  text-decoration: none;
+  margin-left: 20px;
 }
 
-/* ===== HOVER EFFECT ===== */
+nav a:hover {
+  color: #38bdf8;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  padding: 20px;
+}
+
+#chat-box {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 15px;
+}
+
+.message {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 70%;
+}
+
+.user {
+  background: #2563eb;
+  align-self: flex-end;
+}
+
+.bot {
+  background: #334155;
+  align-self: flex-start;
+}
+
+.input-area {
+  display: flex;
+}
+
+textarea {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  resize: none;
+}
+
+button {
+  padding: 10px 20px;
+  margin-left: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #22c55e;
+  color: white;
+  cursor: pointer;
+}
+
 button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 25px #00f2ff,
-              0 0 50px #007bff;
+  background: #16a34a;
 }
 
-/* ===== FLOATING ROBOTS ===== */
-.robot {
-  position: absolute;
-  width: 80px;
-  animation: float 6s ease-in-out infinite;
-  opacity: 0.4;
+.image-container {
+  padding: 30px;
+  text-align: center;
 }
 
-.robot:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-.robot:nth-child(2) { top: 70%; left: 80%; animation-delay: 2s; }
-.robot:nth-child(3) { top: 40%; left: 5%; animation-delay: 4s; }
-
-@keyframes float {
-  0%,100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+#image-prompt {
+  width: 60%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
 }
 
-</style>
-</head>
-<body>
-
-<!-- Floating Robot SVGs -->
-<img class="robot" src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
-<img class="robot" src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
-<img class="robot" src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png">
-
-<div class="container">
-  <h1>BrainRack AI</h1>
-  <input type="text" placeholder="Enter your prompt..." />
-  <br/>
-  <button>Generate Image</button>
-  <button>Start Chat</button>
-</div>
-
-</body>
-</html>
+#image-result img {
+  margin-top: 20px;
+  max-width: 400px;
+  border-radius: 10px;
+}
