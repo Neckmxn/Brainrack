@@ -1,11 +1,16 @@
 require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
+const path = require("path");
 
 const app = express();
+
+// ✅ Middleware AFTER app is created
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 const PORT = process.env.PORT || 5000;
@@ -32,12 +37,11 @@ app.post("/api/chat", async (req, res) => {
     );
 
     res.setHeader("Content-Type", "text/plain");
-    res.setHeader("Transfer-Encoding", "chunked");
 
     response.data.on("data", (chunk) => {
       const lines = chunk.toString().split("\n");
 
-      lines.forEach((line) => {
+      for (const line of lines) {
         if (line.startsWith("data: ")) {
           const json = line.replace("data: ", "").trim();
 
@@ -53,16 +57,16 @@ app.post("/api/chat", async (req, res) => {
             }
           } catch (err) {}
         }
-      });
+      }
     });
 
   } catch (error) {
-    console.error(error.response?.data || error.message);
+    console.error("CHAT ERROR:", error.response?.data || error.message);
     res.status(500).end("Error");
   }
 });
 
-// ===== IMAGE ROUTE (UNCHANGED) =====
+// ===== IMAGE ROUTE =====
 app.post("/api/image", async (req, res) => {
   try {
     const { prompt } = req.body;
@@ -71,8 +75,7 @@ app.post("/api/image", async (req, res) => {
       "https://openrouter.ai/api/v1/images/generations",
       {
         model: "stabilityai/stable-diffusion-xl-base-1.0",
-        prompt: prompt,
-        size: "1024x1024"
+        prompt: prompt
       },
       {
         headers: {
@@ -83,14 +86,16 @@ app.post("/api/image", async (req, res) => {
     );
 
     res.json(response.data);
+
   } catch (error) {
-    console.error(error.response?.data || error.message);
+    console.error("IMAGE ERROR:", error.response?.data || error.message);
     res.status(500).json({ error: "Image generation failed" });
   }
 });
 
+// Serve main page
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.listen(PORT, () => {
