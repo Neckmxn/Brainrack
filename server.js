@@ -24,7 +24,7 @@ app.post("/api/chat", async (req, res) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          Authorization: `Bearer ${process.env.OPENROUTER_KEY}`,
           "Content-Type": "application/json"
         },
         responseType: "stream"
@@ -70,13 +70,13 @@ app.post("/api/image", async (req, res) => {
     const response = await axios.post(
       "https://openrouter.ai/api/v1/images/generations",
       {
-        model: "openai/dall-e-3",
+        model: "stabilityai/stable-diffusion-xl-base-1.0",
         prompt: prompt,
         size: "1024x1024"
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          Authorization: `Bearer ${process.env.OPENROUTER_KEY}`,
           "Content-Type": "application/json"
         }
       }
