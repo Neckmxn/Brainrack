@@ -1,101 +1,54 @@
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Body */
 body {
+  font-family: Arial, sans-serif;
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  height: 100vh;
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 }
 
-/* Main Container */
 .container {
-  width: 95%;
-  max-width: 800px;
-  height: 90vh;
-  background: #ffffff;
+  background: rgba(0,0,0,0.6);
+  padding: 20px;
   border-radius: 15px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-}
-
-/* Header */
-.header {
-  background: #111827;
-  color: white;
-  padding: 20px;
+  width: 400px;
   text-align: center;
-  font-size: 22px;
-  font-weight: bold;
 }
 
-/* Chat Box */
-.chat-box {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-  background: #f3f4f6;
-}
-
-/* Message Styles */
-.message {
-  margin-bottom: 15px;
-  padding: 10px 15px;
-  border-radius: 10px;
-  max-width: 75%;
-  word-wrap: break-word;
-}
-
-.user {
-  background: #2563eb;
-  color: white;
-  align-self: flex-end;
-}
-
-.bot {
-  background: #e5e7eb;
-  color: black;
-  align-self: flex-start;
-}
-
-/* Input Area */
-.input-area {
-  display: flex;
-  padding: 15px;
-  border-top: 1px solid #ddd;
-  background: white;
-}
-
-.input-area input {
-  flex: 1;
+input {
+  width: 80%;
   padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  outline: none;
-  font-size: 16px;
-}
-
-.input-area button {
-  margin-left: 10px;
-  padding: 10px 18px;
-  border-radius: 8px;
+  margin: 10px 0;
+  border-radius: 5px;
   border: none;
-  background: #2563eb;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
 }
 
-.input-area button:hover {
-  background: #1e40af;
+button {
+  padding: 10px 20px;
+  border: none;
+  background: #1e90ff;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background: #00bfff;
+}
+
+.chat-box {
+  height: 300px;
+  overflow-y: auto;
+  background: rgba(255,255,255,0.1);
+  padding: 10px;
+  border-radius: 5px;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+#imageResult img {
+  max-width: 100%;
+  margin-top: 10px;
+  border-radius: 10px;
 }
