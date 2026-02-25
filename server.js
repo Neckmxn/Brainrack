@@ -67,28 +67,32 @@ app.post("/api/chat", async (req, res) => {
 });
 
 // ===== IMAGE ROUTE =====
+const OpenAI = require("openai");
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
 app.post("/api/image", async (req, res) => {
   try {
     const { prompt } = req.body;
 
-    const response = await axios.post(
-      "https://openrouter.ai/api/v1/images/generations",
-      {
-        model: "stabilityai/stable-diffusion-xl-base-1.0",
-        prompt: prompt
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.OPENROUTER_KEY}`,
-          "Content-Type": "application/json"
-        }
-      }
-    );
+    const result = await openai.images.generate({
+      model: "gpt-image-1",
+      prompt: prompt,
+      size: "1024x1024"
+    });
 
-    res.json(response.data);
+    res.json({
+      data: [
+        {
+          url: result.data[0].url
+        }
+      ]
+    });
 
   } catch (error) {
-    console.error("IMAGE ERROR:", error.response?.data || error.message);
+    console.error("IMAGE ERROR:", error);
     res.status(500).json({ error: "Image generation failed" });
   }
 });
