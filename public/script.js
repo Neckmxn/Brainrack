@@ -1,50 +1,59 @@
-const chatBox = document.getElementById("chat-box");
+const chatBox = document.getElementById("chatBox");
 
+// ===== CHAT =====
 async function sendMessage() {
-  const input = document.getElementById("user-input");
-  const message = input.value.trim();
-  if (!message) return;
+  const input = document.getElementById("inputText");
 
-  addMessage(message, "user");
+  if (!input.value.trim()) return;
+
+  // USER MESSAGE
+  const userBubble = document.createElement("div");
+  userBubble.className = "bubble user";
+  userBubble.innerText = input.value;
+  chatBox.appendChild(userBubble);
+
   input.value = "";
 
-  // Create empty bot message container
-  const botMessageDiv = document.createElement("div");
-  botMessageDiv.classList.add("message", "bot");
-  chatBox.appendChild(botMessageDiv);
+  // AI BUBBLE
+  const aiBubble = document.createElement("div");
+  aiBubble.className = "bubble ai";
+  chatBox.appendChild(aiBubble);
+
+  // Thinking animation
+  aiBubble.innerHTML = `
+    <div class="typing-dots">
+      <span>.</span><span>.</span><span>.</span>
+    </div>
+  `;
 
   chatBox.scrollTop = chatBox.scrollHeight;
 
-  const response = await fetch("/api/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message })
-  });
+  setTimeout(() => {
+    const aiResponse =
+      "⚡ BrainRack is processing your request with advanced neural intelligence systems.";
 
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder("utf-8");
-
-  let done = false;
-  let fullText = "";
-
-  while (!done) {
-    const { value, done: doneReading } = await reader.read();
-    done = doneReading;
-
-    const chunk = decoder.decode(value || new Uint8Array());
-    fullText += chunk;
-
-    botMessageDiv.textContent = fullText;
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
+    typeText(aiBubble, aiResponse);
+  }, 1200);
 }
 
-function addMessage(text, sender) {
-  const msg = document.createElement("div");
-  msg.classList.add("message", sender);
-  msg.innerText = text;
-  chatBox.appendChild(msg);
-  chatBox.scrollTop = chatBox.scrollHeight;
+function typeText(element, text) {
+  element.innerHTML = "";
+  element.classList.add("typing-text");
+
+  let i = 0;
+
+  function typing() {
+    if (i < text.length) {
+      element.innerHTML += text.charAt(i);
+      i++;
+      chatBox.scrollTop = chatBox.scrollHeight;
+      setTimeout(typing, 25);
+    } else {
+      element.classList.remove("typing-text");
+    }
+  }
+
+  typing();
 }
 
 // ===== IMAGE =====
@@ -55,20 +64,25 @@ async function generateImage() {
   const resultDiv = document.getElementById("image-result");
   resultDiv.innerHTML = "Generating...";
 
-  const res = await fetch("/api/image", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt })
-  });
+  try {
+    const res = await fetch("/api/image", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
 
-  const data = await res.json();
-  const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?model=sdxl&t=${Date.now()}`;
+    const data = await res.json();
 
-  resultDiv.innerHTML = `
-  <img src="${imageUrl}" />
-  <br/>
-  <a href="${imageUrl}" download target="_blank">
-    <button style="margin-top:10px;">Download Image</button>
-  </a>
-`;
+    const imageUrl = data.data[0].url; // ✅ Use backend response
+
+    resultDiv.innerHTML = `
+      <img src="${imageUrl}" style="max-width:100%; border-radius:15px;" />
+      <br/>
+      <a href="${imageUrl}" download target="_blank">
+        <button style="margin-top:10px;">Download Image</button>
+      </a>
+    `;
+  } catch (err) {
+    resultDiv.innerHTML = "Image generation failed.";
+  }
 }
