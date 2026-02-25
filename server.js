@@ -66,37 +66,28 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// ===== IMAGE ROUTE =====
-const OpenAI = require("openai");
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
-
+// ===== FREE IMAGE ROUTE (Pollinations) =====
 app.post("/api/image", async (req, res) => {
   try {
     const { prompt } = req.body;
 
-    const result = await openai.images.generate({
-      model: "gpt-image-1",
-      prompt: prompt,
-      size: "1024x1024"
-    });
+    if (!prompt) {
+      return res.status(400).json({ error: "Prompt is required" });
+    }
+
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024&seed=${Math.floor(Math.random() * 100000)}`;
 
     res.json({
       data: [
-        {
-          url: result.data[0].url
-        }
+        { url: imageUrl }
       ]
     });
 
   } catch (error) {
-    console.error("IMAGE ERROR:", error);
+    console.error("IMAGE ERROR:", error.message);
     res.status(500).json({ error: "Image generation failed" });
   }
 });
-
 // Serve main page
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
