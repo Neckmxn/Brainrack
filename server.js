@@ -66,7 +66,7 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// ===== FREE IMAGE ROUTE (Pollinations) =====
+// ===== HUGGINGFACE IMAGE ROUTE =====
 app.post("/api/image", async (req, res) => {
   try {
     const { prompt } = req.body;
@@ -75,7 +75,20 @@ app.post("/api/image", async (req, res) => {
       return res.status(400).json({ error: "Prompt is required" });
     }
 
-    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024&seed=${Math.floor(Math.random() * 100000)}`;
+    const response = await axios.post(
+      "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
+      { inputs: prompt },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HF_TOKEN}`,
+          "Content-Type": "application/json"
+        },
+        responseType: "arraybuffer"
+      }
+    );
+
+    const base64Image = Buffer.from(response.data).toString("base64");
+    const imageUrl = `data:image/png;base64,${base64Image}`;
 
     res.json({
       data: [
@@ -84,10 +97,11 @@ app.post("/api/image", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("IMAGE ERROR:", error.message);
+    console.error("IMAGE ERROR:", error.response?.data || error.message);
     res.status(500).json({ error: "Image generation failed" });
   }
 });
+
 // Serve main page
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));

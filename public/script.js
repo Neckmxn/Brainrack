@@ -62,7 +62,13 @@ async function generateImage() {
   });
 
   const data = await res.json();
-  const imageUrl = data.data[0].url;
+  const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?model=sdxl&t=${Date.now()}`;
 
-  resultDiv.innerHTML = `<img src="${imageUrl}" />`;
+  resultDiv.innerHTML = `
+  <img src="${imageUrl}" />
+  <br/>
+  <a href="${imageUrl}" download target="_blank">
+    <button style="margin-top:10px;">Download Image</button>
+  </a>
+`;
 }
