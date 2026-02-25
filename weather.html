@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather - Brainrack AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="weather">
+
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">
+      <div class="logo">B</div>
+      <span class="brand-text">Brainrack AI</span>
+    </a>
+    <div class="navbar-actions">
+      <button class="nav-btn" id="menuBtn" title="Menu">☰</button>
+    </div>
+  </nav>
+
+  <div class="menu-overlay" id="menuOverlay"></div>
+  <div class="three-dot-menu" id="threeDotsMenu">
+    <div class="menu-header">
+      <div class="user-name">Weather</div>
+      <div class="user-email">Live Weather Updates</div>
+    </div>
+    <div class="menu-items">
+      <a href="/" class="menu-item"><span class="menu-icon">🏠</span> Dashboard</a>
+      <a href="/index.html" class="menu-item"><span class="menu-icon">💬</span> AI Chat</a>
+      <a href="/image.html" class="menu-item"><span class="menu-icon">🎨</span> Image Generator</a>
+      <a href="/document.html" class="menu-item"><span class="menu-icon">📄</span> Document Solver</a>
+      <a href="/video.html" class="menu-item"><span class="menu-icon">🎬</span> Video Generator</a>
+      <a href="/business.html" class="menu-item"><span class="menu-icon">💼</span> Business Solver</a>
+      <a href="/startup.html" class="menu-item"><span class="menu-icon">🚀</span> Startup Ideas</a>
+      <a href="/news.html" class="menu-item"><span class="menu-icon">📰</span> News</a>
+      <a href="/weather.html" class="menu-item"><span class="menu-icon">🌤</span> Weather</a>
+      <a href="/contactus.html" class="menu-item"><span class="menu-icon">📧</span> Contact Us</a>
+      <div class="menu-divider"></div>
+      <div class="menu-item" onclick="openProfile()"><span class="menu-icon">👤</span> Profile</div>
+      <div class="menu-item" id="themeToggleMenu" onclick="toggleTheme()"><span class="menu-icon">🌙</span> Dark Mode</div>
+      <div class="menu-item" onclick="openSettings()"><span class="menu-icon">⚙️</span> Settings</div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+      <div class="modal-title">⚙️ Settings <button class="modal-close" data-modal-close>✕</button></div>
+      <div class="setting-group"><div class="setting-label">Voice Model</div><select class="setting-control" id="voiceModelSelect"></select></div>
+      <div class="setting-group"><div class="setting-label">Speed</div><div class="range-container"><input type="range" id="voiceSpeed" min="0.5" max="2" step="0.1" value="1" oninput="document.getElementById('speedValue').textContent=this.value"><span class="range-value" id="speedValue">1</span></div></div>
+      <div class="setting-group"><div class="setting-label">Pitch</div><div class="range-container"><input type="range" id="voicePitch" min="0.5" max="2" step="0.1" value="1" oninput="document.getElementById('pitchValue').textContent=this.value"><span class="range-value" id="pitchValue">1</span></div></div>
+      <div class="setting-group"><div class="setting-label">Volume</div><div class="range-container"><input type="range" id="voiceVolume" min="0" max="1" step="0.1" value="1" oninput="document.getElementById('volumeValue').textContent=this.value"><span class="range-value" id="volumeValue">1</span></div></div>
+      <button class="btn-primary" onclick="saveSettings()" style="width:100%;">Save</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal">
+      <div class="modal-title">👤 Profile <button class="modal-close" data-modal-close>✕</button></div>
+      <div class="profile-avatar">👤</div>
+      <div class="setting-group"><div class="setting-label">Name</div><input type="text" class="setting-control" id="profileName"></div>
+      <div class="setting-group"><div class="setting-label">Email</div><input type="email" class="setting-control" id="profileEmail"></div>
+      <button class="btn-primary" onclick="saveProfile()" style="width:100%;">Save</button>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <div class="page-container">
+      <div class="page-header">
+        <h1>🌤 Weather Station</h1>
+        <p>Real-time weather updates, forecasts, and air quality</p>
+        <div style="margin-top: 16px;">
+          <button class="btn-notify" id="weatherNotifyBtn">🔔 Notify about real-time-weather</button>
+        </div>
+      </div>
+
+      <!-- Search -->
+      <div class="search-bar">
+        <input type="text" id="weatherSearch" placeholder="Search city...">
+        <button id="weatherSearchBtn">🔍</button>
+      </div>
+
+      <!-- Current Weather -->
+      <div id="weatherCurrent">
+        <div class="weather-current">
+          <div class="empty-state">
+            <div class="empty-icon">🌍</div>
+            <h3>Detecting your location...</h3>
+            <p>Allow location access for automatic weather detection</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Forecast -->
+      <div id="weatherForecast"></div>
+
+      <!-- Air Quality -->
+      <div id="airQuality"></div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

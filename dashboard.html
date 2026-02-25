@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brainrack AI - Your All-in-One AI Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="dashboard">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">
+      <div class="logo">B</div>
+      <span class="brand-text">Brainrack AI</span>
+    </a>
+    <div class="navbar-actions">
+      <button class="nav-btn" id="menuBtn" title="Menu">☰</button>
+    </div>
+  </nav>
+
+  <!-- Menu Overlay -->
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <!-- Three Dot Menu -->
+  <div class="three-dot-menu" id="threeDotsMenu">
+    <div class="menu-header">
+      <div class="user-name">Welcome!</div>
+      <div class="user-email">Brainrack AI Platform</div>
+    </div>
+    <div class="menu-items">
+      <a href="/" class="menu-item"><span class="menu-icon">🏠</span> Dashboard</a>
+      <a href="/index.html" class="menu-item"><span class="menu-icon">💬</span> AI Chat</a>
+      <a href="/image.html" class="menu-item"><span class="menu-icon">🎨</span> Image Generator</a>
+      <a href="/document.html" class="menu-item"><span class="menu-icon">📄</span> Document Solver</a>
+      <a href="/video.html" class="menu-item"><span class="menu-icon">🎬</span> Video Generator</a>
+      <a href="/business.html" class="menu-item"><span class="menu-icon">💼</span> Business Solver</a>
+      <a href="/startup.html" class="menu-item"><span class="menu-icon">🚀</span> Startup Ideas</a>
+      <a href="/news.html" class="menu-item"><span class="menu-icon">📰</span> News</a>
+      <a href="/weather.html" class="menu-item"><span class="menu-icon">🌤</span> Weather</a>
+      <a href="/contactus.html" class="menu-item"><span class="menu-icon">📧</span> Contact Us</a>
+      <div class="menu-divider"></div>
+      <div class="menu-item" onclick="openProfile()"><span class="menu-icon">👤</span> Profile</div>
+      <div class="menu-item" id="themeToggleMenu" onclick="toggleTheme()"><span class="menu-icon">🌙</span> Dark Mode</div>
+      <div class="menu-item" onclick="openSettings()"><span class="menu-icon">⚙️</span> Settings</div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+      <div class="modal-title">
+        ⚙️ Settings
+        <button class="modal-close" data-modal-close>✕</button>
+      </div>
+      <div class="setting-group">
+        <div class="setting-label">Voice Model</div>
+        <select class="setting-control" id="voiceModelSelect"></select>
+      </div>
+      <div class="setting-group">
+        <div class="setting-label">Voice Speed</div>
+        <div class="range-container">
+          <input type="range" id="voiceSpeed" min="0.5" max="2" step="0.1" value="1" oninput="document.getElementById('speedValue').textContent=this.value">
+          <span class="range-value" id="speedValue">1</span>
+        </div>
+      </div>
+      <div class="setting-group">
+        <div class="setting-label">Voice Pitch</div>
+        <div class="range-container">
+          <input type="range" id="voicePitch" min="0.5" max="2" step="0.1" value="1" oninput="document.getElementById('pitchValue').textContent=this.value">
+          <span class="range-value" id="pitchValue">1</span>
+        </div>
+      </div>
+      <div class="setting-group">
+        <div class="setting-label">Voice Volume</div>
+        <div class="range-container">
+          <input type="range" id="voiceVolume" min="0" max="1" step="0.1" value="1" oninput="document.getElementById('volumeValue').textContent=this.value">
+          <span class="range-value" id="volumeValue">1</span>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="saveSettings()" style="width: 100%;">Save Settings</button>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal">
+      <div class="modal-title">
+        👤 Profile
+        <button class="modal-close" data-modal-close>✕</button>
+      </div>
+      <div class="profile-avatar">👤</div>
+      <div class="setting-group">
+        <div class="setting-label">Name</div>
+        <input type="text" class="setting-control" id="profileName" placeholder="Your name">
+      </div>
+      <div class="setting-group">
+        <div class="setting-label">Email</div>
+        <input type="email" class="setting-control" id="profileEmail" placeholder="Your email">
+      </div>
+      <button class="btn-primary" onclick="saveProfile()" style="width: 100%;">Save Profile</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Hero -->
+    <section class="dashboard-hero">
+      <h1>Welcome to Brainrack AI</h1>
+      <p>Your all-in-one intelligent platform powered by cutting-edge AI. Chat, create, analyze, and innovate — all in one place.</p>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+      <div class="about-card">
+        <h2>About Brainrack AI</h2>
+        <p>Brainrack AI is a next-generation artificial intelligence platform designed to empower individuals and businesses with powerful AI tools. From intelligent conversations to document analysis, image generation to startup ideation — we bring the power of AI to your fingertips.</p>
+        <p><strong>Our Mission:</strong> To democratize access to advanced AI capabilities and help people work smarter, create faster, and think bigger.</p>
+        <div class="about-grid">
+          <div class="about-item">
+            <div class="about-icon">🎯</div>
+            <h4>Mission</h4>
+            <p>Making AI accessible and useful for everyone</p>
+          </div>
+          <div class="about-item">
+            <div class="about-icon">⚡</div>
+            <h4>Technology</h4>
+            <p>Powered by state-of-the-art language models</p>
+          </div>
+          <div class="about-item">
+            <div class="about-icon">👨‍💻</div>
+            <h4>Developer</h4>
+            <p>Built with passion by the Brainrack team</p>
+          </div>
+          <div class="about-item">
+            <div class="about-icon">🌍</div>
+            <h4>Global</h4>
+            <p>Supporting multiple languages worldwide</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features-section">
+      <h2>Explore Features</h2>
+      <div class="features-grid">
+        <a href="/index.html" class="feature-card" tabindex="0">
+          <div class="feature-icon">💬</div>
+          <h3>AI Chat</h3>
+          <p>Intelligent conversations with voice support</p>
+        </a>
+        <a href="/image.html" class="feature-card" tabindex="0">
+          <div class="feature-icon">🎨</div>
+          <h3>Image Generator</h3>
+          <p>Create and enhance images with AI</p>
+        </a>
+        <a href="/document.html" class="feature-card" tabindex="0">
+          <div class="feature-icon">📄</div>
+          <h3>Document Solver</h3>
+          <p>Analyze, summarize & solve documents</p>
+        </a>
+        <a href="/video.html" class="feature-card" tabindex="0">
+          <div class="feature-icon">🎬</div>
+          <h3>Video Generator</h3>
+          <p>AI-powered video storyboards & scripts</p>
+        </a>
+        <a href="/business.html" class="feature-card" tabindex="0">
+          <div class="feature-icon">💼</div>
+          <h3>Business Solver</h3>
+          <p>Strategic solutions for business problems</p>
+        </a>
+        <a href="/startup.html" class="feature-card" tabindex="0">
+          <div class="feature-icon">🚀</div>
+          <h3>Startup Ideas</h3>
+          <p>Generate innovative startup concepts</p>
+        </a>
+        <a href="/news.html" class="feature-card" tabindex="0">
+          <div class="feature-icon">📰</div>
+          <h3>News</h3>
+          <p>Real-time news with notifications</p>
+        </a>
+        <a href="/weather.html" class="feature-card" tabindex="0">
+          <div class="feature-icon">🌤</div>
+          <h3>Weather</h3>
+          <p>Live weather updates & forecasts</p>
+        </a>
+        <a href="/contactus.html" class="feature-card" tabindex="0">
+          <div class="feature-icon">📧</div>
+          <h3>Contact Us</h3>
+          <p>Get in touch with our team</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
