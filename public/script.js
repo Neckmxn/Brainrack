@@ -1,66 +1,68 @@
 const chatBox = document.getElementById("chat-box");
 
-// ========== CHAT ==========
 async function sendMessage() {
-  const input = document.getElementById("userInput");
-  const chatBox = document.getElementById("chatBox");
-
-  if (!input) return;
-
+  const input = document.getElementById("user-input");
   const message = input.value.trim();
   if (!message) return;
 
   addMessage(message, "user");
   input.value = "";
 
-  const res = await fetch("/chat", {
+  // Create empty bot message container
+  const botMessageDiv = document.createElement("div");
+  botMessageDiv.classList.add("message", "bot");
+  chatBox.appendChild(botMessageDiv);
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  const response = await fetch("/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message })
   });
 
-  const data = await res.json();
-  addMessage(data.reply, "bot");
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder("utf-8");
+
+  let done = false;
+  let fullText = "";
+
+  while (!done) {
+    const { value, done: doneReading } = await reader.read();
+    done = doneReading;
+
+    const chunk = decoder.decode(value || new Uint8Array());
+    fullText += chunk;
+
+    botMessageDiv.textContent = fullText;
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
 }
 
-function addMessage(text, type) {
-  const chatBox = document.getElementById("chatBox");
-  const div = document.createElement("div");
-
-  div.classList.add("message", type);
-  div.innerText = text;
-
-  chatBox.appendChild(div);
+function addMessage(text, sender) {
+  const msg = document.createElement("div");
+  msg.classList.add("message", sender);
+  msg.innerText = text;
+  chatBox.appendChild(msg);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-
-// ========== IMAGE ==========
+// ===== IMAGE =====
 async function generateImage() {
-  const promptInput = document.getElementById("imagePrompt");
-  const resultDiv = document.getElementById("imageResult");
-
-  if (!promptInput) return;
-
-  const prompt = promptInput.value.trim();
+  const prompt = document.getElementById("image-prompt").value;
   if (!prompt) return;
 
+  const resultDiv = document.getElementById("image-result");
   resultDiv.innerHTML = "Generating...";
 
-  const res = await fetch("/image", {
+  const res = await fetch("/api/image", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ prompt })
   });
 
   const data = await res.json();
-
-  if (data.image) {
-    resultDiv.innerHTML = `<img src="${data.image}" />`;
-  } else {
-    resultDiv.innerHTML = "Failed to generate image.";
-  }
-}
+  const imageUrl = data.data[0].url;
 
   resultDiv.innerHTML = `
   <img src="${imageUrl}" />
