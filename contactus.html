@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Brainrack AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>Brainrack AI</h1>
+            </div>
+            <div class="menu-icon" id="menuIcon">
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
+        </header>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-comments"></i> AI Chat
+            </a>
+            <a href="news.html" class="menu-item">
+                <i class="fas fa-newspaper"></i> News
+            </a>
+            <a href="weather.html" class="menu-item">
+                <i class="fas fa-cloud-sun"></i> Weather
+            </a>
+            <a href="image.html" class="menu-item">
+                <i class="fas fa-image"></i> Image AI
+            </a>
+            <a href="document.html" class="menu-item">
+                <i class="fas fa-file-pdf"></i> Document AI
+            </a>
+            <a href="video.html" class="menu-item">
+                <i class="fas fa-video"></i> Video AI
+            </a>
+            <a href="business.html" class="menu-item">
+                <i class="fas fa-briefcase"></i> Business AI
+            </a>
+            <a href="startup.html" class="menu-item">
+                <i class="fas fa-rocket"></i> Startup Ideas
+            </a>
+            <a href="contactus.html" class="menu-item active">
+                <i class="fas fa-envelope"></i> Contact Us
+            </a>
+            <div class="menu-divider"></div>
+            <a href="#" class="menu-item" id="profileBtn">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            <a href="#" class="menu-item" id="themeToggle">
+                <i class="fas fa-moon"></i> <span id="themeText">Dark Mode</span>
+            </a>
+            <a href="#" class="menu-item" id="settingsBtn">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </div>
+        <main class="contact-container">
+            <div class="feature-header">
+                <h2><i class="fas fa-envelope"></i> Contact Us</h2>
+                <p>Get in touch with our team for support and feedback</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info-section">
+                    <h3>Get In Touch</h3>
+                    <p>Have questions, feedback, or need support? We're here to help!</p>
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <p>support@brainrackai.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-method">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h4>Phone</h4>
+                                <p>+1 (555) 123-4567</p>
+                            </div>
+                        </div>
+                        <div class="contact-method">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h4>Address</h4>
+                                <p>123 AI Street, Tech Valley, CA 94000</p>
+                            </div>
+                        </div>
+                        <div class="contact-method">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h4>Business Hours</h4>
+                                <p>Mon-Fri: 9:00 AM - 6:00 PM PST</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <h4>Follow Us</h4>
+                        <div class="social-icons">
+                            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form-section">
+                    <h3>Send us a Message</h3>
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-group">
+                            <label for="contactName">Full Name *</label>
+                            <input type="text" id="contactName" class="form-input" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail">Email Address *</label>
+                            <input type="email" id="contactEmail" class="form-input" required placeholder="john@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactSubject">Subject *</label>
+                            <select id="contactSubject" class="form-input" required>
+                                <option value="">Select a subject</option>
+                                <option value="support">Technical Support</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="feature">Feature Request</option>
+                                <option value="bug">Bug Report</option>
+                                <option value="billing">Billing Question</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactMessage">Message *</label>
+                            <textarea id="contactMessage" class="form-textarea" rows="6" required placeholder="Tell us how we can help you..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                    <div class="form-success" id="formSuccess" style="display: none;">
+                        <i class="fas fa-check-circle"></i>
+                        <p>Thank you for contacting us! We'll get back to you soon.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeContact();
+        });
+    </script>
+</body>
+</html>
