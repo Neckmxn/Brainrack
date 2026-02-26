@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News - Brainrack AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>Brainrack AI</h1>
+            </div>
+            <div class="menu-icon" id="menuIcon">
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
+        </header>
+
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-comments"></i> AI Chat
+            </a>
+            <a href="news.html" class="menu-item active">
+                <i class="fas fa-newspaper"></i> News
+            </a>
+            <a href="weather.html" class="menu-item">
+                <i class="fas fa-cloud-sun"></i> Weather
+            </a>
+            <a href="image.html" class="menu-item">
+                <i class="fas fa-image"></i> Image AI
+            </a>
+            <a href="document.html" class="menu-item">
+                <i class="fas fa-file-pdf"></i> Document AI
+            </a>
+            <a href="video.html" class="menu-item">
+                <i class="fas fa-video"></i> Video AI
+            </a>
+            <a href="business.html" class="menu-item">
+                <i class="fas fa-briefcase"></i> Business AI
+            </a>
+            <a href="startup.html" class="menu-item">
+                <i class="fas fa-rocket"></i> Startup Ideas
+            </a>
+            <a href="contactus.html" class="menu-item">
+                <i class="fas fa-envelope"></i> Contact Us
+            </a>
+            <div class="menu-divider"></div>
+            <a href="#" class="menu-item" id="profileBtn">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            <a href="#" class="menu-item" id="themeToggle">
+                <i class="fas fa-moon"></i> <span id="themeText">Dark Mode</span>
+            </a>
+            <a href="#" class="menu-item" id="settingsBtn">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </div>
+
+        <main class="news-container">
+            <div class="news-header">
+                <h2><i class="fas fa-newspaper"></i> Real-time News</h2>
+                <div class="news-controls">
+                    <button class="notification-btn" id="newsNotifyBtn">
+                        <i class="fas fa-bell"></i> Notify about real-time news
+                    </button>
+                    <button class="refresh-btn" id="refreshNewsBtn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <div class="news-categories">
+                <button class="category-btn active" data-category="general">
+                    <i class="fas fa-globe"></i> Latest
+                </button>
+                <button class="category-btn" data-category="headlines">
+                    <i class="fas fa-star"></i> Headlines
+                </button>
+                <button class="category-btn" data-category="technology">
+                    <i class="fas fa-microchip"></i> Technology
+                </button>
+                <button class="category-btn" data-category="business">
+                    <i class="fas fa-briefcase"></i> Business
+                </button>
+                <button class="category-btn" data-category="sports">
+                    <i class="fas fa-futbol"></i> Sports
+                </button>
+                <button class="category-btn" data-category="entertainment">
+                    <i class="fas fa-film"></i> Entertainment
+                </button>
+                <button class="category-btn" data-category="health">
+                    <i class="fas fa-heartbeat"></i> Health
+                </button>
+                <button class="category-btn" data-category="science">
+                    <i class="fas fa-flask"></i> Science
+                </button>
+            </div>
+
+            <div class="news-grid" id="newsGrid">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading news...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeNews();
+        });
+    </script>
+</body>
+</html>

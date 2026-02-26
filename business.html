@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business AI - Brainrack AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>Brainrack AI</h1>
+            </div>
+            <div class="menu-icon" id="menuIcon">
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
+        </header>
+
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-comments"></i> AI Chat
+            </a>
+            <a href="news.html" class="menu-item">
+                <i class="fas fa-newspaper"></i> News
+            </a>
+            <a href="weather.html" class="menu-item">
+                <i class="fas fa-cloud-sun"></i> Weather
+            </a>
+            <a href="image.html" class="menu-item">
+                <i class="fas fa-image"></i> Image AI
+            </a>
+            <a href="document.html" class="menu-item">
+                <i class="fas fa-file-pdf"></i> Document AI
+            </a>
+            <a href="video.html" class="menu-item">
+                <i class="fas fa-video"></i> Video AI
+            </a>
+            <a href="business.html" class="menu-item active">
+                <i class="fas fa-briefcase"></i> Business AI
+            </a>
+            <a href="startup.html" class="menu-item">
+                <i class="fas fa-rocket"></i> Startup Ideas
+            </a>
+            <a href="contactus.html" class="menu-item">
+                <i class="fas fa-envelope"></i> Contact Us
+            </a>
+            <div class="menu-divider"></div>
+            <a href="#" class="menu-item" id="profileBtn">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            <a href="#" class="menu-item" id="themeToggle">
+                <i class="fas fa-moon"></i> <span id="themeText">Dark Mode</span>
+            </a>
+            <a href="#" class="menu-item" id="settingsBtn">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </div>
+
+        <main class="feature-container">
+            <div class="feature-header">
+                <h2><i class="fas fa-briefcase"></i> AI Business Problem Solver</h2>
+                <p>Get AI-powered solutions for your business challenges</p>
+            </div>
+
+            <div class="input-section">
+                <label for="businessType">Business Type/Industry</label>
+                <input type="text" id="businessType" class="text-input" placeholder="e.g., E-commerce, SaaS, Retail, etc.">
+
+                <label for="businessProblem">Describe Your Business Challenge</label>
+                <textarea id="businessProblem" class="text-area" rows="6" placeholder="Describe the problem you're facing in detail..."></textarea>
+
+                <div class="option-group">
+                    <label for="problemCategory">Problem Category</label>
+                    <select id="problemCategory" class="select-input">
+                        <option value="general">General</option>
+                        <option value="marketing">Marketing & Sales</option>
+                        <option value="operations">Operations</option>
+                        <option value="finance">Finance & Accounting</option>
+                        <option value="hr">Human Resources</option>
+                        <option value="technology">Technology & IT</option>
+                        <option value="customer-service">Customer Service</option>
+                        <option value="strategy">Strategy & Planning</option>
+                    </select>
+                </div>
+
+                <label>
+                    <input type="checkbox" id="includeExamples"> Include real-world examples
+                </label>
+                <label>
+                    <input type="checkbox" id="includeSteps"> Include step-by-step action plan
+                </label>
+
+                <button class="btn-primary" id="solveBtn">
+                    <i class="fas fa-lightbulb"></i> Get AI Solution
+                </button>
+            </div>
+
+            <div class="result-section" id="businessResult">
+                <div class="loading" id="businessLoading" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Analyzing your business problem...</p>
+                </div>
+                <div class="solution-output" id="solutionOutput"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeBusinessAI();
+        });
+    </script>
+</body>
+</html>

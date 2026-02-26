@@ -1,16 +1,31 @@
 {
   "name": "brainrack-ai",
   "version": "1.0.0",
-  "description": "Brainrack AI - Chat and Image Generator",
+  "description": "AI-powered multi-purpose application with chat, image generation, document analysis, and more",
   "main": "server.js",
-  "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
+  "keywords": [
+    "ai",
+    "openrouter",
+    "chat",
+    "image-generator",
+    "document-analyzer"
+  ],
+  "author": "Brainrack AI Team",
+  "license": "MIT",
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
     "express": "^4.18.2",
-    "node-fetch": "^3.3.2"
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.2",
+    "multer": "^1.4.5-lts.1",
+    "pdf-parse": "^1.1.1",
+    "form-data": "^4.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   }
 }

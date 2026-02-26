@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat - Brainrack AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Menu -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>Brainrack AI</h1>
+            </div>
+            <div class="menu-icon" id="menuIcon">
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
+        </header>
+
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="dashboard.html" class="menu-item active">
+                <i class="fas fa-comments"></i> AI Chat
+            </a>
+            <a href="news.html" class="menu-item">
+                <i class="fas fa-newspaper"></i> News
+            </a>
+            <a href="weather.html" class="menu-item">
+                <i class="fas fa-cloud-sun"></i> Weather
+            </a>
+            <a href="image.html" class="menu-item">
+                <i class="fas fa-image"></i> Image AI
+            </a>
+            <a href="document.html" class="menu-item">
+                <i class="fas fa-file-pdf"></i> Document AI
+            </a>
+            <a href="video.html" class="menu-item">
+                <i class="fas fa-video"></i> Video AI
+            </a>
+            <a href="business.html" class="menu-item">
+                <i class="fas fa-briefcase"></i> Business AI
+            </a>
+            <a href="startup.html" class="menu-item">
+                <i class="fas fa-rocket"></i> Startup Ideas
+            </a>
+            <a href="contactus.html" class="menu-item">
+                <i class="fas fa-envelope"></i> Contact Us
+            </a>
+            <div class="menu-divider"></div>
+            <a href="#" class="menu-item" id="profileBtn">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            <a href="#" class="menu-item" id="themeToggle">
+                <i class="fas fa-moon"></i> <span id="themeText">Dark Mode</span>
+            </a>
+            <a href="#" class="menu-item" id="settingsBtn">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </div>
+
+        <!-- Chat Container -->
+        <main class="chat-container">
+            <div class="chat-header">
+                <h2><i class="fas fa-comments"></i> AI Chat Assistant</h2>
+                <p>Ask me anything in any language</p>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    <div class="message-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Hello! I'm your AI assistant. How can I help you today?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <button class="voice-btn" id="voiceBtn" title="Voice Input">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <input type="text" class="chat-input" id="chatInput" placeholder="Type your message...">
+                <button class="send-btn" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </main>
+
+        <!-- Settings Modal -->
+        <div class="modal" id="settingsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-cog"></i> Voice Settings</h2>
+                    <button class="close-btn" id="closeSettings">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="setting-group">
+                        <label for="voiceModel">Voice Model</label>
+                        <select id="voiceModel" class="setting-select">
+                            <option value="0">Default Voice</option>
+                            <option value="1">Professional Voice</option>
+                            <option value="2">Casual Voice</option>
+                            <option value="3">Energetic Voice</option>
+                            <option value="4">Calm Voice</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="voiceSpeed">Voice Speed: <span id="speedValue">1.0</span>x</label>
+                        <input type="range" id="voiceSpeed" class="setting-slider" min="0.5" max="2.0" step="0.1" value="1.0">
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="voicePitch">Voice Pitch: <span id="pitchValue">1.0</span></label>
+                        <input type="range" id="voicePitch" class="setting-slider" min="0.5" max="2.0" step="0.1" value="1.0">
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="voiceVolume">Voice Volume: <span id="volumeValue">100</span>%</label>
+                        <input type="range" id="voiceVolume" class="setting-slider" min="0" max="100" step="1" value="100">
+                    </div>
+
+                    <div class="setting-group">
+                        <label>
+                            <input type="checkbox" id="autoSpeak"> Auto-speak responses (voice input only)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Modal -->
+        <div class="modal" id="profileModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-user"></i> User Profile</h2>
+                    <button class="close-btn" id="closeProfile">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="profile-section">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h3 id="userName">Guest User</h3>
+                            <p id="userEmail">guest@brainrackai.com</p>
+                        </div>
+                    </div>
+                    <div class="setting-group">
+                        <label for="displayName">Display Name</label>
+                        <input type="text" id="displayName" class="setting-input" placeholder="Enter your name">
+                    </div>
+                    <div class="setting-group">
+                        <label for="emailAddress">Email Address</label>
+                        <input type="email" id="emailAddress" class="setting-input" placeholder="Enter your email">
+                    </div>
+                    <button class="btn-primary" id="saveProfile">Save Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Page-specific initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeChat();
+        });
+    </script>
+</body>
+</html>

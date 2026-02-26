@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainrack AI - Your All-in-One AI Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Menu -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>Brainrack AI</h1>
+            </div>
+            <div class="menu-icon" id="menuIcon">
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
+        </header>
+
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="news.html" class="menu-item">
+                <i class="fas fa-newspaper"></i> News
+            </a>
+            <a href="weather.html" class="menu-item">
+                <i class="fas fa-cloud-sun"></i> Weather
+            </a>
+            <a href="image.html" class="menu-item">
+                <i class="fas fa-image"></i> Image AI
+            </a>
+            <a href="document.html" class="menu-item">
+                <i class="fas fa-file-pdf"></i> Document AI
+            </a>
+            <a href="video.html" class="menu-item">
+                <i class="fas fa-video"></i> Video AI
+            </a>
+            <a href="business.html" class="menu-item">
+                <i class="fas fa-briefcase"></i> Business AI
+            </a>
+            <a href="startup.html" class="menu-item">
+                <i class="fas fa-rocket"></i> Startup Ideas
+            </a>
+            <a href="contactus.html" class="menu-item">
+                <i class="fas fa-envelope"></i> Contact Us
+            </a>
+            <div class="menu-divider"></div>
+            <a href="#" class="menu-item" id="profileBtn">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            <a href="#" class="menu-item" id="themeToggle">
+                <i class="fas fa-moon"></i> <span id="themeText">Dark Mode</span>
+            </a>
+            <a href="#" class="menu-item" id="settingsBtn">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </div>
+
+        <!-- Dashboard Content -->
+        <main class="dashboard">
+            <!-- About Section -->
+            <section class="about-section">
+                <h2><i class="fas fa-info-circle"></i> About Brainrack AI</h2>
+                <div class="about-content">
+                    <p class="mission">
+                        <strong>Our Mission:</strong> To democratize artificial intelligence and make powerful AI tools accessible to everyone. 
+                        We believe in empowering individuals and businesses with cutting-edge AI technology that simplifies complex tasks and unleashes creativity.
+                    </p>
+                    <p class="description">
+                        Brainrack AI is your comprehensive AI-powered platform that combines multiple intelligent features into one seamless experience. 
+                        From intelligent conversations to image generation, document analysis to business solutions, we've got you covered.
+                    </p>
+                    <div class="developer-info">
+                        <h3><i class="fas fa-code"></i> Developer Information</h3>
+                        <p><strong>Development Team:</strong> Brainrack AI Development Team</p>
+                        <p><strong>Version:</strong> 1.0.0</p>
+                        <p><strong>Powered by:</strong> OpenRouter AI, OpenWeather API, News API</p>
+                        <p><strong>Last Updated:</strong> 2025</p>
+                    </div>
+                    <div class="features-highlight">
+                        <h3><i class="fas fa-star"></i> Key Features</h3>
+                        <ul>
+                            <li>Multi-language voice interaction with customizable AI voices</li>
+                            <li>Advanced image generation and enhancement</li>
+                            <li>Intelligent document analysis and summarization</li>
+                            <li>AI-powered video generation</li>
+                            <li>Business problem solving and startup idea generation</li>
+                            <li>Real-time news and weather updates</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Grid -->
+            <section class="features-section">
+                <h2><i class="fas fa-th"></i> Explore Features</h2>
+                <div class="features-grid">
+                    <a href="dashboard.html" class="feature-card">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>AI Chat</h3>
+                        <p>Intelligent conversations with voice support in multiple languages</p>
+                    </a>
+
+                    <a href="image.html" class="feature-card">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <h3>Image Generator</h3>
+                        <p>Create and enhance images with advanced AI technology</p>
+                    </a>
+
+                    <a href="document.html" class="feature-card">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h3>Document Analyzer</h3>
+                        <p>Analyze PDFs, solve questions, and summarize documents</p>
+                    </a>
+
+                    <a href="video.html" class="feature-card">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3>Video Generator</h3>
+                        <p>Generate AI-powered videos from text descriptions</p>
+                    </a>
+
+                    <a href="business.html" class="feature-card">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3>Business Solver</h3>
+                        <p>Get AI-powered solutions for your business challenges</p>
+                    </a>
+
+                    <a href="startup.html" class="feature-card">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3>Startup Ideas</h3>
+                        <p>Discover innovative startup ideas tailored to your interests</p>
+                    </a>
+
+                    <a href="news.html" class="feature-card">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <h3>Real-time News</h3>
+                        <p>Stay updated with latest headlines and breaking news</p>
+                    </a>
+
+                    <a href="weather.html" class="feature-card">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-cloud-sun"></i>
+                        </div>
+                        <h3>Weather Updates</h3>
+                        <p>Get accurate weather forecasts and real-time updates</p>
+                    </a>
+
+                    <a href="contactus.html" class="feature-card">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Contact Us</h3>
+                        <p>Get in touch with our team for support and feedback</p>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Brainrack AI. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image AI - Brainrack AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Menu -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>Brainrack AI</h1>
+            </div>
+            <div class="menu-icon" id="menuIcon">
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
+        </header>
+
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-comments"></i> AI Chat
+            </a>
+            <a href="news.html" class="menu-item">
+                <i class="fas fa-newspaper"></i> News
+            </a>
+            <a href="weather.html" class="menu-item">
+                <i class="fas fa-cloud-sun"></i> Weather
+            </a>
+            <a href="image.html" class="menu-item active">
+                <i class="fas fa-image"></i> Image AI
+            </a>
+            <a href="document.html" class="menu-item">
+                <i class="fas fa-file-pdf"></i> Document AI
+            </a>
+            <a href="video.html" class="menu-item">
+                <i class="fas fa-video"></i> Video AI
+            </a>
+            <a href="business.html" class="menu-item">
+                <i class="fas fa-briefcase"></i> Business AI
+            </a>
+            <a href="startup.html" class="menu-item">
+                <i class="fas fa-rocket"></i> Startup Ideas
+            </a>
+            <a href="contactus.html" class="menu-item">
+                <i class="fas fa-envelope"></i> Contact Us
+            </a>
+            <div class="menu-divider"></div>
+            <a href="#" class="menu-item" id="profileBtn">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            <a href="#" class="menu-item" id="themeToggle">
+                <i class="fas fa-moon"></i> <span id="themeText">Dark Mode</span>
+            </a>
+            <a href="#" class="menu-item" id="settingsBtn">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </div>
+
+        <!-- Image AI Container -->
+        <main class="feature-container">
+            <div class="feature-header">
+                <h2><i class="fas fa-image"></i> AI Image Generator & Enhancer</h2>
+                <p>Create stunning images from text or enhance existing ones</p>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="generate">Generate Image</button>
+                <button class="tab-btn" data-tab="enhance">Enhance Image</button>
+            </div>
+
+            <!-- Generate Tab -->
+            <div class="tab-content active" id="generate">
+                <div class="input-section">
+                    <label for="imagePrompt">Describe the image you want to create</label>
+                    <textarea id="imagePrompt" class="text-area" rows="4" placeholder="A beautiful sunset over mountains with a lake in the foreground..."></textarea>
+                    
+                    <div class="options-grid">
+                        <div class="option-group">
+                            <label for="imageSize">Image Size</label>
+                            <select id="imageSize" class="select-input">
+                                <option value="1024x1024">Square (1024x1024)</option>
+                                <option value="1024x1792">Portrait (1024x1792)</option>
+                                <option value="1792x1024">Landscape (1792x1024)</option>
+                            </select>
+                        </div>
+                        <div class="option-group">
+                            <label for="imageStyle">Style</label>
+                            <select id="imageStyle" class="select-input">
+                                <option value="realistic">Realistic</option>
+                                <option value="artistic">Artistic</option>
+                                <option value="anime">Anime</option>
+                                <option value="digital-art">Digital Art</option>
+                                <option value="3d-render">3D Render</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" id="generateBtn">
+                        <i class="fas fa-magic"></i> Generate Image
+                    </button>
+                </div>
+
+                <div class="result-section" id="generateResult">
+                    <div class="loading" id="generateLoading" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Creating your image...</p>
+                    </div>
+                    <div class="image-preview" id="generatedImageContainer" style="display: none;">
+                        <img id="generatedImage" alt="Generated Image">
+                        <div class="image-actions">
+                            <button class="btn-secondary" id="downloadGenerated">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhance Tab -->
+            <div class="tab-content" id="enhance">
+                <div class="input-section">
+                    <label>Upload Image to Enhance</label>
+                    <div class="file-upload-area" id="enhanceUploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload or drag and drop</p>
+                        <input type="file" id="enhanceImageInput" accept="image/*" hidden>
+                    </div>
+
+                    <div class="uploaded-preview" id="uploadedPreview" style="display: none;">
+                        <img id="uploadedImage" alt="Uploaded Image">
+                    </div>
+
+                    <label for="enhancePrompt">Enhancement Instructions</label>
+                    <textarea id="enhancePrompt" class="text-area" rows="3" placeholder="Make it brighter, add more colors, improve quality..."></textarea>
+
+                    <button class="btn-primary" id="enhanceBtn" disabled>
+                        <i class="fas fa-wand-magic-sparkles"></i> Enhance Image
+                    </button>
+                </div>
+
+                <div class="result-section" id="enhanceResult">
+                    <div class="loading" id="enhanceLoading" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Enhancing your image...</p>
+                    </div>
+                    <div class="image-preview" id="enhancedImageContainer" style="display: none;">
+                        <img id="enhancedImage" alt="Enhanced Image">
+                        <div class="image-actions">
+                            <button class="btn-secondary" id="downloadEnhanced">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeImageAI();
+        });
+    </script>
+</body>
+</html>
