@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>BrainRack AI - Image Generator</title>
+  <title>Brainrack AI - Image Generator</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <nav>
-    <h1>BrainRack AI</h1>
-    <div>
-      <a href="index.html">Chat</a>
-      <a href="image.html">Image</a>
-    </div>
-  </nav>
-
-  <div class="image-container">
-    <input type="text" id="image-prompt" placeholder="Describe the image...">
-    <button onclick="generateImage()">Generate</button>
-
-    <div id="image-result"></div>
+<nav>
+  <h1>Brainrack AI</h1>
+  <div>
+    <a href="/">Chat</a>
+    <a href="image.html">Image</a>
   </div>
+</nav>
 
-  <script src="script.js"></script>
+<div class="image-container">
+  <h2>AI Image Generator</h2>
+
+  <input type="text" id="imagePrompt" placeholder="Describe your image..." />
+  <button onclick="generateImage()">Generate</button>
+
+  <div id="imageResult"></div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>

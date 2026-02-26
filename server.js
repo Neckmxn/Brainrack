@@ -1,112 +1,85 @@
-require("dotenv").config();
+import express from "express";
+import cors from "cors";
+import fetch from "node-fetch";
+import dotenv from "dotenv";
 
-const express = require("express");
-const cors = require("cors");
-const axios = require("axios");
-const path = require("path");
+dotenv.config();
 
 const app = express();
 
-// ✅ Middleware AFTER app is created
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
+const OPENROUTER_KEY = process.env.OPENROUTER_KEY;
 
-// ===== STREAMING CHAT ROUTE =====
-app.post("/api/chat", async (req, res) => {
+// Health check
+app.get("/", (req, res) => {
+  res.send("Brainrack AI Backend Running 🚀");
+});
+
+
+// ================= CHAT ROUTE =================
+app.post("/chat", async (req, res) => {
   try {
     const { message } = req.body;
 
-    const response = await axios.post(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        model: "openai/gpt-4o-mini",
-        messages: [{ role: "user", content: message }],
-        stream: true
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENROUTER_KEY}`,
+        "Content-Type": "application/json"
       },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.OPENROUTER_KEY}`,
-          "Content-Type": "application/json"
-        },
-        responseType: "stream"
-      }
-    );
+      body: JSON.stringify({
+        model: "openai/gpt-4o-mini",
+        messages: [{ role: "user", content: message }]
+      })
+    });
 
-    res.setHeader("Content-Type", "text/plain");
+    const data = await response.json();
 
-    response.data.on("data", (chunk) => {
-      const lines = chunk.toString().split("\n");
-
-      for (const line of lines) {
-        if (line.startsWith("data: ")) {
-          const json = line.replace("data: ", "").trim();
-
-          if (json === "[DONE]") {
-            return res.end();
-          }
-
-          try {
-            const parsed = JSON.parse(json);
-            const content = parsed.choices[0]?.delta?.content;
-            if (content) {
-              res.write(content);
-            }
-          } catch (err) {}
-        }
-      }
+    res.json({
+      reply: data.choices?.[0]?.message?.content || "No response."
     });
 
   } catch (error) {
-    console.error("CHAT ERROR:", error.response?.data || error.message);
-    res.status(500).end("Error");
+    console.error(error);
+    res.status(500).json({ error: "Chat Error" });
   }
 });
 
-// ===== HUGGINGFACE IMAGE ROUTE =====
-app.post("/api/image", async (req, res) => {
+
+// ================= IMAGE ROUTE =================
+app.post("/image", async (req, res) => {
   try {
     const { prompt } = req.body;
 
-    if (!prompt) {
-      return res.status(400).json({ error: "Prompt is required" });
-    }
+    const response = await fetch("https://openrouter.ai/api/v1/images/generations", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENROUTER_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "openai/dall-e-3",
+        prompt
+      })
+    });
 
-    const response = await axios.post(
-      "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
-      { inputs: prompt },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.HF_TOKEN}`,
-          "Content-Type": "application/json"
-        },
-        responseType: "arraybuffer"
-      }
-    );
-
-    const base64Image = Buffer.from(response.data).toString("base64");
-    const imageUrl = `data:image/png;base64,${base64Image}`;
+    const data = await response.json();
 
     res.json({
-      data: [
-        { url: imageUrl }
-      ]
+      image: data.data?.[0]?.url || null
     });
 
   } catch (error) {
-    console.error("IMAGE ERROR:", error.response?.data || error.message);
-    res.status(500).json({ error: "Image generation failed" });
+    console.error(error);
+    res.status(500).json({ error: "Image Error" });
   }
 });
 
-// Serve main page
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
 
 app.listen(PORT, () => {
-  console.log(`BrainRack AI running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

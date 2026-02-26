@@ -1,17 +1,16 @@
 {
   "name": "brainrack-ai",
   "version": "1.0.0",
-  "description": "BrainRack AI - Chat and Image Generation",
+  "description": "Brainrack AI - Chat and Image Generator",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js"
   },
-  "author": "BrainRack AI",
-  "license": "MIT",
   "dependencies": {
-    "axios": "^1.6.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2"
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.2"
   }
 }
