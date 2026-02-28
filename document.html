@@ -3,195 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document AI - Brainrack AI</title>
+    <title>Document Analyzer - Brainrack AI</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Header with Menu -->
-        <header class="header">
-            <div class="logo">
-                <i class="fas fa-brain"></i>
-                <h1>Brainrack AI</h1>
-            </div>
-            <div class="menu-icon" id="menuIcon">
-                <i class="fas fa-ellipsis-v"></i>
-            </div>
-        </header>
-
-        <!-- Dropdown Menu -->
-        <div class="dropdown-menu" id="dropdownMenu">
-            <a href="index.html" class="menu-item">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <a href="dashboard.html" class="menu-item">
-                <i class="fas fa-comments"></i> AI Chat
-            </a>
-            <a href="news.html" class="menu-item">
-                <i class="fas fa-newspaper"></i> News
-            </a>
-            <a href="weather.html" class="menu-item">
-                <i class="fas fa-cloud-sun"></i> Weather
-            </a>
-            <a href="image.html" class="menu-item">
-                <i class="fas fa-image"></i> Image AI
-            </a>
-            <a href="document.html" class="menu-item active">
-                <i class="fas fa-file-pdf"></i> Document AI
-            </a>
-            <a href="video.html" class="menu-item">
-                <i class="fas fa-video"></i> Video AI
-            </a>
-            <a href="business.html" class="menu-item">
-                <i class="fas fa-briefcase"></i> Business AI
-            </a>
-            <a href="startup.html" class="menu-item">
-                <i class="fas fa-rocket"></i> Startup Ideas
-            </a>
-            <a href="contactus.html" class="menu-item">
-                <i class="fas fa-envelope"></i> Contact Us
-            </a>
-            <div class="menu-divider"></div>
-            <a href="#" class="menu-item" id="profileBtn">
-                <i class="fas fa-user"></i> Profile
-            </a>
-            <a href="#" class="menu-item" id="themeToggle">
-                <i class="fas fa-moon"></i> <span id="themeText">Dark Mode</span>
-            </a>
-            <a href="#" class="menu-item" id="settingsBtn">
-                <i class="fas fa-cog"></i> Settings
-            </a>
+    <div class="animated-bg"></div>
+    <header>
+        <div class="header-content">
+            <a href="/dashboard" class="logo"><span>🧠</span> Brainrack AI</a>
+            <nav class="nav-actions">
+                <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
+                <div class="menu-container">
+                    <button class="icon-btn" id="menuBtn"><span>⋮</span></button>
+                    <div class="menu-dropdown" id="menuDropdown">
+                        <a href="/dashboard" class="menu-item"><span>🏠</span> Dashboard</a>
+                        <a href="/chat" class="menu-item"><span>💬</span> AI Chat</a>
+                        <a href="/image" class="menu-item"><span>🎨</span> Image Generator</a>
+                        <a href="/document" class="menu-item"><span>📄</span> Document Analyzer</a>
+                        <a href="/video" class="menu-item"><span>🎥</span> Video Generator</a>
+                        <a href="/business" class="menu-item"><span>💼</span> Business Solutions</a>
+                        <a href="/startup" class="menu-item"><span>🚀</span> Startup Ideas</a>
+                        <a href="/news" class="menu-item"><span>📰</span> News</a>
+                        <a href="/weather" class="menu-item"><span>⛅</span> Weather</a>
+                        <a href="/contact" class="menu-item"><span>📧</span> Contact Us</a>
+                        <div class="menu-item" id="profileBtn"><span>👤</span> Profile</div>
+                        <div class="menu-item" id="themeToggle"><span>🌓</span> Toggle Theme</div>
+                        <div class="menu-item" id="settingsBtn"><span>⚙️</span> Settings</div>
+                    </div>
+                </div>
+            </nav>
         </div>
+    </header>
 
-        <!-- Document AI Container -->
-        <main class="feature-container">
-            <div class="feature-header">
-                <h2><i class="fas fa-file-pdf"></i> AI Document Analyzer</h2>
-                <p>Analyze PDFs, solve questions, and summarize documents</p>
+    <main class="container">
+        <div class="document-analyzer">
+            <h1 style="margin-bottom: 2rem;">📄 AI Document Analyzer</h1>
+            
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <h3>Upload Document</h3>
+                <p>Drag & drop or click to upload</p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Supports: PDF, DOCX, TXT (Max 50MB)</p>
+                <input type="file" id="fileInput" accept=".pdf,.docx,.doc,.txt" style="display: none;">
             </div>
 
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="analyze">Analyze Document</button>
-                <button class="tab-btn" data-tab="question">Ask Question</button>
-                <button class="tab-btn" data-tab="summarize">Summarize</button>
+            <div id="documentContent" style="display: none;">
+                <div class="document-content">
+                    <h3>Document: <span id="fileName"></span></h3>
+                    <div class="document-text" id="documentText"></div>
+                    <div class="form-group">
+                        <label for="questionInput">Ask a question about this document</label>
+                        <input type="text" id="questionInput" placeholder="What is this document about?">
+                    </div>
+                    <button class="btn btn-primary" id="askBtn">Ask Question</button>
+                    <button class="btn btn-secondary" id="summarizeBtn">Summarize Document</button>
+                    <button class="btn btn-secondary" id="newDocBtn">Upload New Document</button>
+                </div>
+                <div id="answerSection" style="margin-top: 1.5rem;"></div>
             </div>
-
-            <!-- Analyze Tab -->
-            <div class="tab-content active" id="analyze">
-                <div class="input-section">
-                    <label>Upload Document (PDF, DOCX, TXT)</label>
-                    <div class="file-upload-area" id="analyzeUploadArea">
-                        <i class="fas fa-file-upload"></i>
-                        <p>Click to upload or drag and drop</p>
-                        <input type="file" id="analyzeFileInput" accept=".pdf,.docx,.txt" hidden>
-                    </div>
-
-                    <div class="file-info" id="analyzeFileInfo" style="display: none;">
-                        <i class="fas fa-file-alt"></i>
-                        <span id="analyzeFileName"></span>
-                        <button class="remove-btn" id="removeAnalyzeFile">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-
-                    <button class="btn-primary" id="analyzeBtn" disabled>
-                        <i class="fas fa-search"></i> Analyze Document
-                    </button>
-                </div>
-
-                <div class="result-section" id="analyzeResult">
-                    <div class="loading" id="analyzeLoading" style="display: none;">
-                        <i class="fas fa-spinner fa-spin"></i>
-                        <p>Analyzing document...</p>
-                    </div>
-                    <div class="analysis-output" id="analysisOutput"></div>
-                </div>
-            </div>
-
-            <!-- Question Tab -->
-            <div class="tab-content" id="question">
-                <div class="input-section">
-                    <label>Upload Document (PDF, DOCX, TXT)</label>
-                    <div class="file-upload-area" id="questionUploadArea">
-                        <i class="fas fa-file-upload"></i>
-                        <p>Click to upload or drag and drop</p>
-                        <input type="file" id="questionFileInput" accept=".pdf,.docx,.txt" hidden>
-                    </div>
-
-                    <div class="file-info" id="questionFileInfo" style="display: none;">
-                        <i class="fas fa-file-alt"></i>
-                        <span id="questionFileName"></span>
-                        <button class="remove-btn" id="removeQuestionFile">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-
-                    <label for="documentQuestion">Ask a Question</label>
-                    <textarea id="documentQuestion" class="text-area" rows="3" placeholder="What is the main topic of this document?"></textarea>
-
-                    <button class="btn-primary" id="questionBtn" disabled>
-                        <i class="fas fa-question-circle"></i> Get Answer
-                    </button>
-                </div>
-
-                <div class="result-section" id="questionResult">
-                    <div class="loading" id="questionLoading" style="display: none;">
-                        <i class="fas fa-spinner fa-spin"></i>
-                        <p>Finding answer...</p>
-                    </div>
-                    <div class="answer-output" id="answerOutput"></div>
-                </div>
-            </div>
-
-            <!-- Summarize Tab -->
-            <div class="tab-content" id="summarize">
-                <div class="input-section">
-                    <label>Upload Document (PDF, DOCX, TXT)</label>
-                    <div class="file-upload-area" id="summarizeUploadArea">
-                        <i class="fas fa-file-upload"></i>
-                        <p>Click to upload or drag and drop</p>
-                        <input type="file" id="summarizeFileInput" accept=".pdf,.docx,.txt" hidden>
-                    </div>
-
-                    <div class="file-info" id="summarizeFileInfo" style="display: none;">
-                        <i class="fas fa-file-alt"></i>
-                        <span id="summarizeFileName"></span>
-                        <button class="remove-btn" id="removeSummarizeFile">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-
-                    <div class="option-group">
-                        <label for="summaryLength">Summary Length</label>
-                        <select id="summaryLength" class="select-input">
-                            <option value="short">Short (3-5 sentences)</option>
-                            <option value="medium" selected>Medium (1-2 paragraphs)</option>
-                            <option value="long">Long (detailed summary)</option>
-                        </select>
-                    </div>
-
-                    <button class="btn-primary" id="summarizeBtn" disabled>
-                        <i class="fas fa-compress-alt"></i> Summarize Document
-                    </button>
-                </div>
-
-                <div class="result-section" id="summarizeResult">
-                    <div class="loading" id="summarizeLoading" style="display: none;">
-                        <i class="fas fa-spinner fa-spin"></i>
-                        <p>Summarizing document...</p>
-                    </div>
-                    <div class="summary-output" id="summaryOutput"></div>
-                </div>
-            </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <script src="script.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeDocumentAI();
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const documentContent = document.getElementById('documentContent');
+        const documentText = document.getElementById('documentText');
+        const fileName = document.getElementById('fileName');
+        const questionInput = document.getElementById('questionInput');
+        const askBtn = document.getElementById('askBtn');
+        const summarizeBtn = document.getElementById('summarizeBtn');
+        const newDocBtn = document.getElementById('newDocBtn');
+        const answerSection = document.getElementById('answerSection');
+
+        let currentDocumentText = '';
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
         });
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) handleFileUpload(file);
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files[0]) handleFileUpload(e.target.files[0]);
+        });
+
+        askBtn.addEventListener('click', askQuestion);
+        summarizeBtn.addEventListener('click', summarizeDocument);
+        newDocBtn.addEventListener('click', () => {
+            documentContent.style.display = 'none';
+            uploadArea.style.display = 'block';
+            currentDocumentText = '';
+        });
+
+        async function handleFileUpload(file) {
+            const formData = new FormData();
+            formData.append('document', file);
+
+            uploadArea.innerHTML = '<div class="loading-spinner"></div><p>Processing document...</p>';
+
+            try {
+                const response = await fetch('/api/upload-document', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.error) throw new Error(data.error);
+
+                currentDocumentText = data.text;
+                fileName.textContent = data.filename;
+                documentText.textContent = data.text.substring(0, 2000) + (data.text.length > 2000 ? '...' : '');
+                
+                uploadArea.style.display = 'none';
+                documentContent.style.display = 'block';
+
+            } catch (error) {
+                alert('Error processing document: ' + error.message);
+                uploadArea.innerHTML = `
+                    <div class="upload-icon">📁</div>
+                    <h3>Upload Document</h3>
+                    <p>Drag & drop or click to upload</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">Supports: PDF, DOCX, TXT (Max 50MB)</p>
+                `;
+            }
+        }
+
+        async function askQuestion() {
+            const question = questionInput.value.trim();
+            if (!question) {
+                alert('Please enter a question');
+                return;
+            }
+
+            askBtn.disabled = true;
+            answerSection.innerHTML = '<div class="loading-spinner"></div>';
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        messages: [
+                            { role: 'system', content: 'You are a document analysis assistant. Answer questions based on the provided document.' },
+                            { role: 'user', content: `Document content:\n\n${currentDocumentText}\n\nQuestion: ${question}` }
+                        ]
+                    })
+                });
+
+                const data = await response.json();
+                const answer = data.choices[0].message.content;
+
+                answerSection.innerHTML = `
+                    <div class="document-content">
+                        <h3>Answer:</h3>
+                        <p style="line-height: 1.6;">${answer}</p>
+                    </div>
+                `;
+
+            } catch (error) {
+                answerSection.innerHTML = `<div class="alert alert-error">Error: ${error.message}</div>`;
+            } finally {
+                askBtn.disabled = false;
+            }
+        }
+
+        async function summarizeDocument() {
+            summarizeBtn.disabled = true;
+            answerSection.innerHTML = '<div class="loading-spinner"></div>';
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        messages: [
+                            { role: 'system', content: 'You are a document summarization assistant. Provide concise, accurate summaries.' },
+                            { role: 'user', content: `Please provide a comprehensive summary of this document:\n\n${currentDocumentText}` }
+                        ]
+                    })
+                });
+
+                const data = await response.json();
+                const summary = data.choices[0].message.content;
+
+                answerSection.innerHTML = `
+                    <div class="document-content">
+                        <h3>Summary:</h3>
+                        <p style="line-height: 1.6;">${summary}</p>
+                    </div>
+                `;
+
+            } catch (error) {
+                answerSection.innerHTML = `<div class="alert alert-error">Error: ${error.message}</div>`;
+            } finally {
+                summarizeBtn.disabled = false;
+            }
+        }
     </script>
 </body>
 </html>

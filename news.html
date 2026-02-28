@@ -5,117 +5,222 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News - Brainrack AI</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <div class="logo">
-                <i class="fas fa-brain"></i>
-                <h1>Brainrack AI</h1>
-            </div>
-            <div class="menu-icon" id="menuIcon">
-                <i class="fas fa-ellipsis-v"></i>
-            </div>
-        </header>
+    <div class="animated-bg"></div>
+    <header>
+        <div class="header-content">
+            <a href="/dashboard" class="logo"><span>🧠</span> Brainrack AI</a>
+            <nav class="nav-actions">
+                <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
+                <div class="menu-container">
+                    <button class="icon-btn" id="menuBtn"><span>⋮</span></button>
+                    <div class="menu-dropdown" id="menuDropdown">
+                        <a href="/dashboard" class="menu-item"><span>🏠</span> Dashboard</a>
+                        <a href="/chat" class="menu-item"><span>💬</span> AI Chat</a>
+                        <a href="/image" class="menu-item"><span>🎨</span> Image Generator</a>
+                        <a href="/document" class="menu-item"><span>📄</span> Document Analyzer</a>
+                        <a href="/video" class="menu-item"><span>🎥</span> Video Generator</a>
+                        <a href="/business" class="menu-item"><span>💼</span> Business Solutions</a>
+                        <a href="/startup" class="menu-item"><span>🚀</span> Startup Ideas</a>
+                        <a href="/news" class="menu-item"><span>📰</span> News</a>
+                        <a href="/weather" class="menu-item"><span>⛅</span> Weather</a>
+                        <a href="/contact" class="menu-item"><span>📧</span> Contact Us</a>
+                        <div class="menu-item" id="profileBtn"><span>👤</span> Profile</div>
+                        <div class="menu-item" id="themeToggle"><span>🌓</span> Toggle Theme</div>
+                        <div class="menu-item" id="settingsBtn"><span>⚙️</span> Settings</div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-        <div class="dropdown-menu" id="dropdownMenu">
-            <a href="index.html" class="menu-item">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <a href="dashboard.html" class="menu-item">
-                <i class="fas fa-comments"></i> AI Chat
-            </a>
-            <a href="news.html" class="menu-item active">
-                <i class="fas fa-newspaper"></i> News
-            </a>
-            <a href="weather.html" class="menu-item">
-                <i class="fas fa-cloud-sun"></i> Weather
-            </a>
-            <a href="image.html" class="menu-item">
-                <i class="fas fa-image"></i> Image AI
-            </a>
-            <a href="document.html" class="menu-item">
-                <i class="fas fa-file-pdf"></i> Document AI
-            </a>
-            <a href="video.html" class="menu-item">
-                <i class="fas fa-video"></i> Video AI
-            </a>
-            <a href="business.html" class="menu-item">
-                <i class="fas fa-briefcase"></i> Business AI
-            </a>
-            <a href="startup.html" class="menu-item">
-                <i class="fas fa-rocket"></i> Startup Ideas
-            </a>
-            <a href="contactus.html" class="menu-item">
-                <i class="fas fa-envelope"></i> Contact Us
-            </a>
-            <div class="menu-divider"></div>
-            <a href="#" class="menu-item" id="profileBtn">
-                <i class="fas fa-user"></i> Profile
-            </a>
-            <a href="#" class="menu-item" id="themeToggle">
-                <i class="fas fa-moon"></i> <span id="themeText">Dark Mode</span>
-            </a>
-            <a href="#" class="menu-item" id="settingsBtn">
-                <i class="fas fa-cog"></i> Settings
-            </a>
+    <main class="container news-container">
+        <h1 style="margin-bottom: 1.5rem;">📰 Real-Time News</h1>
+
+        <div style="margin-bottom: 2rem;">
+            <button class="btn btn-primary" id="notifyNewsBtn">
+                🔔 Enable News Notifications
+            </button>
         </div>
 
-        <main class="news-container">
-            <div class="news-header">
-                <h2><i class="fas fa-newspaper"></i> Real-time News</h2>
-                <div class="news-controls">
-                    <button class="notification-btn" id="newsNotifyBtn">
-                        <i class="fas fa-bell"></i> Notify about real-time news
-                    </button>
-                    <button class="refresh-btn" id="refreshNewsBtn">
-                        <i class="fas fa-sync-alt"></i> Refresh
-                    </button>
-                </div>
-            </div>
+        <div class="news-categories">
+            <button class="category-btn active" data-category="headlines">Headlines</button>
+            <button class="category-btn" data-category="latest">Latest</button>
+            <button class="category-btn" data-category="business">Business</button>
+            <button class="category-btn" data-category="technology">Technology</button>
+            <button class="category-btn" data-category="sports">Sports</button>
+            <button class="category-btn" data-category="entertainment">Entertainment</button>
+            <button class="category-btn" data-category="science">Science</button>
+            <button class="category-btn" data-category="health">Health</button>
+        </div>
 
-            <div class="news-categories">
-                <button class="category-btn active" data-category="general">
-                    <i class="fas fa-globe"></i> Latest
-                </button>
-                <button class="category-btn" data-category="headlines">
-                    <i class="fas fa-star"></i> Headlines
-                </button>
-                <button class="category-btn" data-category="technology">
-                    <i class="fas fa-microchip"></i> Technology
-                </button>
-                <button class="category-btn" data-category="business">
-                    <i class="fas fa-briefcase"></i> Business
-                </button>
-                <button class="category-btn" data-category="sports">
-                    <i class="fas fa-futbol"></i> Sports
-                </button>
-                <button class="category-btn" data-category="entertainment">
-                    <i class="fas fa-film"></i> Entertainment
-                </button>
-                <button class="category-btn" data-category="health">
-                    <i class="fas fa-heartbeat"></i> Health
-                </button>
-                <button class="category-btn" data-category="science">
-                    <i class="fas fa-flask"></i> Science
-                </button>
-            </div>
+        <div id="loadingSpinner" style="display: none;">
+            <div class="loading-spinner"></div>
+        </div>
 
-            <div class="news-grid" id="newsGrid">
-                <div class="loading">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>Loading news...</p>
-                </div>
-            </div>
-        </main>
-    </div>
+        <div class="news-grid" id="newsGrid"></div>
+    </main>
 
     <script src="script.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeNews();
+        const newsGrid = document.getElementById('newsGrid');
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const notifyNewsBtn = document.getElementById('notifyNewsBtn');
+
+        let currentCategory = 'headlines';
+        let notificationsEnabled = false;
+        let lastNewsCheck = null;
+
+        // Category selection
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.dataset.category;
+                loadNews(currentCategory);
+            });
         });
+
+        // Enable notifications
+        notifyNewsBtn.addEventListener('click', async () => {
+            if (!('Notification' in window)) {
+                alert('This browser does not support notifications');
+                return;
+            }
+
+            if (Notification.permission === 'granted') {
+                notificationsEnabled = !notificationsEnabled;
+                updateNotificationBtn();
+                if (notificationsEnabled) {
+                    startNewsPolling();
+                } else {
+                    stopNewsPolling();
+                }
+            } else if (Notification.permission !== 'denied') {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    notificationsEnabled = true;
+                    updateNotificationBtn();
+                    startNewsPolling();
+                }
+            } else {
+                alert('Please enable notifications in your browser settings');
+            }
+        });
+
+        function updateNotificationBtn() {
+            if (notificationsEnabled) {
+                notifyNewsBtn.textContent = '🔕 Disable News Notifications';
+                notifyNewsBtn.classList.remove('btn-primary');
+                notifyNewsBtn.classList.add('btn-secondary');
+            } else {
+                notifyNewsBtn.textContent = '🔔 Enable News Notifications';
+                notifyNewsBtn.classList.remove('btn-secondary');
+                notifyNewsBtn.classList.add('btn-primary');
+            }
+        }
+
+        let newsPollingInterval;
+
+        function startNewsPolling() {
+            // Check for new news every 5 minutes
+            newsPollingInterval = setInterval(checkForNewNews, 5 * 60 * 1000);
+            new Notification('News Notifications Enabled', {
+                body: 'You will receive updates about breaking news',
+                icon: '📰'
+            });
+        }
+
+        function stopNewsPolling() {
+            if (newsPollingInterval) {
+                clearInterval(newsPollingInterval);
+            }
+        }
+
+        async function checkForNewNews() {
+            try {
+                const response = await fetch('/api/news/headlines');
+                const data = await response.json();
+
+                if (data.articles && data.articles.length > 0) {
+                    const latestArticle = data.articles[0];
+                    const articleTime = new Date(latestArticle.publishedAt).getTime();
+
+                    if (!lastNewsCheck || articleTime > lastNewsCheck) {
+                        new Notification(latestArticle.title, {
+                            body: latestArticle.description || 'Click to read more',
+                            icon: latestArticle.urlToImage || '📰'
+                        });
+                        lastNewsCheck = articleTime;
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking for new news:', error);
+            }
+        }
+
+        async function loadNews(category) {
+            loadingSpinner.style.display = 'block';
+            newsGrid.innerHTML = '';
+
+            try {
+                const response = await fetch(`/api/news/${category}`);
+                const data = await response.json();
+
+                if (data.error || !data.articles) {
+                    newsGrid.innerHTML = '<div class="alert alert-error">Failed to load news. Please check your News API key configuration.</div>';
+                    return;
+                }
+
+                if (data.articles.length === 0) {
+                    newsGrid.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No news articles found.</p>';
+                    return;
+                }
+
+                data.articles.forEach(article => {
+                    const newsCard = createNewsCard(article);
+                    newsGrid.appendChild(newsCard);
+                });
+
+            } catch (error) {
+                console.error('Error loading news:', error);
+                newsGrid.innerHTML = '<div class="alert alert-error">Failed to load news. Please try again.</div>';
+            } finally {
+                loadingSpinner.style.display = 'none';
+            }
+        }
+
+        function createNewsCard(article) {
+            const card = document.createElement('a');
+            card.className = 'news-card';
+            card.href = article.url;
+            card.target = '_blank';
+
+            const imageUrl = article.urlToImage || 'https://via.placeholder.com/400x200?text=No+Image';
+            const title = article.title || 'No title';
+            const description = article.description || 'No description available';
+            const source = article.source?.name || 'Unknown';
+            const publishedAt = new Date(article.publishedAt).toLocaleDateString();
+
+            card.innerHTML = `
+                <img src="${imageUrl}" alt="${title}" class="news-image" onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'">
+                <div class="news-content">
+                    <h3 class="news-title">${title}</h3>
+                    <p class="news-description">${description.substring(0, 150)}${description.length > 150 ? '...' : ''}</p>
+                    <div class="news-meta">
+                        <span>${source}</span>
+                        <span>${publishedAt}</span>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Load initial news
+        loadNews('headlines');
     </script>
 </body>
 </html>

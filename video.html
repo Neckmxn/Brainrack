@@ -3,131 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video AI - Brainrack AI</title>
+    <title>Video Generator - Brainrack AI</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <div class="logo">
-                <i class="fas fa-brain"></i>
-                <h1>Brainrack AI</h1>
-            </div>
-            <div class="menu-icon" id="menuIcon">
-                <i class="fas fa-ellipsis-v"></i>
-            </div>
-        </header>
-
-        <div class="dropdown-menu" id="dropdownMenu">
-            <a href="index.html" class="menu-item">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <a href="dashboard.html" class="menu-item">
-                <i class="fas fa-comments"></i> AI Chat
-            </a>
-            <a href="news.html" class="menu-item">
-                <i class="fas fa-newspaper"></i> News
-            </a>
-            <a href="weather.html" class="menu-item">
-                <i class="fas fa-cloud-sun"></i> Weather
-            </a>
-            <a href="image.html" class="menu-item">
-                <i class="fas fa-image"></i> Image AI
-            </a>
-            <a href="document.html" class="menu-item">
-                <i class="fas fa-file-pdf"></i> Document AI
-            </a>
-            <a href="video.html" class="menu-item active">
-                <i class="fas fa-video"></i> Video AI
-            </a>
-            <a href="business.html" class="menu-item">
-                <i class="fas fa-briefcase"></i> Business AI
-            </a>
-            <a href="startup.html" class="menu-item">
-                <i class="fas fa-rocket"></i> Startup Ideas
-            </a>
-            <a href="contactus.html" class="menu-item">
-                <i class="fas fa-envelope"></i> Contact Us
-            </a>
-            <div class="menu-divider"></div>
-            <a href="#" class="menu-item" id="profileBtn">
-                <i class="fas fa-user"></i> Profile
-            </a>
-            <a href="#" class="menu-item" id="themeToggle">
-                <i class="fas fa-moon"></i> <span id="themeText">Dark Mode</span>
-            </a>
-            <a href="#" class="menu-item" id="settingsBtn">
-                <i class="fas fa-cog"></i> Settings
-            </a>
+    <div class="animated-bg"></div>
+    <header>
+        <div class="header-content">
+            <a href="/dashboard" class="logo"><span>🧠</span> Brainrack AI</a>
+            <nav class="nav-actions">
+                <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
+                <div class="menu-container">
+                    <button class="icon-btn" id="menuBtn"><span>⋮</span></button>
+                    <div class="menu-dropdown" id="menuDropdown">
+                        <a href="/dashboard" class="menu-item"><span>🏠</span> Dashboard</a>
+                        <a href="/chat" class="menu-item"><span>💬</span> AI Chat</a>
+                        <a href="/image" class="menu-item"><span>🎨</span> Image Generator</a>
+                        <a href="/document" class="menu-item"><span>📄</span> Document Analyzer</a>
+                        <a href="/video" class="menu-item"><span>🎥</span> Video Generator</a>
+                        <a href="/business" class="menu-item"><span>💼</span> Business Solutions</a>
+                        <a href="/startup" class="menu-item"><span>🚀</span> Startup Ideas</a>
+                        <a href="/news" class="menu-item"><span>📰</span> News</a>
+                        <a href="/weather" class="menu-item"><span>⛅</span> Weather</a>
+                        <a href="/contact" class="menu-item"><span>📧</span> Contact Us</a>
+                        <div class="menu-item" id="profileBtn"><span>👤</span> Profile</div>
+                        <div class="menu-item" id="themeToggle"><span>🌓</span> Toggle Theme</div>
+                        <div class="menu-item" id="settingsBtn"><span>⚙️</span> Settings</div>
+                    </div>
+                </div>
+            </nav>
         </div>
+    </header>
 
-        <main class="feature-container">
-            <div class="feature-header">
-                <h2><i class="fas fa-video"></i> AI Video Generator</h2>
-                <p>Create videos from text descriptions with AI</p>
-            </div>
-
-            <div class="input-section">
-                <label for="videoPrompt">Describe the video you want to create</label>
-                <textarea id="videoPrompt" class="text-area" rows="5" placeholder="A time-lapse of a sunset over the ocean with waves crashing on the shore..."></textarea>
-
-                <div class="options-grid">
-                    <div class="option-group">
-                        <label for="videoDuration">Duration</label>
-                        <select id="videoDuration" class="select-input">
-                            <option value="5">5 seconds</option>
-                            <option value="10" selected>10 seconds</option>
-                            <option value="15">15 seconds</option>
-                            <option value="30">30 seconds</option>
-                        </select>
-                    </div>
-                    <div class="option-group">
-                        <label for="videoStyle">Video Style</label>
-                        <select id="videoStyle" class="select-input">
-                            <option value="realistic">Realistic</option>
-                            <option value="animated">Animated</option>
-                            <option value="artistic">Artistic</option>
-                            <option value="cinematic">Cinematic</option>
-                        </select>
-                    </div>
-                    <div class="option-group">
-                        <label for="videoQuality">Quality</label>
-                        <select id="videoQuality" class="select-input">
-                            <option value="720p">HD (720p)</option>
-                            <option value="1080p" selected>Full HD (1080p)</option>
-                            <option value="4k">4K</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button class="btn-primary" id="generateVideoBtn">
-                    <i class="fas fa-play-circle"></i> Generate Video
-                </button>
-            </div>
-
-            <div class="result-section" id="videoResult">
-                <div class="loading" id="videoLoading" style="display: none;">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>Generating your video... This may take a few minutes.</p>
-                </div>
-                <div class="video-preview" id="videoPreviewContainer" style="display: none;">
-                    <video id="generatedVideo" controls></video>
-                    <div class="image-actions">
-                        <button class="btn-secondary" id="downloadVideo">
-                            <i class="fas fa-download"></i> Download Video
-                        </button>
+    <main class="container">
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant">
+                    <div class="message-avatar">AI</div>
+                    <div class="message-content">
+                        Hello! I'm your AI Video Concept Generator. Tell me what kind of video you want to create, and I'll help you develop scripts, storyboards, and creative concepts.
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+
+            <div class="chat-input-container">
+                <textarea id="chatInput" class="chat-input" placeholder="Describe your video idea..." rows="1"></textarea>
+                <div class="input-actions">
+                    <button class="send-btn" id="sendBtn">➤</button>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <script src="script.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeVideoAI();
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        let conversationHistory = [
+            { role: 'system', content: 'You are an expert video content creator and scriptwriter. Help users develop video concepts, scripts, storyboards, and creative ideas for various platforms like YouTube, TikTok, Instagram, etc.' }
+        ];
+
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
         });
+        sendBtn.addEventListener('click', sendMessage);
+
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, 'user');
+            chatInput.value = '';
+            conversationHistory.push({ role: 'user', content: message });
+
+            const typingIndicator = addTypingIndicator();
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messages: conversationHistory })
+                });
+
+                const data = await response.json();
+                typingIndicator.remove();
+
+                const aiResponse = data.choices[0].message.content;
+                conversationHistory.push({ role: 'assistant', content: aiResponse });
+                await addMessageWithTyping(aiResponse, 'assistant');
+
+            } catch (error) {
+                typingIndicator.remove();
+                addMessage('Error: ' + error.message, 'assistant');
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${sender === 'user' ? 'You' : 'AI'}</div>
+                <div class="message-content">${text}</div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function addMessageWithTyping(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            messageDiv.innerHTML = `<div class="message-avatar">${sender === 'user' ? 'You' : 'AI'}</div>`;
+            messageDiv.appendChild(content);
+            chatMessages.appendChild(messageDiv);
+
+            for (let i = 0; i < text.length; i++) {
+                content.textContent += text[i];
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                await new Promise(resolve => setTimeout(resolve, 10));
+            }
+        }
+
+        function addTypingIndicator() {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message assistant';
+            messageDiv.innerHTML = `
+                <div class="message-avatar">AI</div>
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return messageDiv;
+        }
     </script>
 </body>
 </html>

@@ -5,178 +5,278 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather - Brainrack AI</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <div class="logo">
-                <i class="fas fa-brain"></i>
-                <h1>Brainrack AI</h1>
-            </div>
-            <div class="menu-icon" id="menuIcon">
-                <i class="fas fa-ellipsis-v"></i>
-            </div>
-        </header>
+    <div class="animated-bg"></div>
+    <header>
+        <div class="header-content">
+            <a href="/dashboard" class="logo"><span>🧠</span> Brainrack AI</a>
+            <nav class="nav-actions">
+                <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
+                <div class="menu-container">
+                    <button class="icon-btn" id="menuBtn"><span>⋮</span></button>
+                    <div class="menu-dropdown" id="menuDropdown">
+                        <a href="/dashboard" class="menu-item"><span>🏠</span> Dashboard</a>
+                        <a href="/chat" class="menu-item"><span>💬</span> AI Chat</a>
+                        <a href="/image" class="menu-item"><span>🎨</span> Image Generator</a>
+                        <a href="/document" class="menu-item"><span>📄</span> Document Analyzer</a>
+                        <a href="/video" class="menu-item"><span>🎥</span> Video Generator</a>
+                        <a href="/business" class="menu-item"><span>💼</span> Business Solutions</a>
+                        <a href="/startup" class="menu-item"><span>🚀</span> Startup Ideas</a>
+                        <a href="/news" class="menu-item"><span>📰</span> News</a>
+                        <a href="/weather" class="menu-item"><span>⛅</span> Weather</a>
+                        <a href="/contact" class="menu-item"><span>📧</span> Contact Us</a>
+                        <div class="menu-item" id="profileBtn"><span>👤</span> Profile</div>
+                        <div class="menu-item" id="themeToggle"><span>🌓</span> Toggle Theme</div>
+                        <div class="menu-item" id="settingsBtn"><span>⚙️</span> Settings</div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-        <div class="dropdown-menu" id="dropdownMenu">
-            <a href="index.html" class="menu-item">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <a href="dashboard.html" class="menu-item">
-                <i class="fas fa-comments"></i> AI Chat
-            </a>
-            <a href="news.html" class="menu-item">
-                <i class="fas fa-newspaper"></i> News
-            </a>
-            <a href="weather.html" class="menu-item active">
-                <i class="fas fa-cloud-sun"></i> Weather
-            </a>
-            <a href="image.html" class="menu-item">
-                <i class="fas fa-image"></i> Image AI
-            </a>
-            <a href="document.html" class="menu-item">
-                <i class="fas fa-file-pdf"></i> Document AI
-            </a>
-            <a href="video.html" class="menu-item">
-                <i class="fas fa-video"></i> Video AI
-            </a>
-            <a href="business.html" class="menu-item">
-                <i class="fas fa-briefcase"></i> Business AI
-            </a>
-            <a href="startup.html" class="menu-item">
-                <i class="fas fa-rocket"></i> Startup Ideas
-            </a>
-            <a href="contactus.html" class="menu-item">
-                <i class="fas fa-envelope"></i> Contact Us
-            </a>
-            <div class="menu-divider"></div>
-            <a href="#" class="menu-item" id="profileBtn">
-                <i class="fas fa-user"></i> Profile
-            </a>
-            <a href="#" class="menu-item" id="themeToggle">
-                <i class="fas fa-moon"></i> <span id="themeText">Dark Mode</span>
-            </a>
-            <a href="#" class="menu-item" id="settingsBtn">
-                <i class="fas fa-cog"></i> Settings
-            </a>
+    <main class="container weather-container">
+        <h1 style="margin-bottom: 1.5rem;">⛅ Weather Forecast</h1>
+
+        <div class="weather-search">
+            <input type="text" id="locationInput" placeholder="Enter city name..." value="London">
+            <button class="btn btn-primary" id="searchBtn">Search</button>
+            <button class="btn btn-secondary" id="locationBtn">📍 My Location</button>
+            <button class="btn btn-secondary" id="notifyWeatherBtn">🔔 Enable Weather Notifications</button>
         </div>
 
-        <main class="weather-container">
-            <div class="weather-header">
-                <div class="location-search">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <input type="text" id="locationInput" placeholder="Search for a city..." class="location-input">
-                    <button id="detectLocationBtn" class="detect-btn" title="Use my location">
-                        <i class="fas fa-crosshairs"></i>
-                    </button>
-                </div>
-                <button class="notification-btn" id="weatherNotifyBtn">
-                    <i class="fas fa-bell"></i> Notify about real-time weather
-                </button>
-            </div>
+        <div id="loadingSpinner" style="display: none;">
+            <div class="loading-spinner"></div>
+        </div>
 
-            <div class="weather-loading" id="weatherLoading">
-                <i class="fas fa-spinner fa-spin"></i>
-                <p>Loading weather data...</p>
-            </div>
+        <div id="weatherContent">
+            <div class="current-weather" id="currentWeather"></div>
 
-            <div class="weather-content" id="weatherContent" style="display: none;">
-                <div class="current-weather">
-                    <div class="location-info">
-                        <h2 id="cityName">Loading...</h2>
-                        <p id="currentDate"></p>
-                    </div>
-                    <div class="weather-main">
-                        <div class="temperature-display">
-                            <i class="weather-icon" id="weatherIcon"></i>
-                            <div class="temp-info">
-                                <h1 id="temperature">--°</h1>
-                                <p id="weatherDescription">--</p>
-                            </div>
-                        </div>
-                        <div class="weather-details">
-                            <div class="detail-item">
-                                <i class="fas fa-tint"></i>
-                                <div>
-                                    <p class="detail-label">Humidity</p>
-                                    <p class="detail-value" id="humidity">--%</p>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-wind"></i>
-                                <div>
-                                    <p class="detail-label">Wind Speed</p>
-                                    <p class="detail-value" id="windSpeed">-- km/h</p>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-compress-arrows-alt"></i>
-                                <div>
-                                    <p class="detail-label">Pressure</p>
-                                    <p class="detail-value" id="pressure">-- hPa</p>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-eye"></i>
-                                <div>
-                                    <p class="detail-label">Visibility</p>
-                                    <p class="detail-value" id="visibility">-- km</p>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-sun"></i>
-                                <div>
-                                    <p class="detail-label">UV Index</p>
-                                    <p class="detail-value" id="uvIndex">--</p>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-cloud"></i>
-                                <div>
-                                    <p class="detail-label">Cloudiness</p>
-                                    <p class="detail-value" id="cloudiness">--%</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sun-times">
-                        <div class="sun-item">
-                            <i class="fas fa-sunrise"></i>
-                            <div>
-                                <p>Sunrise</p>
-                                <p id="sunrise">--:--</p>
-                            </div>
-                        </div>
-                        <div class="sun-item">
-                            <i class="fas fa-sunset"></i>
-                            <div>
-                                <p>Sunset</p>
-                                <p id="sunset">--:--</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="forecast-section">
-                    <h3><i class="fas fa-calendar-alt"></i> 5-Day Forecast</h3>
-                    <div class="forecast-grid" id="forecastGrid"></div>
-                </div>
-
-                <div class="hourly-section">
-                    <h3><i class="fas fa-clock"></i> Hourly Forecast</h3>
-                    <div class="hourly-scroll" id="hourlyForecast"></div>
-                </div>
-            </div>
-        </main>
-    </div>
+            <h2 style="margin: 2rem 0 1rem;">5-Day Forecast</h2>
+            <div class="forecast-container" id="forecastContainer"></div>
+        </div>
+    </main>
 
     <script src="script.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeWeather();
+        const locationInput = document.getElementById('locationInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const locationBtn = document.getElementById('locationBtn');
+        const notifyWeatherBtn = document.getElementById('notifyWeatherBtn');
+        const currentWeather = document.getElementById('currentWeather');
+        const forecastContainer = document.getElementById('forecastContainer');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        let notificationsEnabled = false;
+        let weatherPollingInterval;
+
+        searchBtn.addEventListener('click', () => loadWeather(locationInput.value));
+        locationInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') loadWeather(locationInput.value);
         });
+
+        locationBtn.addEventListener('click', () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        loadWeatherByCoords(position.coords.latitude, position.coords.longitude);
+                    },
+                    (error) => {
+                        alert('Unable to get your location: ' + error.message);
+                    }
+                );
+            } else {
+                alert('Geolocation is not supported by your browser');
+            }
+        });
+
+        notifyWeatherBtn.addEventListener('click', async () => {
+            if (!('Notification' in window)) {
+                alert('This browser does not support notifications');
+                return;
+            }
+
+            if (Notification.permission === 'granted') {
+                notificationsEnabled = !notificationsEnabled;
+                updateNotificationBtn();
+                if (notificationsEnabled) {
+                    startWeatherPolling();
+                } else {
+                    stopWeatherPolling();
+                }
+            } else if (Notification.permission !== 'denied') {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    notificationsEnabled = true;
+                    updateNotificationBtn();
+                    startWeatherPolling();
+                }
+            }
+        });
+
+        function updateNotificationBtn() {
+            if (notificationsEnabled) {
+                notifyWeatherBtn.textContent = '🔕 Disable Weather Notifications';
+            } else {
+                notifyWeatherBtn.textContent = '🔔 Enable Weather Notifications';
+            }
+        }
+
+        function startWeatherPolling() {
+            weatherPollingInterval = setInterval(() => {
+                const location = locationInput.value;
+                loadWeather(location, true);
+            }, 30 * 60 * 1000); // Every 30 minutes
+
+            new Notification('Weather Notifications Enabled', {
+                body: 'You will receive weather updates every 30 minutes',
+                icon: '⛅'
+            });
+        }
+
+        function stopWeatherPolling() {
+            if (weatherPollingInterval) {
+                clearInterval(weatherPollingInterval);
+            }
+        }
+
+        async function loadWeather(location, isNotification = false) {
+            loadingSpinner.style.display = 'block';
+            currentWeather.innerHTML = '';
+            forecastContainer.innerHTML = '';
+
+            try {
+                const response = await fetch(`/api/weather/${encodeURIComponent(location)}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                displayCurrentWeather(data.current);
+                displayForecast(data.forecast);
+
+                if (isNotification && notificationsEnabled) {
+                    const temp = Math.round(data.current.main.temp);
+                    const condition = data.current.weather[0].description;
+                    new Notification(`Weather Update - ${location}`, {
+                        body: `${temp}°C, ${condition}`,
+                        icon: `https://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`
+                    });
+                }
+
+            } catch (error) {
+                console.error('Error loading weather:', error);
+                currentWeather.innerHTML = '<div class="alert alert-error">Failed to load weather data. Please check your OpenWeather API key.</div>';
+            } finally {
+                loadingSpinner.style.display = 'none';
+            }
+        }
+
+        async function loadWeatherByCoords(lat, lon) {
+            loadingSpinner.style.display = 'block';
+            currentWeather.innerHTML = '';
+            forecastContainer.innerHTML = '';
+
+            try {
+                const response = await fetch(`/api/weather-coords/${lat}/${lon}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                locationInput.value = data.current.name;
+                displayCurrentWeather(data.current);
+                displayForecast(data.forecast);
+
+            } catch (error) {
+                console.error('Error loading weather:', error);
+                currentWeather.innerHTML = '<div class="alert alert-error">Failed to load weather data.</div>';
+            } finally {
+                loadingSpinner.style.display = 'none';
+            }
+        }
+
+        function displayCurrentWeather(data) {
+            const temp = Math.round(data.main.temp);
+            const feelsLike = Math.round(data.main.feels_like);
+            const condition = data.weather[0].description;
+            const icon = data.weather[0].icon;
+            const humidity = data.main.humidity;
+            const windSpeed = Math.round(data.wind.speed * 3.6); // Convert m/s to km/h
+            const pressure = data.main.pressure;
+            const visibility = Math.round(data.visibility / 1000); // Convert m to km
+
+            const iconUrl = `https://openweathermap.org/img/wn/${icon}@4x.png`;
+
+            currentWeather.innerHTML = `
+                <img src="${iconUrl}" alt="${condition}" class="weather-icon">
+                <div class="temperature">${temp}°C</div>
+                <p style="font-size: 1.25rem; text-transform: capitalize; margin-bottom: 0.5rem;">${condition}</p>
+                <p style="color: var(--text-secondary);">Feels like ${feelsLike}°C</p>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">${data.name}, ${data.sys.country}</p>
+
+                <div class="weather-details">
+                    <div class="weather-detail-item">
+                        <div style="font-size: 1.5rem;">💧</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">Humidity</div>
+                        <div style="font-size: 1.1rem; font-weight: bold; margin-top: 0.25rem;">${humidity}%</div>
+                    </div>
+                    <div class="weather-detail-item">
+                        <div style="font-size: 1.5rem;">💨</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">Wind Speed</div>
+                        <div style="font-size: 1.1rem; font-weight: bold; margin-top: 0.25rem;">${windSpeed} km/h</div>
+                    </div>
+                    <div class="weather-detail-item">
+                        <div style="font-size: 1.5rem;">🌡️</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">Pressure</div>
+                        <div style="font-size: 1.1rem; font-weight: bold; margin-top: 0.25rem;">${pressure} hPa</div>
+                    </div>
+                    <div class="weather-detail-item">
+                        <div style="font-size: 1.5rem;">👁️</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">Visibility</div>
+                        <div style="font-size: 1.1rem; font-weight: bold; margin-top: 0.25rem;">${visibility} km</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayForecast(data) {
+            // Group by day and take one forecast per day
+            const dailyForecasts = {};
+            data.list.forEach(item => {
+                const date = new Date(item.dt * 1000);
+                const dayKey = date.toLocaleDateString();
+
+                if (!dailyForecasts[dayKey]) {
+                    dailyForecasts[dayKey] = item;
+                }
+            });
+
+            // Display first 5 days
+            Object.values(dailyForecasts).slice(0, 5).forEach(item => {
+                const date = new Date(item.dt * 1000);
+                const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+                const temp = Math.round(item.main.temp);
+                const icon = item.weather[0].icon;
+                const condition = item.weather[0].description;
+                const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+
+                const forecastItem = document.createElement('div');
+                forecastItem.className = 'forecast-item';
+                forecastItem.innerHTML = `
+                    <h4>${dayName}</h4>
+                    <img src="${iconUrl}" alt="${condition}" style="width: 60px; height: 60px;">
+                    <p style="font-size: 1.25rem; font-weight: bold; margin: 0.5rem 0;">${temp}°C</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); text-transform: capitalize;">${condition}</p>
+                `;
+                forecastContainer.appendChild(forecastItem);
+            });
+        }
+
+        // Load weather for default location
+        loadWeather('London');
     </script>
 </body>
 </html>

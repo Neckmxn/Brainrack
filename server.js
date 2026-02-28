@@ -1,10 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-const axios = require('axios');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const axios = require('axios');
 const pdfParse = require('pdf-parse');
+const mammoth = require('mammoth');
 require('dotenv').config();
 
 const app = express();
@@ -12,583 +13,331 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
-app.use(express.json());
-app.use(express.static('public'));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(__dirname));
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadDir = './uploads';
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir);
-        }
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
+  destination: (req, file, cb) => {
+    const uploadDir = './uploads';
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir);
     }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
 });
 
-const upload = multer({ storage });
+const upload = multer({ 
+  storage: storage,
+  limits: { fileSize: 50 * 1024 * 1024 } // 50MB limit
+});
 
-// API Keys from environment variables
-const OPENROUTER_KEY = process.env.OPENROUTER_KEY;
-const NEWS_API_KEY = process.env.NEWS_API_KEY;
-const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
-
-// OpenRouter API Configuration
-const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-
-// ===== HELPER FUNCTIONS =====
-
-async function callOpenRouter(messages, model = 'openai/gpt-3.5-turbo') {
-    try {
-        const response = await axios.post(
-            OPENROUTER_API_URL,
-            {
-                model: model,
-                messages: messages
-            },
-            {
-                headers: {
-                    'Authorization': `Bearer ${OPENROUTER_KEY}`,
-                    'Content-Type': 'application/json',
-                    'HTTP-Referer': 'http://localhost:3000',
-                    'X-Title': 'Brainrack AI'
-                }
-            }
-        );
-
-        return response.data.choices[0].message.content;
-    } catch (error) {
-        console.error('OpenRouter API Error:', error.response?.data || error.message);
-        throw new Error('Failed to get AI response');
-    }
-}
-
-async function extractTextFromPDF(filePath) {
-    try {
-        const dataBuffer = fs.readFileSync(filePath);
-        const data = await pdfParse(dataBuffer);
-        return data.text;
-    } catch (error) {
-        console.error('PDF parsing error:', error);
-        throw new Error('Failed to extract text from PDF');
-    }
-}
-
-function extractTextFromTxt(filePath) {
-    return fs.readFileSync(filePath, 'utf-8');
-}
-
-async function extractTextFromDocument(filePath) {
-    const ext = path.extname(filePath).toLowerCase();
-
-    if (ext === '.pdf') {
-        return await extractTextFromPDF(filePath);
-    } else if (ext === '.txt') {
-        return extractTextFromTxt(filePath);
-    } else if (ext === '.docx') {
-        // For DOCX, you would need a library like mammoth
-        // For simplicity, treating as text for now
-        return extractTextFromTxt(filePath);
-    } else {
-        throw new Error('Unsupported file format');
-    }
-}
-
-// ===== ROUTES =====
-
-// Serve HTML pages
+// Routes for HTML pages
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'dashboard.html'));
 });
 
-app.get('/dashboard.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dashboard.html'));
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dashboard.html'));
 });
 
-// ===== CHAT API =====
+app.get('/chat', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/image', (req, res) => {
+  res.sendFile(path.join(__dirname, 'image.html'));
+});
+
+app.get('/document', (req, res) => {
+  res.sendFile(path.join(__dirname, 'document.html'));
+});
+
+app.get('/video', (req, res) => {
+  res.sendFile(path.join(__dirname, 'video.html'));
+});
+
+app.get('/business', (req, res) => {
+  res.sendFile(path.join(__dirname, 'business.html'));
+});
+
+app.get('/startup', (req, res) => {
+  res.sendFile(path.join(__dirname, 'startup.html'));
+});
+
+app.get('/news', (req, res) => {
+  res.sendFile(path.join(__dirname, 'news.html'));
+});
+
+app.get('/weather', (req, res) => {
+  res.sendFile(path.join(__dirname, 'weather.html'));
+});
+
+app.get('/contact', (req, res) => {
+  res.sendFile(path.join(__dirname, 'contactus.html'));
+});
+
+// API Routes
+// OpenRouter AI Chat API
 app.post('/api/chat', async (req, res) => {
-    try {
-        const { message, language } = req.body;
-
-        if (!message) {
-            return res.status(400).json({ success: false, error: 'Message is required' });
+  try {
+    const { messages, model = 'anthropic/claude-3.5-sonnet' } = req.body;
+    
+    const response = await axios.post(
+      'https://openrouter.ai/api/v1/chat/completions',
+      {
+        model: model,
+        messages: messages
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.OPENROUTER_KEY}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': process.env.APP_URL || 'http://localhost:3000',
+          'X-Title': 'Brainrack AI'
         }
+      }
+    );
 
-        const messages = [
-            {
-                role: 'system',
-                content: `You are a helpful AI assistant. Respond in the same language as the user's input. Be concise and friendly.`
-            },
-            {
-                role: 'user',
-                content: message
-            }
-        ];
+    res.json(response.data);
+  } catch (error) {
+    console.error('Chat API Error:', error.response?.data || error.message);
+    res.status(500).json({ 
+      error: 'Failed to get AI response', 
+      details: error.response?.data || error.message 
+    });
+  }
+});
 
-        const response = await callOpenRouter(messages);
+// Image Generation API
+app.post('/api/generate-image', async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    
+    const response = await axios.post(
+      'https://openrouter.ai/api/v1/chat/completions',
+      {
+        model: 'openai/dall-e-3',
+        messages: [{
+          role: 'user',
+          content: prompt
+        }]
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.OPENROUTER_KEY}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': process.env.APP_URL || 'http://localhost:3000',
+          'X-Title': 'Brainrack AI'
+        }
+      }
+    );
 
-        res.json({ success: true, response });
-    } catch (error) {
-        console.error('Chat error:', error);
-        res.status(500).json({ success: false, error: error.message });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Image Generation Error:', error.response?.data || error.message);
+    res.status(500).json({ 
+      error: 'Failed to generate image', 
+      details: error.response?.data || error.message 
+    });
+  }
+});
+
+// Document Upload and Analysis
+app.post('/api/upload-document', upload.single('document'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
     }
-});
 
-// ===== IMAGE AI API =====
-app.post('/api/image/generate', async (req, res) => {
-    try {
-        const { prompt, size, style } = req.body;
+    const filePath = req.file.path;
+    const fileExtension = path.extname(req.file.originalname).toLowerCase();
+    let extractedText = '';
 
-        if (!prompt) {
-            return res.status(400).json({ success: false, error: 'Prompt is required' });
-        }
-
-        // Enhanced prompt with style
-        const enhancedPrompt = `${prompt}, ${style} style, high quality, detailed`;
-
-        const messages = [
-            {
-                role: 'user',
-                content: `Generate an image with the following description: ${enhancedPrompt}`
-            }
-        ];
-
-        // Note: OpenRouter doesn't directly support image generation
-        // You would need to use a model that supports image generation like DALL-E
-        // For this example, we'll return a placeholder response
-        const response = await callOpenRouter([
-            {
-                role: 'system',
-                content: 'You are an AI that describes how an image would look based on a prompt.'
-            },
-            {
-                role: 'user',
-                content: `Describe in detail what an image of "${enhancedPrompt}" would look like.`
-            }
-        ]);
-
-        // In a real implementation, you would use an image generation API
-        // For now, returning a placeholder
-        res.json({
-            success: true,
-            imageUrl: `https://via.placeholder.com/${size.replace('x', 'x')}?text=Generated+Image`,
-            description: response
-        });
-    } catch (error) {
-        console.error('Image generation error:', error);
-        res.status(500).json({ success: false, error: error.message });
+    // Extract text based on file type
+    if (fileExtension === '.pdf') {
+      const dataBuffer = fs.readFileSync(filePath);
+      const pdfData = await pdfParse(dataBuffer);
+      extractedText = pdfData.text;
+    } else if (fileExtension === '.docx' || fileExtension === '.doc') {
+      const result = await mammoth.extractRawText({ path: filePath });
+      extractedText = result.value;
+    } else if (fileExtension === '.txt') {
+      extractedText = fs.readFileSync(filePath, 'utf8');
+    } else {
+      // Cleanup and return error
+      fs.unlinkSync(filePath);
+      return res.status(400).json({ error: 'Unsupported file type' });
     }
+
+    // Cleanup uploaded file
+    fs.unlinkSync(filePath);
+
+    res.json({ 
+      success: true, 
+      text: extractedText,
+      filename: req.file.originalname
+    });
+  } catch (error) {
+    console.error('Document Upload Error:', error);
+    res.status(500).json({ 
+      error: 'Failed to process document', 
+      details: error.message 
+    });
+  }
 });
 
-app.post('/api/image/enhance', upload.single('image'), async (req, res) => {
-    try {
-        const { prompt } = req.body;
-        const imagePath = req.file.path;
-
-        if (!req.file) {
-            return res.status(400).json({ success: false, error: 'Image is required' });
-        }
-
-        // In a real implementation, you would use an image enhancement API
-        // For now, returning the original image URL
-        const imageUrl = `/${imagePath}`;
-
-        res.json({
-            success: true,
-            imageUrl: imageUrl,
-            message: 'Image enhancement complete'
-        });
-
-        // Clean up uploaded file after some time
-        setTimeout(() => {
-            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath);
-            }
-        }, 60000);
-    } catch (error) {
-        console.error('Image enhancement error:', error);
-        res.status(500).json({ success: false, error: error.message });
+// News API
+app.get('/api/news/:category?', async (req, res) => {
+  try {
+    const category = req.params.category || 'general';
+    const apiKey = process.env.NEWS_API_KEY;
+    
+    if (!apiKey) {
+      return res.status(500).json({ error: 'News API key not configured' });
     }
-});
 
-// ===== DOCUMENT AI API =====
-app.post('/api/document/analyze', upload.single('document'), async (req, res) => {
-    try {
-        const documentPath = req.file.path;
-
-        if (!req.file) {
-            return res.status(400).json({ success: false, error: 'Document is required' });
-        }
-
-        const text = await extractTextFromDocument(documentPath);
-
-        const messages = [
-            {
-                role: 'system',
-                content: 'You are an AI document analyzer. Provide a comprehensive analysis of the document including main topics, key points, and overall summary.'
-            },
-            {
-                role: 'user',
-                content: `Analyze this document:\n\n${text.substring(0, 8000)}`
-            }
-        ];
-
-        const analysis = await callOpenRouter(messages);
-
-        // Clean up uploaded file
-        fs.unlinkSync(documentPath);
-
-        res.json({ success: true, analysis });
-    } catch (error) {
-        console.error('Document analysis error:', error);
-        res.status(500).json({ success: false, error: error.message });
+    let url = '';
+    if (category === 'headlines') {
+      url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`;
+    } else if (category === 'latest') {
+      url = `https://newsapi.org/v2/everything?q=latest&sortBy=publishedAt&apiKey=${apiKey}`;
+    } else {
+      url = `https://newsapi.org/v2/top-headlines?category=${category}&apiKey=${apiKey}`;
     }
+
+    const response = await axios.get(url);
+    res.json(response.data);
+  } catch (error) {
+    console.error('News API Error:', error.response?.data || error.message);
+    res.status(500).json({ 
+      error: 'Failed to fetch news', 
+      details: error.response?.data || error.message 
+    });
+  }
 });
 
-app.post('/api/document/question', upload.single('document'), async (req, res) => {
-    try {
-        const { question } = req.body;
-        const documentPath = req.file.path;
-
-        if (!req.file || !question) {
-            return res.status(400).json({ success: false, error: 'Document and question are required' });
-        }
-
-        const text = await extractTextFromDocument(documentPath);
-
-        const messages = [
-            {
-                role: 'system',
-                content: 'You are an AI assistant that answers questions about documents. Provide accurate and specific answers based on the document content.'
-            },
-            {
-                role: 'user',
-                content: `Document content:\n${text.substring(0, 8000)}\n\nQuestion: ${question}`
-            }
-        ];
-
-        const answer = await callOpenRouter(messages);
-
-        // Clean up uploaded file
-        fs.unlinkSync(documentPath);
-
-        res.json({ success: true, answer });
-    } catch (error) {
-        console.error('Question answering error:', error);
-        res.status(500).json({ success: false, error: error.message });
+// Weather API
+app.get('/api/weather/:location?', async (req, res) => {
+  try {
+    const location = req.params.location || 'London';
+    const apiKey = process.env.OPENWEATHER_API_KEY;
+    
+    if (!apiKey) {
+      return res.status(500).json({ error: 'Weather API key not configured' });
     }
+
+    // Get current weather
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
+    const weatherResponse = await axios.get(weatherUrl);
+
+    // Get forecast
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${apiKey}&units=metric`;
+    const forecastResponse = await axios.get(forecastUrl);
+
+    res.json({
+      current: weatherResponse.data,
+      forecast: forecastResponse.data
+    });
+  } catch (error) {
+    console.error('Weather API Error:', error.response?.data || error.message);
+    res.status(500).json({ 
+      error: 'Failed to fetch weather', 
+      details: error.response?.data || error.message 
+    });
+  }
 });
 
-app.post('/api/document/summarize', upload.single('document'), async (req, res) => {
-    try {
-        const { length } = req.body;
-        const documentPath = req.file.path;
-
-        if (!req.file) {
-            return res.status(400).json({ success: false, error: 'Document is required' });
-        }
-
-        const text = await extractTextFromDocument(documentPath);
-
-        let summaryInstruction = '';
-        if (length === 'short') {
-            summaryInstruction = 'Provide a very brief summary in 3-5 sentences.';
-        } else if (length === 'medium') {
-            summaryInstruction = 'Provide a medium-length summary in 1-2 paragraphs.';
-        } else {
-            summaryInstruction = 'Provide a detailed summary covering all major points.';
-        }
-
-        const messages = [
-            {
-                role: 'system',
-                content: `You are an AI document summarizer. ${summaryInstruction}`
-            },
-            {
-                role: 'user',
-                content: `Summarize this document:\n\n${text.substring(0, 8000)}`
-            }
-        ];
-
-        const summary = await callOpenRouter(messages);
-
-        // Clean up uploaded file
-        fs.unlinkSync(documentPath);
-
-        res.json({ success: true, summary });
-    } catch (error) {
-        console.error('Document summarization error:', error);
-        res.status(500).json({ success: false, error: error.message });
+// Weather by coordinates
+app.get('/api/weather-coords/:lat/:lon', async (req, res) => {
+  try {
+    const { lat, lon } = req.params;
+    const apiKey = process.env.OPENWEATHER_API_KEY;
+    
+    if (!apiKey) {
+      return res.status(500).json({ error: 'Weather API key not configured' });
     }
+
+    // Get current weather
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+    const weatherResponse = await axios.get(weatherUrl);
+
+    // Get forecast
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+    const forecastResponse = await axios.get(forecastUrl);
+
+    res.json({
+      current: weatherResponse.data,
+      forecast: forecastResponse.data
+    });
+  } catch (error) {
+    console.error('Weather API Error:', error.response?.data || error.message);
+    res.status(500).json({ 
+      error: 'Failed to fetch weather', 
+      details: error.response?.data || error.message 
+    });
+  }
 });
 
-// ===== VIDEO AI API =====
-app.post('/api/video/generate', async (req, res) => {
-    try {
-        const { prompt, duration, style, quality } = req.body;
-
-        if (!prompt) {
-            return res.status(400).json({ success: false, error: 'Prompt is required' });
-        }
-
-        // In a real implementation, you would use a video generation API
-        // For now, returning a placeholder response
-        const messages = [
-            {
-                role: 'system',
-                content: 'You are an AI that describes video content based on prompts.'
-            },
-            {
-                role: 'user',
-                content: `Describe a ${duration} second ${style} video about: ${prompt}`
-            }
-        ];
-
-        const description = await callOpenRouter(messages);
-
-        // Placeholder video URL
-        res.json({
-            success: true,
-            videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
-            description
-        });
-    } catch (error) {
-        console.error('Video generation error:', error);
-        res.status(500).json({ success: false, error: error.message });
-    }
+// Text-to-Speech API (using OpenRouter for voice generation)
+app.post('/api/text-to-speech', async (req, res) => {
+  try {
+    const { text, voice = 'alloy', speed = 1.0 } = req.body;
+    
+    // Note: This is a placeholder. OpenRouter doesn't directly support TTS.
+    // You would need to integrate with OpenAI's TTS API or another service
+    res.json({ 
+      message: 'TTS endpoint - implement with OpenAI TTS API or similar service',
+      text: text
+    });
+  } catch (error) {
+    console.error('TTS Error:', error);
+    res.status(500).json({ error: 'Failed to generate speech' });
+  }
 });
 
-// ===== BUSINESS AI API =====
-app.post('/api/business/solve', async (req, res) => {
-    try {
-        const { businessType, problem, category, includeExamples, includeSteps } = req.body;
-
-        if (!problem) {
-            return res.status(400).json({ success: false, error: 'Problem description is required' });
-        }
-
-        let systemPrompt = 'You are an expert business consultant. Provide practical and actionable solutions to business problems.';
-
-        if (includeExamples) {
-            systemPrompt += ' Include real-world examples where applicable.';
-        }
-
-        if (includeSteps) {
-            systemPrompt += ' Provide step-by-step action plans.';
-        }
-
-        const messages = [
-            {
-                role: 'system',
-                content: systemPrompt
-            },
-            {
-                role: 'user',
-                content: `Business Type: ${businessType || 'General'}\nCategory: ${category}\n\nProblem: ${problem}\n\nProvide a comprehensive solution.`
-            }
-        ];
-
-        const solution = await callOpenRouter(messages, 'openai/gpt-4-turbo');
-
-        res.json({ success: true, solution });
-    } catch (error) {
-        console.error('Business solution error:', error);
-        res.status(500).json({ success: false, error: error.message });
-    }
+// Contact form submission
+app.post('/api/contact', async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+    
+    // Here you would typically save to database or send email
+    console.log('Contact Form Submission:', { name, email, message });
+    
+    res.json({ 
+      success: true, 
+      message: 'Thank you for contacting us! We will get back to you soon.' 
+    });
+  } catch (error) {
+    console.error('Contact Form Error:', error);
+    res.status(500).json({ error: 'Failed to submit contact form' });
+  }
 });
 
-// ===== STARTUP AI API =====
-app.post('/api/startup/ideas', async (req, res) => {
-    try {
-        const {
-            interests,
-            targetMarket,
-            budget,
-            timeframe,
-            additionalInfo,
-            includeTrends,
-            includeCompetitors,
-            includeMonetization
-        } = req.body;
-
-        if (!interests) {
-            return res.status(400).json({ success: false, error: 'Interests are required' });
-        }
-
-        let systemPrompt = 'You are an expert startup advisor. Generate innovative and practical startup ideas.';
-
-        if (includeTrends) {
-            systemPrompt += ' Include current market trends.';
-        }
-
-        if (includeCompetitors) {
-            systemPrompt += ' Include competitor analysis.';
-        }
-
-        if (includeMonetization) {
-            systemPrompt += ' Include monetization strategies.';
-        }
-
-        const userPrompt = `
-Interests/Skills: ${interests}
-Target Market: ${targetMarket || 'General'}
-Budget: ${budget}
-Timeframe: ${timeframe}
-${additionalInfo ? `Additional Info: ${additionalInfo}` : ''}
-
-Generate 3-5 innovative startup ideas with detailed descriptions, implementation strategies, and potential challenges.
-`;
-
-        const messages = [
-            {
-                role: 'system',
-                content: systemPrompt
-            },
-            {
-                role: 'user',
-                content: userPrompt
-            }
-        ];
-
-        const ideas = await callOpenRouter(messages, 'openai/gpt-4-turbo');
-
-        res.json({ success: true, ideas });
-    } catch (error) {
-        console.error('Startup ideas error:', error);
-        res.status(500).json({ success: false, error: error.message });
-    }
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    service: 'Brainrack AI',
+    timestamp: new Date().toISOString()
+  });
 });
 
-// ===== NEWS API =====
-app.get('/api/news/:category', async (req, res) => {
-    try {
-        const { category } = req.params;
-
-        let endpoint = 'top-headlines';
-        let params = {
-            apiKey: NEWS_API_KEY,
-            country: 'us',
-            pageSize: 20
-        };
-
-        if (category === 'headlines') {
-            params.category = 'general';
-        } else if (category === 'general') {
-            endpoint = 'everything';
-            params.q = 'latest';
-            params.sortBy = 'publishedAt';
-            delete params.country;
-        } else {
-            params.category = category;
-        }
-
-        const response = await axios.get(`https://newsapi.org/v2/${endpoint}`, { params });
-
-        res.json({
-            success: true,
-            articles: response.data.articles
-        });
-    } catch (error) {
-        console.error('News API error:', error.response?.data || error.message);
-        res.status(500).json({ success: false, error: 'Failed to fetch news' });
-    }
-});
-
-// ===== WEATHER API =====
-app.get('/api/weather/city', async (req, res) => {
-    try {
-        const { city } = req.query;
-
-        if (!city) {
-            return res.status(400).json({ success: false, error: 'City is required' });
-        }
-
-        const response = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
-            params: {
-                q: city,
-                appid: WEATHER_API_KEY,
-                units: 'metric'
-            }
-        });
-
-        res.json({
-            success: true,
-            weather: response.data
-        });
-    } catch (error) {
-        console.error('Weather API error:', error.response?.data || error.message);
-        res.status(500).json({ success: false, error: 'Failed to fetch weather' });
-    }
-});
-
-app.get('/api/weather/coords', async (req, res) => {
-    try {
-        const { lat, lon } = req.query;
-
-        if (!lat || !lon) {
-            return res.status(400).json({ success: false, error: 'Coordinates are required' });
-        }
-
-        const response = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
-            params: {
-                lat,
-                lon,
-                appid: WEATHER_API_KEY,
-                units: 'metric'
-            }
-        });
-
-        res.json({
-            success: true,
-            weather: response.data
-        });
-    } catch (error) {
-        console.error('Weather API error:', error.response?.data || error.message);
-        res.status(500).json({ success: false, error: 'Failed to fetch weather' });
-    }
-});
-
-// ===== ERROR HANDLING =====
-app.use((err, req, res, next) => {
-    console.error('Server error:', err);
-    res.status(500).json({ success: false, error: 'Internal server error' });
-});
-
-// ===== START SERVER =====
+// Start server
 app.listen(PORT, () => {
-    console.log(`
-╔════════════════════════════════════════╗
-║     🧠 Brainrack AI Server Started    ║
-╠════════════════════════════════════════╣
-║  Port: ${PORT}                           ║
-║  URL: http://localhost:${PORT}          ║
-║                                        ║
-║  Features:                             ║
-║  ✓ AI Chat                             ║
-║  ✓ Image Generation & Enhancement      ║
-║  ✓ Document Analysis                   ║
-║  ✓ Video Generation                    ║
-║  ✓ Business Solutions                  ║
-║  ✓ Startup Ideas                       ║
-║  ✓ Real-time News                      ║
-║  ✓ Weather Updates                     ║
-╚════════════════════════════════════════╝
-    `);
-
-    // Check for required API keys
-    if (!OPENROUTER_KEY) {
-        console.warn('⚠️  WARNING: OPENROUTER_KEY not found in environment variables');
-    }
-    if (!NEWS_API_KEY) {
-        console.warn('⚠️  WARNING: NEWS_API_KEY not found in environment variables');
-    }
-    if (!WEATHER_API_KEY) {
-        console.warn('⚠️  WARNING: WEATHER_API_KEY not found in environment variables');
-    }
+  console.log(`🚀 Brainrack AI Server running on port ${PORT}`);
+  console.log(`📍 Local: http://localhost:${PORT}`);
 });
 
-module.exports = app;
+// Error handling
+process.on('unhandledRejection', (error) => {
+  console.error('Unhandled Rejection:', error);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+});
