@@ -3,146 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AI Image Generator - Create stunning images from text">
-    <title>Image Generator - Brainrack AI</title>
+    <title>Brainrack AI - Image Generator & Enhancer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="animated-bg"></div>
-
-    <header>
-        <div class="header-content">
-            <a href="/dashboard" class="logo">
-                <span>🧠</span> Brainrack AI
-            </a>
-            <nav class="nav-actions">
-                <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
-                <div class="menu-container">
-                    <button class="icon-btn" id="menuBtn"><span>⋮</span></button>
-                    <div class="menu-dropdown" id="menuDropdown">
-                        <a href="/dashboard" class="menu-item"><span>🏠</span> Dashboard</a>
-                        <a href="/chat" class="menu-item"><span>💬</span> AI Chat</a>
-                        <a href="/image" class="menu-item"><span>🎨</span> Image Generator</a>
-                        <a href="/document" class="menu-item"><span>📄</span> Document Analyzer</a>
-                        <a href="/video" class="menu-item"><span>🎥</span> Video Generator</a>
-                        <a href="/business" class="menu-item"><span>💼</span> Business Solutions</a>
-                        <a href="/startup" class="menu-item"><span>🚀</span> Startup Ideas</a>
-                        <a href="/news" class="menu-item"><span>📰</span> News</a>
-                        <a href="/weather" class="menu-item"><span>⛅</span> Weather</a>
-                        <a href="/contact" class="menu-item"><span>📧</span> Contact Us</a>
-                        <div class="menu-item" id="profileBtn"><span>👤</span> Profile</div>
-                        <div class="menu-item" id="themeToggle"><span>🌓</span> Toggle Theme</div>
-                        <div class="menu-item" id="settingsBtn"><span>⚙️</span> Settings</div>
-                    </div>
-                </div>
-            </nav>
+    <header class="header">
+        <div class="logo">🧠 Brainrack AI</div>
+        <div class="menu-icon" id="menuIcon">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="5" r="2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <circle cx="12" cy="19" r="2"/>
+            </svg>
+        </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="dashboard.html" class="dropdown-item">🏠 Dashboard</a>
+            <a href="index.html" class="dropdown-item">💬 AI Chat</a>
+            <a href="image.html" class="dropdown-item">🎨 Image Generator</a>
+            <a href="document.html" class="dropdown-item">📄 Document Analyzer</a>
+            <a href="video.html" class="dropdown-item">🎬 Video Generator</a>
+            <a href="business.html" class="dropdown-item">💼 Business Solver</a>
+            <a href="startup.html" class="dropdown-item">🚀 Startup Ideas</a>
+            <a href="weather.html" class="dropdown-item">🌤️ Weather</a>
+            <a href="news.html" class="dropdown-item">📰 News</a>
+            <div class="dropdown-item" id="themeToggle">🌓 Toggle Theme</div>
+            <a href="contactus.html" class="dropdown-item">📧 Contact Us</a>
         </div>
     </header>
 
-    <main class="container">
-        <div class="image-generator">
-            <div class="image-controls">
-                <h2>AI Image Generator & Enhancer</h2>
-                <div class="form-group">
-                    <label for="imagePrompt">Describe the image you want to create</label>
-                    <textarea id="imagePrompt" rows="4" placeholder="Example: A futuristic city at sunset with flying cars and neon lights"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="imageStyle">Style (optional)</label>
-                    <select id="imageStyle">
-                        <option value="">Default</option>
-                        <option value="photorealistic">Photorealistic</option>
-                        <option value="digital art">Digital Art</option>
-                        <option value="oil painting">Oil Painting</option>
-                        <option value="watercolor">Watercolor</option>
-                        <option value="anime">Anime</option>
-                        <option value="3d render">3D Render</option>
-                        <option value="sketch">Sketch</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary" id="generateBtn">Generate Image</button>
-                <button class="btn btn-secondary" id="enhanceBtn" style="display: none;">Enhance Image</button>
+    <div class="container">
+        <div class="chat-container">
+            <div class="chat-header">
+                🎨 AI Image Generator & Enhancer
             </div>
 
-            <div id="loadingSpinner" style="display: none;">
-                <div class="loading-spinner"></div>
-                <p style="text-align: center; color: var(--text-secondary);">Generating your image...</p>
-            </div>
+            <div style="padding: 2rem;">
+                <div class="form-group">
+                    <label>Image Generation</label>
+                    <textarea 
+                        class="form-textarea" 
+                        id="imagePrompt" 
+                        placeholder="Describe the image you want to generate... (e.g., 'A futuristic city at sunset with flying cars')"
+                    ></textarea>
+                </div>
 
-            <div class="image-result" id="imageResult"></div>
+                <button class="btn-primary" id="generateBtn" style="width: 100%; margin-bottom: 2rem;">
+                    Generate Image 🎨
+                </button>
+
+                <div class="form-group">
+                    <label>Image Enhancement</label>
+                    <div class="file-upload" id="imageUpload">
+                        <input type="file" id="imageFile" accept="image/*">
+                        <p>📁 Click to upload an image to enhance</p>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary-dark); margin-top: 0.5rem;">
+                            Supported formats: JPG, PNG, GIF, WebP
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-group" id="enhanceGroup" style="display: none;">
+                    <label>Enhancement Instructions (optional)</label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="enhancePrompt" 
+                        placeholder="How should we enhance this image? (e.g., 'make it brighter', 'add more contrast')"
+                    >
+                </div>
+
+                <button class="btn-primary" id="enhanceBtn" style="width: 100%; display: none;">
+                    Enhance Image ✨
+                </button>
+
+                <div id="resultArea"></div>
+            </div>
         </div>
-    </main>
+    </div>
 
     <script src="script.js"></script>
     <script>
         const imagePrompt = document.getElementById('imagePrompt');
-        const imageStyle = document.getElementById('imageStyle');
         const generateBtn = document.getElementById('generateBtn');
+        const imageUpload = document.getElementById('imageUpload');
+        const imageFile = document.getElementById('imageFile');
+        const enhancePrompt = document.getElementById('enhancePrompt');
         const enhanceBtn = document.getElementById('enhanceBtn');
-        const imageResult = document.getElementById('imageResult');
-        const loadingSpinner = document.getElementById('loadingSpinner');
+        const enhanceGroup = document.getElementById('enhanceGroup');
+        const resultArea = document.getElementById('resultArea');
 
-        generateBtn.addEventListener('click', generateImage);
-        enhanceBtn.addEventListener('click', enhanceImage);
+        let uploadedImage = null;
 
-        async function generateImage() {
+        // Image upload handling
+        imageUpload.addEventListener('click', () => {
+            imageFile.click();
+        });
+
+        imageFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedImage = e.target.result;
+                    imageUpload.innerHTML = `
+                        <img src="${uploadedImage}" alt="Uploaded" style="max-width: 100%; border-radius: 8px;">
+                        <p style="margin-top: 1rem;">Image uploaded successfully! ✅</p>
+                    `;
+                    enhanceGroup.style.display = 'block';
+                    enhanceBtn.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Generate image
+        generateBtn.addEventListener('click', async () => {
             const prompt = imagePrompt.value.trim();
-            const style = imageStyle.value;
-
+            
             if (!prompt) {
-                alert('Please describe the image you want to create');
+                BrainrackAI.showToast('Please enter a description for the image');
                 return;
             }
 
-            const fullPrompt = style ? `${prompt}, ${style} style` : prompt;
-
             generateBtn.disabled = true;
-            loadingSpinner.style.display = 'block';
-            imageResult.innerHTML = '';
+            generateBtn.textContent = 'Generating... ⏳';
+            BrainrackAI.showLoading(resultArea, 'Creating your image...');
 
             try {
-                const response = await fetch('/api/generate-image', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: fullPrompt })
+                const response = await BrainrackAI.callAPI('/api/generate-image', 'POST', {
+                    prompt: prompt
                 });
 
-                const data = await response.json();
+                resultArea.innerHTML = `
+                    <div class="result-container">
+                        <h3>Generated Image</h3>
+                        <div class="image-display">
+                            <img src="data:image/png;base64,${response.imageUrl}" alt="Generated">
+                        </div>
+                        <p style="margin-top: 1rem; color: var(--text-secondary-dark);">
+                            <strong>Prompt:</strong> ${prompt}
+                        </p>
+                        <button class="btn-primary" onclick="downloadImage('${response.imageUrl}', 'generated-image.png')" style="margin-top: 1rem;">
+                            Download Image 📥
+                        </button>
+                    </div>
+                `;
 
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-
-                // Display generated image (this depends on the API response structure)
-                displayImage(data);
-                enhanceBtn.style.display = 'inline-flex';
-
+                BrainrackAI.showToast('Image generated successfully!');
             } catch (error) {
+                BrainrackAI.showError(resultArea, 'Failed to generate image. Please check your API configuration and try again.');
                 console.error('Error:', error);
-                imageResult.innerHTML = `<div class="alert alert-error">Failed to generate image: ${error.message}</div>`;
             } finally {
                 generateBtn.disabled = false;
-                loadingSpinner.style.display = 'none';
+                generateBtn.textContent = 'Generate Image 🎨';
             }
-        }
+        });
 
-        function displayImage(data) {
-            // Note: The actual implementation depends on the API response structure
-            // This is a placeholder implementation
-            const imageCard = document.createElement('div');
-            imageCard.className = 'image-card';
-            imageCard.innerHTML = `
-                <h3>Generated Image</h3>
-                <p>Image generation is ready! Please configure your OpenRouter API key with DALL-E 3 access.</p>
-                <p class="alert alert-warning">Response: ${JSON.stringify(data)}</p>
-            `;
-            imageResult.appendChild(imageCard);
-        }
+        // Enhance image
+        enhanceBtn.addEventListener('click', async () => {
+            if (!uploadedImage) {
+                BrainrackAI.showToast('Please upload an image first');
+                return;
+            }
 
-        function enhanceImage() {
-            const prompt = imagePrompt.value.trim();
-            imagePrompt.value = `highly detailed, 8k quality, professional photography, ${prompt}`;
-            generateImage();
+            enhanceBtn.disabled = true;
+            enhanceBtn.textContent = 'Enhancing... ⏳';
+            BrainrackAI.showLoading(resultArea, 'Analyzing and enhancing your image...');
+
+            try {
+                const response = await BrainrackAI.callAPI('/api/enhance-image', 'POST', {
+                    imageData: uploadedImage,
+                    enhancePrompt: enhancePrompt.value
+                });
+
+                resultArea.innerHTML = `
+                    <div class="result-container">
+                        <h3>Enhancement Analysis</h3>
+                        <div style="background: var(--dark-surface); padding: 1.5rem; border-radius: 8px; line-height: 1.8;">
+                            ${response.enhancement.replace(/\n/g, '<br>')}
+                        </div>
+                        <div class="image-display" style="margin-top: 1.5rem;">
+                            <img src="${uploadedImage}" alt="Original">
+                        </div>
+                        <p style="margin-top: 1rem; color: var(--text-secondary-dark); text-align: center;">
+                            Original Image
+                        </p>
+                    </div>
+                `;
+
+                BrainrackAI.showToast('Image analyzed successfully!');
+            } catch (error) {
+                BrainrackAI.showError(resultArea, 'Failed to enhance image. Please try again.');
+                console.error('Error:', error);
+            } finally {
+                enhanceBtn.disabled = false;
+                enhanceBtn.textContent = 'Enhance Image ✨';
+            }
+        });
+
+        // Download image function
+        function downloadImage(base64Data, filename) {
+            const link = document.createElement('a');
+            link.href = `data:image/png;base64,${base64Data}`;
+            link.download = filename;
+            link.click();
         }
     </script>
 </body>

@@ -3,155 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Solutions - Brainrack AI</title>
+    <title>Brainrack AI - Business Problem Solver</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="animated-bg"></div>
-    <header>
-        <div class="header-content">
-            <a href="/dashboard" class="logo"><span>🧠</span> Brainrack AI</a>
-            <nav class="nav-actions">
-                <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
-                <div class="menu-container">
-                    <button class="icon-btn" id="menuBtn"><span>⋮</span></button>
-                    <div class="menu-dropdown" id="menuDropdown">
-                        <a href="/dashboard" class="menu-item"><span>🏠</span> Dashboard</a>
-                        <a href="/chat" class="menu-item"><span>💬</span> AI Chat</a>
-                        <a href="/image" class="menu-item"><span>🎨</span> Image Generator</a>
-                        <a href="/document" class="menu-item"><span>📄</span> Document Analyzer</a>
-                        <a href="/video" class="menu-item"><span>🎥</span> Video Generator</a>
-                        <a href="/business" class="menu-item"><span>💼</span> Business Solutions</a>
-                        <a href="/startup" class="menu-item"><span>🚀</span> Startup Ideas</a>
-                        <a href="/news" class="menu-item"><span>📰</span> News</a>
-                        <a href="/weather" class="menu-item"><span>⛅</span> Weather</a>
-                        <a href="/contact" class="menu-item"><span>📧</span> Contact Us</a>
-                        <div class="menu-item" id="profileBtn"><span>👤</span> Profile</div>
-                        <div class="menu-item" id="themeToggle"><span>🌓</span> Toggle Theme</div>
-                        <div class="menu-item" id="settingsBtn"><span>⚙️</span> Settings</div>
-                    </div>
-                </div>
-            </nav>
+    <header class="header">
+        <div class="logo">🧠 Brainrack AI</div>
+        <div class="menu-icon" id="menuIcon">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="5" r="2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <circle cx="12" cy="19" r="2"/>
+            </svg>
+        </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="dashboard.html" class="dropdown-item">🏠 Dashboard</a>
+            <a href="index.html" class="dropdown-item">💬 AI Chat</a>
+            <a href="image.html" class="dropdown-item">🎨 Image Generator</a>
+            <a href="document.html" class="dropdown-item">📄 Document Analyzer</a>
+            <a href="video.html" class="dropdown-item">🎬 Video Generator</a>
+            <a href="business.html" class="dropdown-item">💼 Business Solver</a>
+            <a href="startup.html" class="dropdown-item">🚀 Startup Ideas</a>
+            <a href="weather.html" class="dropdown-item">🌤️ Weather</a>
+            <a href="news.html" class="dropdown-item">📰 News</a>
+            <div class="dropdown-item" id="themeToggle">🌓 Toggle Theme</div>
+            <a href="contactus.html" class="dropdown-item">📧 Contact Us</a>
         </div>
     </header>
 
-    <main class="container">
+    <div class="container">
         <div class="chat-container">
-            <div class="chat-messages" id="chatMessages">
-                <div class="message assistant">
-                    <div class="message-avatar">AI</div>
-                    <div class="message-content">
-                        Hello! I'm your AI Business Consultant. I can help you with:
-                        <br>• Strategic Planning
-                        <br>• Market Analysis
-                        <br>• Financial Planning
-                        <br>• Operations Optimization
-                        <br>• Marketing Strategies
-                        <br>• Problem Solving
-                        <br><br>What business challenge can I help you with today?
-                    </div>
-                </div>
+            <div class="chat-header">
+                💼 AI Business Problem Solver
             </div>
 
-            <div class="chat-input-container">
-                <textarea id="chatInput" class="chat-input" placeholder="Describe your business problem..." rows="1"></textarea>
-                <div class="input-actions">
-                    <button class="send-btn" id="sendBtn">➤</button>
+            <div style="padding: 2rem;">
+                <div class="form-group">
+                    <label>Problem Category</label>
+                    <select class="form-select" id="problemCategory">
+                        <option value="strategy">🎯 Strategy & Planning</option>
+                        <option value="marketing">📣 Marketing & Sales</option>
+                        <option value="operations">⚙️ Operations & Efficiency</option>
+                        <option value="finance">💰 Finance & Budgeting</option>
+                        <option value="hr">👥 Human Resources</option>
+                        <option value="tech">💻 Technology & IT</option>
+                        <option value="customer">🤝 Customer Service</option>
+                        <option value="growth">📈 Growth & Scaling</option>
+                        <option value="other">🔧 Other</option>
+                    </select>
                 </div>
+
+                <div class="form-group">
+                    <label>Business Type</label>
+                    <select class="form-select" id="businessType">
+                        <option value="startup">🚀 Startup</option>
+                        <option value="small">🏪 Small Business</option>
+                        <option value="medium">🏢 Medium Enterprise</option>
+                        <option value="large">🏭 Large Corporation</option>
+                        <option value="nonprofit">❤️ Non-Profit</option>
+                        <option value="freelance">💼 Freelance/Solo</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Industry</label>
+                    <input
+                        type="text"
+                        class="form-input"
+                        id="industry"
+                        placeholder="e.g., E-commerce, Healthcare, Education, SaaS"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Describe Your Problem</label>
+                    <textarea
+                        class="form-textarea"
+                        id="problemDesc"
+                        placeholder="Describe your business challenge in detail... Include context, what you've tried, and desired outcomes."
+                        style="min-height: 150px;"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Budget/Resources Available (Optional)</label>
+                    <input
+                        type="text"
+                        class="form-input"
+                        id="budget"
+                        placeholder="e.g., $5,000, Limited budget, Team of 5 people"
+                    >
+                </div>
+
+                <button class="btn-primary" id="solveBtn" style="width: 100%;">
+                    Get Solution 💡
+                </button>
+
+                <div id="resultArea"></div>
             </div>
         </div>
-    </main>
+    </div>
 
     <script src="script.js"></script>
     <script>
-        const chatMessages = document.getElementById('chatMessages');
-        const chatInput = document.getElementById('chatInput');
-        const sendBtn = document.getElementById('sendBtn');
-        let conversationHistory = [
-            { role: 'system', content: 'You are an expert business consultant with MBA-level knowledge. Provide strategic, actionable advice for business problems including operations, marketing, finance, HR, and strategy. Be specific and data-driven in your recommendations.' }
-        ];
+        const problemCategory = document.getElementById('problemCategory');
+        const businessType = document.getElementById('businessType');
+        const industry = document.getElementById('industry');
+        const problemDesc = document.getElementById('problemDesc');
+        const budget = document.getElementById('budget');
+        const solveBtn = document.getElementById('solveBtn');
+        const resultArea = document.getElementById('resultArea');
 
-        chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
+        solveBtn.addEventListener('click', async () => {
+            const problem = problemDesc.value.trim();
+
+            if (!problem) {
+                BrainrackAI.showToast('Please describe your business problem');
+                return;
             }
-        });
-        sendBtn.addEventListener('click', sendMessage);
 
-        async function sendMessage() {
-            const message = chatInput.value.trim();
-            if (!message) return;
+            const fullProblem = `
+                Business Type: ${businessType.options[businessType.selectedIndex].text}
+                Industry: ${industry.value || 'Not specified'}
+                Category: ${problemCategory.options[problemCategory.selectedIndex].text}
+                ${budget.value ? `Budget/Resources: ${budget.value}` : ''}
 
-            addMessage(message, 'user');
-            chatInput.value = '';
-            conversationHistory.push({ role: 'user', content: message });
+                Problem:
+                ${problem}
 
-            const typingIndicator = addTypingIndicator();
+                Please provide:
+                1. Analysis of the problem
+                2. Multiple solution approaches
+                3. Step-by-step implementation plan
+                4. Potential challenges and how to overcome them
+                5. Expected outcomes and metrics to track
+                6. Alternative strategies if primary solution doesn't work
+            `;
+
+            solveBtn.disabled = true;
+            solveBtn.textContent = 'Analyzing... ⏳';
+            BrainrackAI.showLoading(resultArea, 'Analyzing your business challenge...');
 
             try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ messages: conversationHistory })
+                const response = await BrainrackAI.callAPI('/api/business-solver', 'POST', {
+                    problem: fullProblem
                 });
 
-                const data = await response.json();
-                typingIndicator.remove();
-
-                const aiResponse = data.choices[0].message.content;
-                conversationHistory.push({ role: 'assistant', content: aiResponse });
-                await addMessageWithTyping(aiResponse, 'assistant');
-
-            } catch (error) {
-                typingIndicator.remove();
-                addMessage('Error: ' + error.message, 'assistant');
-            }
-        }
-
-        function addMessage(text, sender) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}`;
-            messageDiv.innerHTML = `
-                <div class="message-avatar">${sender === 'user' ? 'You' : 'AI'}</div>
-                <div class="message-content">${text}</div>
-            `;
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        async function addMessageWithTyping(text, sender) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}`;
-            const content = document.createElement('div');
-            content.className = 'message-content';
-            messageDiv.innerHTML = `<div class="message-avatar">${sender === 'user' ? 'You' : 'AI'}</div>`;
-            messageDiv.appendChild(content);
-            chatMessages.appendChild(messageDiv);
-
-            for (let i = 0; i < text.length; i++) {
-                content.textContent += text[i];
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                await new Promise(resolve => setTimeout(resolve, 10));
-            }
-        }
-
-        function addTypingIndicator() {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message assistant';
-            messageDiv.innerHTML = `
-                <div class="message-avatar">AI</div>
-                <div class="message-content">
-                    <div class="typing-indicator">
-                        <div class="typing-dot"></div>
-                        <div class="typing-dot"></div>
-                        <div class="typing-dot"></div>
+                resultArea.innerHTML = `
+                    <div class="result-container">
+                        <h3>Business Solution Analysis</h3>
+                        <div style="background: var(--dark-surface); padding: 2rem; border-radius: 8px; line-height: 1.8; white-space: pre-wrap;">
+                            ${response.solution}
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <button class="btn-primary" onclick="copySolution()">
+                                Copy Solution 📋
+                            </button>
+                            <button class="btn-primary" onclick="downloadSolution()">
+                                Download as PDF 📥
+                            </button>
+                            <button class="btn-primary" onclick="getSimilarCases()">
+                                Get Similar Cases 🔍
+                            </button>
+                        </div>
+                        <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(74, 144, 226, 0.1); border-radius: 8px; border-left: 4px solid var(--accent-blue);">
+                            <strong>💡 Pro Tip:</strong> Implement solutions incrementally and measure results at each step. 
+                            Consider consulting with industry experts for critical decisions.
+                        </div>
                     </div>
-                </div>
-            `;
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            return messageDiv;
+                `;
+
+                window.currentSolution = response.solution;
+
+                BrainrackAI.showToast('Solution generated successfully!');
+            } catch (error) {
+                BrainrackAI.showError(resultArea, 'Failed to generate solution. Please check your API configuration and try again.');
+                console.error('Error:', error);
+            } finally {
+                solveBtn.disabled = false;
+                solveBtn.textContent = 'Get Solution 💡';
+            }
+        });
+
+        function copySolution() {
+            if (window.currentSolution) {
+                BrainrackAI.copyToClipboard(window.currentSolution);
+            }
+        }
+
+        function downloadSolution() {
+            if (window.currentSolution) {
+                const blob = new Blob([window.currentSolution], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'business-solution.txt';
+                link.click();
+                URL.revokeObjectURL(url);
+                BrainrackAI.showToast('Solution downloaded!');
+            }
+        }
+
+        function getSimilarCases() {
+            BrainrackAI.showToast('Feature coming soon! This will show similar case studies.');
         }
     </script>
 </body>

@@ -3,417 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AI Chat - Intelligent conversations powered by advanced AI">
-    <title>AI Chat - Brainrack AI</title>
+    <title>Brainrack AI - Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="animated-bg"></div>
-
-    <header>
-        <div class="header-content">
-            <a href="/dashboard" class="logo">
-                <span>🧠</span> Brainrack AI
-            </a>
-            <nav class="nav-actions">
-                <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
-                <div class="menu-container">
-                    <button class="icon-btn" id="menuBtn" aria-label="Menu">
-                        <span>⋮</span>
-                    </button>
-                    <div class="menu-dropdown" id="menuDropdown">
-                        <a href="/dashboard" class="menu-item">
-                            <span>🏠</span> Dashboard
-                        </a>
-                        <a href="/chat" class="menu-item">
-                            <span>💬</span> AI Chat
-                        </a>
-                        <a href="/image" class="menu-item">
-                            <span>🎨</span> Image Generator
-                        </a>
-                        <a href="/document" class="menu-item">
-                            <span>📄</span> Document Analyzer
-                        </a>
-                        <a href="/video" class="menu-item">
-                            <span>🎥</span> Video Generator
-                        </a>
-                        <a href="/business" class="menu-item">
-                            <span>💼</span> Business Solutions
-                        </a>
-                        <a href="/startup" class="menu-item">
-                            <span>🚀</span> Startup Ideas
-                        </a>
-                        <a href="/news" class="menu-item">
-                            <span>📰</span> News
-                        </a>
-                        <a href="/weather" class="menu-item">
-                            <span>⛅</span> Weather
-                        </a>
-                        <a href="/contact" class="menu-item">
-                            <span>📧</span> Contact Us
-                        </a>
-                        <div class="menu-item" id="profileBtn">
-                            <span>👤</span> Profile
-                        </div>
-                        <div class="menu-item" id="themeToggle">
-                            <span>🌓</span> Toggle Theme
-                        </div>
-                        <div class="menu-item" id="settingsBtn">
-                            <span>⚙️</span> Settings
-                        </div>
-                    </div>
-                </div>
-            </nav>
+    <header class="header">
+        <div class="logo">🧠 Brainrack AI</div>
+        <div class="menu-icon" id="menuIcon">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="5" r="2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <circle cx="12" cy="19" r="2"/>
+            </svg>
+        </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="dashboard.html" class="dropdown-item">🏠 Dashboard</a>
+            <a href="index.html" class="dropdown-item">💬 AI Chat</a>
+            <a href="image.html" class="dropdown-item">🎨 Image Generator</a>
+            <a href="document.html" class="dropdown-item">📄 Document Analyzer</a>
+            <a href="video.html" class="dropdown-item">🎬 Video Generator</a>
+            <a href="business.html" class="dropdown-item">💼 Business Solver</a>
+            <a href="startup.html" class="dropdown-item">🚀 Startup Ideas</a>
+            <a href="weather.html" class="dropdown-item">🌤️ Weather</a>
+            <a href="news.html" class="dropdown-item">📰 News</a>
+            <div class="dropdown-item" id="themeToggle">🌓 Toggle Theme</div>
+            <a href="contactus.html" class="dropdown-item">📧 Contact Us</a>
         </div>
     </header>
 
-    <main class="container">
+    <div class="container">
         <div class="chat-container">
+            <div class="chat-header">
+                💬 AI Chat Assistant
+            </div>
             <div class="chat-messages" id="chatMessages">
-                <div class="message assistant">
+                <div class="message ai">
                     <div class="message-avatar">AI</div>
                     <div class="message-content">
-                        Hello! I'm your AI assistant. How can I help you today?
+                        Hello! I'm your Brainrack AI assistant. How can I help you today?
                     </div>
                 </div>
             </div>
-
-            <div class="chat-input-container">
-                <textarea 
-                    id="chatInput" 
-                    class="chat-input" 
-                    placeholder="Type your message... (Shift+Enter for new line)"
-                    rows="1"
-                ></textarea>
-                <div class="input-actions">
-                    <button class="voice-btn" id="voiceBtn" aria-label="Voice input" title="Voice input">
-                        🎤
-                    </button>
-                    <button class="send-btn" id="sendBtn" aria-label="Send message" title="Send message">
-                        ➤
-                    </button>
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        class="chat-input" 
+                        id="chatInput" 
+                        placeholder="Type your message..."
+                        autocomplete="off"
+                    >
                 </div>
+                <button class="voice-btn" id="voiceBtn">
+                    <span id="voiceIcon">🎤</span>
+                </button>
+                <button class="send-btn" id="sendBtn">
+                    Send ➤
+                </button>
             </div>
-        </div>
-    </main>
-
-    <!-- Settings Modal -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Settings</h2>
-                <button class="close-modal" id="closeSettings">&times;</button>
-            </div>
-            <div class="settings-group">
-                <h3>Voice Settings</h3>
-                <div class="form-group">
-                    <label for="voiceModel">Voice Model</label>
-                    <select id="voiceModel" class="form-control">
-                        <option value="alloy">Alloy (Neutral)</option>
-                        <option value="echo">Echo (Male)</option>
-                        <option value="fable">Fable (British Male)</option>
-                        <option value="onyx">Onyx (Deep Male)</option>
-                        <option value="nova">Nova (Female)</option>
-                        <option value="shimmer">Shimmer (Soft Female)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="voiceSpeed">Speed: <span class="slider-value" id="speedValue">1.0</span></label>
-                    <input type="range" id="voiceSpeed" class="slider" min="0.5" max="2.0" step="0.1" value="1.0">
-                </div>
-                <div class="form-group">
-                    <label for="voicePitch">Pitch: <span class="slider-value" id="pitchValue">1.0</span></label>
-                    <input type="range" id="voicePitch" class="slider" min="0.5" max="2.0" step="0.1" value="1.0">
-                </div>
-                <div class="form-group">
-                    <label for="voiceVolume">Volume: <span class="slider-value" id="volumeValue">1.0</span></label>
-                    <input type="range" id="voiceVolume" class="slider" min="0" max="1" step="0.1" value="1.0">
-                </div>
-            </div>
-            <div class="settings-group">
-                <h3>AI Model</h3>
-                <div class="form-group">
-                    <label for="aiModel">Select AI Model</label>
-                    <select id="aiModel" class="form-control">
-                        <option value="anthropic/claude-3.5-sonnet">Claude 3.5 Sonnet (Best)</option>
-                        <option value="openai/gpt-4-turbo">GPT-4 Turbo</option>
-                        <option value="openai/gpt-3.5-turbo">GPT-3.5 Turbo (Fast)</option>
-                        <option value="google/gemini-pro">Gemini Pro</option>
-                    </select>
-                </div>
-            </div>
-            <button class="btn btn-primary" id="saveSettings">Save Settings</button>
-        </div>
-    </div>
-
-    <!-- Profile Modal -->
-    <div class="modal" id="profileModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Profile</h2>
-                <button class="close-modal" id="closeProfile">&times;</button>
-            </div>
-            <div class="form-group">
-                <label for="userName">Name</label>
-                <input type="text" id="userName" placeholder="Enter your name">
-            </div>
-            <div class="form-group">
-                <label for="userEmail">Email</label>
-                <input type="email" id="userEmail" placeholder="Enter your email">
-            </div>
-            <div class="form-group">
-                <label for="userLanguage">Preferred Language</label>
-                <select id="userLanguage">
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="fr">French</option>
-                    <option value="de">German</option>
-                    <option value="zh">Chinese</option>
-                    <option value="ja">Japanese</option>
-                    <option value="hi">Hindi</option>
-                    <option value="ar">Arabic</option>
-                </select>
-            </div>
-            <button class="btn btn-primary" id="saveProfile">Save Profile</button>
         </div>
     </div>
 
     <script src="script.js"></script>
     <script>
-        // Chat-specific functionality
+        // Chat specific functionality
         const chatMessages = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
         const sendBtn = document.getElementById('sendBtn');
         const voiceBtn = document.getElementById('voiceBtn');
-
-        let conversationHistory = [];
+        
         let isRecording = false;
         let recognition = null;
-        let isVoiceInput = false;
-
+        let detectedLanguage = 'en-US';
+        
         // Initialize Speech Recognition
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-
-            // Get user's preferred language
-            const userLang = localStorage.getItem('userLanguage') || 'en';
-            recognition.lang = userLang === 'en' ? 'en-US' : userLang;
-
+            
             recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript;
+                detectedLanguage = event.results[0][0].lang || 'en-US';
                 chatInput.value = transcript;
-                isVoiceInput = true;
+                sendMessage(true);
             };
-
-            recognition.onend = () => {
-                isRecording = false;
-                voiceBtn.classList.remove('recording');
-                voiceBtn.textContent = '🎤';
-            };
-
+            
             recognition.onerror = (event) => {
                 console.error('Speech recognition error:', event.error);
-                isRecording = false;
                 voiceBtn.classList.remove('recording');
-                voiceBtn.textContent = '🎤';
+                isRecording = false;
+            };
+            
+            recognition.onend = () => {
+                voiceBtn.classList.remove('recording');
+                isRecording = false;
             };
         }
-
-        // Voice button click
+        
         voiceBtn.addEventListener('click', () => {
             if (!recognition) {
                 alert('Speech recognition is not supported in your browser');
                 return;
             }
-
+            
             if (isRecording) {
                 recognition.stop();
             } else {
-                isRecording = true;
-                voiceBtn.classList.add('recording');
-                voiceBtn.textContent = '⏸️';
+                recognition.lang = detectedLanguage;
                 recognition.start();
+                voiceBtn.classList.add('recording');
+                isRecording = true;
             }
         });
-
-        // Auto-resize textarea
-        chatInput.addEventListener('input', () => {
-            chatInput.style.height = 'auto';
-            chatInput.style.height = chatInput.scrollHeight + 'px';
-        });
-
-        // Send message on Enter (Shift+Enter for new line)
-        chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
+        
+        sendBtn.addEventListener('click', () => sendMessage(false));
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage(false);
             }
         });
-
-        sendBtn.addEventListener('click', sendMessage);
-
-        async function sendMessage() {
+        
+        async function sendMessage(useVoice) {
             const message = chatInput.value.trim();
             if (!message) return;
-
-            // Add user message to chat
+            
             addMessage(message, 'user');
             chatInput.value = '';
-            chatInput.style.height = 'auto';
-
-            // Add to conversation history
-            conversationHistory.push({ role: 'user', content: message });
-
-            // Show typing indicator
-            const typingIndicator = addTypingIndicator();
-
+            
+            showTypingIndicator();
+            
             try {
-                // Get AI model from settings
-                const aiModel = localStorage.getItem('aiModel') || 'anthropic/claude-3.5-sonnet';
-
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        messages: conversationHistory,
-                        model: aiModel
+                        message: message,
+                        language: detectedLanguage
                     })
                 });
-
+                
                 const data = await response.json();
-
-                // Remove typing indicator
-                typingIndicator.remove();
-
-                if (data.error) {
-                    addMessage('Sorry, I encountered an error. Please try again.', 'assistant');
-                    return;
+                removeTypingIndicator();
+                
+                if (data.response) {
+                    addMessage(data.response, 'ai');
+                    
+                    if (useVoice) {
+                        speakText(data.response);
+                    }
+                } else {
+                    addMessage('Sorry, I encountered an error. Please try again.', 'ai');
                 }
-
-                const aiResponse = data.choices[0].message.content;
-                conversationHistory.push({ role: 'assistant', content: aiResponse });
-
-                // Add AI response with typing animation
-                await addMessageWithTyping(aiResponse, 'assistant');
-
-                // If voice input was used, speak the response
-                if (isVoiceInput) {
-                    speakText(aiResponse);
-                    isVoiceInput = false;
-                }
-
             } catch (error) {
                 console.error('Error:', error);
-                typingIndicator.remove();
-                addMessage('Sorry, I encountered an error. Please check your *** and try again.', 'assistant');
+                removeTypingIndicator();
+                addMessage('Sorry, I encountered an error. Please check your API configuration.', 'ai');
             }
         }
-
+        
         function addMessage(text, sender) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}`;
-
+            
             const avatar = document.createElement('div');
             avatar.className = 'message-avatar';
-            avatar.textContent = sender === 'user' ? 'You' : 'AI';
-
+            avatar.textContent = sender === 'user' ? 'U' : 'AI';
+            
             const content = document.createElement('div');
             content.className = 'message-content';
-            content.textContent = text;
-
-            messageDiv.appendChild(avatar);
-            messageDiv.appendChild(content);
-            chatMessages.appendChild(messageDiv);
-
-            // Scroll to bottom
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            return messageDiv;
-        }
-
-        async function addMessageWithTyping(text, sender) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}`;
-
-            const avatar = document.createElement('div');
-            avatar.className = 'message-avatar';
-            avatar.textContent = sender === 'user' ? 'You' : 'AI';
-
-            const content = document.createElement('div');
-            content.className = 'message-content';
-            content.textContent = '';
-
-            messageDiv.appendChild(avatar);
-            messageDiv.appendChild(content);
-            chatMessages.appendChild(messageDiv);
-
-            // Typing animation
-            for (let i = 0; i < text.length; i++) {
-                content.textContent += text[i];
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                await new Promise(resolve => setTimeout(resolve, 10)); // Adjust speed here
+            
+            if (sender === 'ai') {
+                typeText(content, text);
+            } else {
+                content.textContent = text;
             }
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            chatMessages.appendChild(messageDiv);
+            
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
-
-        function addTypingIndicator() {
+        
+        function typeText(element, text, speed = 20) {
+            let index = 0;
+            element.textContent = '';
+            
+            const interval = setInterval(() => {
+                if (index < text.length) {
+                    element.textContent += text.charAt(index);
+                    index++;
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                } else {
+                    clearInterval(interval);
+                }
+            }, speed);
+        }
+        
+        function showTypingIndicator() {
             const messageDiv = document.createElement('div');
-            messageDiv.className = 'message assistant';
-
+            messageDiv.className = 'message ai typing-message';
+            messageDiv.id = 'typingIndicator';
+            
             const avatar = document.createElement('div');
             avatar.className = 'message-avatar';
             avatar.textContent = 'AI';
-
+            
             const content = document.createElement('div');
             content.className = 'message-content';
-
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'typing-indicator';
-            typingDiv.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
-
-            content.appendChild(typingDiv);
+            content.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            
             messageDiv.appendChild(avatar);
             messageDiv.appendChild(content);
             chatMessages.appendChild(messageDiv);
-
+            
             chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            return messageDiv;
         }
-
+        
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+        
         function speakText(text) {
             if ('speechSynthesis' in window) {
-                // Cancel any ongoing speech
-                window.speechSynthesis.cancel();
-
                 const utterance = new SpeechSynthesisUtterance(text);
-
-                // Get settings from localStorage
-                const voiceSpeed = parseFloat(localStorage.getItem('voiceSpeed')) || 1.0;
-                const voicePitch = parseFloat(localStorage.getItem('voicePitch')) || 1.0;
-                const voiceVolume = parseFloat(localStorage.getItem('voiceVolume')) || 1.0;
-                const userLang = localStorage.getItem('userLanguage') || 'en';
-
-                utterance.rate = voiceSpeed;
-                utterance.pitch = voicePitch;
-                utterance.volume = voiceVolume;
-                utterance.lang = userLang === 'en' ? 'en-US' : userLang;
-
-                window.speechSynthesis.speak(utterance);
+                const settings = JSON.parse(localStorage.getItem('voiceSettings') || '{}');
+                
+                utterance.lang = detectedLanguage;
+                utterance.rate = settings.speed || 1.0;
+                utterance.pitch = settings.pitch || 1.0;
+                utterance.volume = settings.volume || 1.0;
+                
+                if (settings.voice) {
+                    const voices = speechSynthesis.getVoices();
+                    const selectedVoice = voices.find(v => v.name === settings.voice);
+                    if (selectedVoice) {
+                        utterance.voice = selectedVoice;
+                    }
+                }
+                
+                speechSynthesis.speak(utterance);
             }
         }
-
-        // Update speech recognition language when changed in profile
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'userLanguage' && recognition) {
-                const userLang = e.newValue || 'en';
-                recognition.lang = userLang === 'en' ? 'en-US' : userLang;
-            }
-        });
     </script>
 </body>
 </html>

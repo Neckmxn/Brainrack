@@ -1,313 +1,79 @@
-// Global Variables
+// Global variables and settings
 let currentTheme = localStorage.getItem('theme') || 'dark';
-let userSettings = {
-    voiceModel: localStorage.getItem('voiceModel') || 'alloy',
-    voiceSpeed: parseFloat(localStorage.getItem('voiceSpeed')) || 1.0,
-    voicePitch: parseFloat(localStorage.getItem('voicePitch')) || 1.0,
-    voiceVolume: parseFloat(localStorage.getItem('voiceVolume')) || 1.0,
-    aiModel: localStorage.getItem('aiModel') || 'anthropic/claude-3.5-sonnet'
-};
+let voiceSettings = JSON.parse(localStorage.getItem('voiceSettings') || '{"speed": 1.0, "pitch": 1.0, "volume": 1.0, "voice": null}');
 
-// Initialize theme
-document.documentElement.setAttribute('data-theme', currentTheme);
-
-// DOM Elements (initialized when available)
-let menuBtn, menuDropdown, themeToggle, settingsBtn, profileBtn;
-let settingsModal, profileModal;
-let closeSettings, closeProfile;
-
-// Initialize when DOM is ready
+// Apply theme on page load
 document.addEventListener('DOMContentLoaded', () => {
-    initializeElements();
-    setupEventListeners();
-    loadUserSettings();
+    applyTheme(currentTheme);
+    setupMenuListeners();
 });
 
-function initializeElements() {
-    // Menu elements
-    menuBtn = document.getElementById('menuBtn');
-    menuDropdown = document.getElementById('menuDropdown');
-    themeToggle = document.getElementById('themeToggle');
-    settingsBtn = document.getElementById('settingsBtn');
-    profileBtn = document.getElementById('profileBtn');
-
-    // Modal elements
-    settingsModal = document.getElementById('settingsModal');
-    profileModal = document.getElementById('profileModal');
-    closeSettings = document.getElementById('closeSettings');
-    closeProfile = document.getElementById('closeProfile');
+// Theme management
+function applyTheme(theme) {
+    if (theme === 'light') {
+        document.body.classList.add('light-theme');
+    } else {
+        document.body.classList.remove('light-theme');
+    }
+    currentTheme = theme;
+    localStorage.setItem('theme', theme);
 }
 
-function setupEventListeners() {
-    // Menu toggle
-    if (menuBtn && menuDropdown) {
-        menuBtn.addEventListener('click', (e) => {
+function toggleTheme() {
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    applyTheme(newTheme);
+}
+
+// Menu functionality
+function setupMenuListeners() {
+    const menuIcon = document.getElementById('menuIcon');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const themeToggle = document.getElementById('themeToggle');
+
+    if (menuIcon && dropdownMenu) {
+        menuIcon.addEventListener('click', (e) => {
             e.stopPropagation();
-            menuDropdown.classList.toggle('active');
+            dropdownMenu.classList.toggle('active');
         });
 
         // Close menu when clicking outside
         document.addEventListener('click', (e) => {
-            if (!menuDropdown.contains(e.target) && !menuBtn.contains(e.target)) {
-                menuDropdown.classList.remove('active');
+            if (!dropdownMenu.contains(e.target) && !menuIcon.contains(e.target)) {
+                dropdownMenu.classList.remove('active');
             }
         });
     }
 
-    // Theme toggle
     if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', currentTheme);
-            localStorage.setItem('theme', currentTheme);
-            menuDropdown.classList.remove('active');
+        themeToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleTheme();
         });
     }
-
-    // Settings modal
-    if (settingsBtn && settingsModal) {
-        settingsBtn.addEventListener('click', () => {
-            settingsModal.classList.add('active');
-            menuDropdown.classList.remove('active');
-            loadSettingsToModal();
-        });
-    }
-
-    if (closeSettings) {
-        closeSettings.addEventListener('click', () => {
-            settingsModal.classList.remove('active');
-        });
-    }
-
-    // Profile modal
-    if (profileBtn && profileModal) {
-        profileBtn.addEventListener('click', () => {
-            profileModal.classList.add('active');
-            menuDropdown.classList.remove('active');
-            loadProfileToModal();
-        });
-    }
-
-    if (closeProfile) {
-        closeProfile.addEventListener('click', () => {
-            profileModal.classList.remove('active');
-        });
-    }
-
-    // Close modals when clicking outside
-    window.addEventListener('click', (e) => {
-        if (e.target === settingsModal) {
-            settingsModal.classList.remove('active');
-        }
-        if (e.target === profileModal) {
-            profileModal.classList.remove('active');
-        }
-    });
-
-    // Settings form
-    setupSettingsForm();
-    setupProfileForm();
-}
-
-function setupSettingsForm() {
-    const voiceSpeed = document.getElementById('voiceSpeed');
-    const voicePitch = document.getElementById('voicePitch');
-    const voiceVolume = document.getElementById('voiceVolume');
-    const speedValue = document.getElementById('speedValue');
-    const pitchValue = document.getElementById('pitchValue');
-    const volumeValue = document.getElementById('volumeValue');
-    const saveSettingsBtn = document.getElementById('saveSettings');
-
-    // Update slider values
-    if (voiceSpeed && speedValue) {
-        voiceSpeed.addEventListener('input', (e) => {
-            speedValue.textContent = e.target.value;
-        });
-    }
-
-    if (voicePitch && pitchValue) {
-        voicePitch.addEventListener('input', (e) => {
-            pitchValue.textContent = e.target.value;
-        });
-    }
-
-    if (voiceVolume && volumeValue) {
-        voiceVolume.addEventListener('input', (e) => {
-            volumeValue.textContent = e.target.value;
-        });
-    }
-
-    // Save settings
-    if (saveSettingsBtn) {
-        saveSettingsBtn.addEventListener('click', saveSettings);
-    }
-}
-
-function setupProfileForm() {
-    const saveProfileBtn = document.getElementById('saveProfile');
-
-    if (saveProfileBtn) {
-        saveProfileBtn.addEventListener('click', saveProfile);
-    }
-}
-
-function loadUserSettings() {
-    // Load settings from localStorage
-    const savedSettings = {
-        voiceModel: localStorage.getItem('voiceModel'),
-        voiceSpeed: localStorage.getItem('voiceSpeed'),
-        voicePitch: localStorage.getItem('voicePitch'),
-        voiceVolume: localStorage.getItem('voiceVolume'),
-        aiModel: localStorage.getItem('aiModel')
-    };
-
-    userSettings = {
-        voiceModel: savedSettings.voiceModel || 'alloy',
-        voiceSpeed: parseFloat(savedSettings.voiceSpeed) || 1.0,
-        voicePitch: parseFloat(savedSettings.voicePitch) || 1.0,
-        voiceVolume: parseFloat(savedSettings.voiceVolume) || 1.0,
-        aiModel: savedSettings.aiModel || 'anthropic/claude-3.5-sonnet'
-    };
-}
-
-function loadSettingsToModal() {
-    const voiceModel = document.getElementById('voiceModel');
-    const voiceSpeed = document.getElementById('voiceSpeed');
-    const voicePitch = document.getElementById('voicePitch');
-    const voiceVolume = document.getElementById('voiceVolume');
-    const aiModel = document.getElementById('aiModel');
-    const speedValue = document.getElementById('speedValue');
-    const pitchValue = document.getElementById('pitchValue');
-    const volumeValue = document.getElementById('volumeValue');
-
-    if (voiceModel) voiceModel.value = userSettings.voiceModel;
-    if (voiceSpeed) {
-        voiceSpeed.value = userSettings.voiceSpeed;
-        if (speedValue) speedValue.textContent = userSettings.voiceSpeed;
-    }
-    if (voicePitch) {
-        voicePitch.value = userSettings.voicePitch;
-        if (pitchValue) pitchValue.textContent = userSettings.voicePitch;
-    }
-    if (voiceVolume) {
-        voiceVolume.value = userSettings.voiceVolume;
-        if (volumeValue) volumeValue.textContent = userSettings.voiceVolume;
-    }
-    if (aiModel) aiModel.value = userSettings.aiModel;
-}
-
-function saveSettings() {
-    const voiceModel = document.getElementById('voiceModel');
-    const voiceSpeed = document.getElementById('voiceSpeed');
-    const voicePitch = document.getElementById('voicePitch');
-    const voiceVolume = document.getElementById('voiceVolume');
-    const aiModel = document.getElementById('aiModel');
-
-    if (voiceModel) {
-        userSettings.voiceModel = voiceModel.value;
-        localStorage.setItem('voiceModel', voiceModel.value);
-    }
-
-    if (voiceSpeed) {
-        userSettings.voiceSpeed = parseFloat(voiceSpeed.value);
-        localStorage.setItem('voiceSpeed', voiceSpeed.value);
-    }
-
-    if (voicePitch) {
-        userSettings.voicePitch = parseFloat(voicePitch.value);
-        localStorage.setItem('voicePitch', voicePitch.value);
-    }
-
-    if (voiceVolume) {
-        userSettings.voiceVolume = parseFloat(voiceVolume.value);
-        localStorage.setItem('voiceVolume', voiceVolume.value);
-    }
-
-    if (aiModel) {
-        userSettings.aiModel = aiModel.value;
-        localStorage.setItem('aiModel', aiModel.value);
-    }
-
-    // Show success message
-    alert('Settings saved successfully!');
-    settingsModal.classList.remove('active');
-}
-
-function loadProfileToModal() {
-    const userName = document.getElementById('userName');
-    const userEmail = document.getElementById('userEmail');
-    const userLanguage = document.getElementById('userLanguage');
-
-    if (userName) userName.value = localStorage.getItem('userName') || '';
-    if (userEmail) userEmail.value = localStorage.getItem('userEmail') || '';
-    if (userLanguage) userLanguage.value = localStorage.getItem('userLanguage') || 'en';
-}
-
-function saveProfile() {
-    const userName = document.getElementById('userName');
-    const userEmail = document.getElementById('userEmail');
-    const userLanguage = document.getElementById('userLanguage');
-
-    if (userName && userName.value) {
-        localStorage.setItem('userName', userName.value);
-    }
-
-    if (userEmail && userEmail.value) {
-        localStorage.setItem('userEmail', userEmail.value);
-    }
-
-    if (userLanguage) {
-        localStorage.setItem('userLanguage', userLanguage.value);
-        // Trigger storage event for other components
-        window.dispatchEvent(new StorageEvent('storage', {
-            key: 'userLanguage',
-            newValue: userLanguage.value
-        }));
-    }
-
-    alert('Profile saved successfully!');
-    profileModal.classList.remove('active');
-}
-
-// Utility Functions
-function showNotification(title, message, type = 'info') {
-    if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification(title, {
-            body: message,
-            icon: type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ'
-        });
-    }
-}
-
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
-
-function truncateText(text, maxLength) {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
 }
 
 // API Helper Functions
-async function fetchAPI(endpoint, options = {}) {
+async function callAPI(endpoint, method = 'GET', body = null) {
+    const options = {
+        method: method,
+        headers: {}
+    };
+
+    if (body) {
+        if (body instanceof FormData) {
+            options.body = body;
+        } else {
+            options.headers['Content-Type'] = 'application/json';
+            options.body = JSON.stringify(body);
+        }
+    }
+
     try {
-        const response = await fetch(endpoint, {
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            },
-            ...options
-        });
+        const response = await fetch(endpoint, options);
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
         }
 
         return await response.json();
@@ -317,74 +83,310 @@ async function fetchAPI(endpoint, options = {}) {
     }
 }
 
-// Service Worker Registration (for PWA support)
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-                console.log('ServiceWorker registered:', registration);
-            })
-            .catch(error => {
-                console.log('ServiceWorker registration failed:', error);
-            });
+// Notification helpers
+function requestNotificationPermission() {
+    if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+    }
+}
+
+function showNotification(title, body, icon = 'ðŸ§ ') {
+    if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, {
+            body: body,
+            icon: icon,
+            badge: icon
+        });
+    }
+}
+
+// Voice settings management
+function saveVoiceSettings(settings) {
+    voiceSettings = { ...voiceSettings, ...settings };
+    localStorage.setItem('voiceSettings', JSON.stringify(voiceSettings));
+}
+
+function getVoiceSettings() {
+    return voiceSettings;
+}
+
+// Speech synthesis helper
+function speakText(text, language = 'en-US') {
+    if ('speechSynthesis' in window) {
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        const settings = getVoiceSettings();
+
+        utterance.lang = language;
+        utterance.rate = settings.speed || 1.0;
+        utterance.pitch = settings.pitch || 1.0;
+        utterance.volume = settings.volume || 1.0;
+
+        if (settings.voice) {
+            const voices = window.speechSynthesis.getVoices();
+            const selectedVoice = voices.find(v => v.name === settings.voice);
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+            }
+        }
+
+        window.speechSynthesis.speak(utterance);
+    }
+}
+
+// Get available voices
+function getAvailableVoices() {
+    return new Promise((resolve) => {
+        let voices = window.speechSynthesis.getVoices();
+
+        if (voices.length > 0) {
+            resolve(voices);
+        } else {
+            window.speechSynthesis.onvoiceschanged = () => {
+                voices = window.speechSynthesis.getVoices();
+                resolve(voices);
+            };
+        }
     });
 }
 
-// Request notification permission on page load
-if ('Notification' in window && Notification.permission === 'default') {
-    // Don't auto-request, let user enable via buttons
-    console.log('Notification permission not granted yet');
+// Loading indicator
+function showLoading(element, message = 'Loading...') {
+    element.innerHTML = `
+        <div style="text-align: center; padding: 2rem;">
+            <div class="spinner"></div>
+            <p style="margin-top: 1rem; color: var(--text-secondary-dark);">${message}</p>
+        </div>
+    `;
 }
 
-// Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-    // Ctrl/Cmd + K to focus search/input
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        const chatInput = document.getElementById('chatInput');
-        const locationInput = document.getElementById('locationInput');
-        if (chatInput) chatInput.focus();
-        else if (locationInput) locationInput.focus();
+// Error display
+function showError(element, message) {
+    element.innerHTML = `
+        <div style="background: rgba(231, 76, 60, 0.1); border: 2px solid #e74c3c; border-radius: 12px; padding: 1.5rem; text-align: center;">
+            <p style="color: #e74c3c; font-weight: 600;">âŒ ${message}</p>
+        </div>
+    `;
+}
+
+// Success display
+function showSuccess(element, message) {
+    element.innerHTML = `
+        <div style="background: rgba(46, 204, 113, 0.1); border: 2px solid #2ecc71; border-radius: 12px; padding: 1.5rem; text-align: center;">
+            <p style="color: #2ecc71; font-weight: 600;">âœ… ${message}</p>
+        </div>
+    `;
+}
+
+// Format date helper
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) {
+        return 'Today';
+    } else if (diffDays === 1) {
+        return 'Yesterday';
+    } else if (diffDays < 7) {
+        return `${diffDays} days ago`;
+    } else {
+        return date.toLocaleDateString();
     }
+}
 
-    // Escape to close modals
-    if (e.key === 'Escape') {
-        if (settingsModal) settingsModal.classList.remove('active');
-        if (profileModal) profileModal.classList.remove('active');
-        if (menuDropdown) menuDropdown.classList.remove('active');
+// Local storage helpers
+function saveToLocalStorage(key, value) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+        return true;
+    } catch (error) {
+        console.error('Error saving to localStorage:', error);
+        return false;
     }
-});
+}
 
-// Handle online/offline status
-window.addEventListener('online', () => {
-    console.log('App is online');
-    showNotification('Connection Restored', 'You are back online', 'success');
-});
+function getFromLocalStorage(key, defaultValue = null) {
+    try {
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : defaultValue;
+    } catch (error) {
+        console.error('Error reading from localStorage:', error);
+        return defaultValue;
+    }
+}
 
-window.addEventListener('offline', () => {
-    console.log('App is offline');
-    showNotification('Connection Lost', 'You are currently offline', 'error');
-});
+// Debounce helper
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
 
-// Prevent accidental page refresh
-window.addEventListener('beforeunload', (e) => {
-    // Only show warning if user has unsaved data
-    const chatInput = document.getElementById('chatInput');
-    const hasUnsavedContent = chatInput && chatInput.value.trim().length > 0;
+// Copy to clipboard
+function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('Copied to clipboard!');
+        }).catch(err => {
+            console.error('Could not copy text:', err);
+        });
+    } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showToast('Copied to clipboard!');
+        } catch (err) {
+            console.error('Could not copy text:', err);
+        }
+        document.body.removeChild(textArea);
+    }
+}
 
-    if (hasUnsavedContent) {
-        e.preventDefault();
-        e.returnValue = '';
+// Toast notification
+function showToast(message, duration = 3000) {
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: var(--accent-blue);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: var(--shadow-lg);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+    `;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 300);
+    }, duration);
+}
+
+// Add CSS animations for toast
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+
+// File size formatter
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+}
+
+// Validate file type
+function validateFileType(file, allowedTypes) {
+    const fileType = file.type;
+    const fileName = file.name;
+    const fileExtension = fileName.split('.').pop().toLowerCase();
+
+    return allowedTypes.some(type => {
+        if (type.includes('*')) {
+            const baseType = type.split('/')[0];
+            return fileType.startsWith(baseType);
+        }
+        return fileType === type || fileExtension === type.replace('.', '');
+    });
+}
+
+// Get geolocation
+function getCurrentLocation() {
+    return new Promise((resolve, reject) => {
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    resolve({
+                        lat: position.coords.latitude,
+                        lon: position.coords.longitude
+                    });
+                },
+                (error) => {
+                    reject(error);
+                }
+            );
+        } else {
+            reject(new Error('Geolocation is not supported'));
+        }
+    });
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    // Request notification permission
+    requestNotificationPermission();
+
+    // Load voices for speech synthesis
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
     }
 });
 
 // Export functions for use in other scripts
 window.BrainrackAI = {
-    userSettings,
+    callAPI,
+    toggleTheme,
+    applyTheme,
+    requestNotificationPermission,
     showNotification,
+    saveVoiceSettings,
+    getVoiceSettings,
+    speakText,
+    getAvailableVoices,
+    showLoading,
+    showError,
+    showSuccess,
     formatDate,
-    truncateText,
-    fetchAPI
+    saveToLocalStorage,
+    getFromLocalStorage,
+    debounce,
+    copyToClipboard,
+    showToast,
+    formatFileSize,
+    validateFileType,
+    getCurrentLocation
 };
-
-console.log('🧠 Brainrack AI loaded successfully');

@@ -3,280 +3,345 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather - Brainrack AI</title>
+    <title>Brainrack AI - Weather</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="animated-bg"></div>
-    <header>
-        <div class="header-content">
-            <a href="/dashboard" class="logo"><span>🧠</span> Brainrack AI</a>
-            <nav class="nav-actions">
-                <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
-                <div class="menu-container">
-                    <button class="icon-btn" id="menuBtn"><span>⋮</span></button>
-                    <div class="menu-dropdown" id="menuDropdown">
-                        <a href="/dashboard" class="menu-item"><span>🏠</span> Dashboard</a>
-                        <a href="/chat" class="menu-item"><span>💬</span> AI Chat</a>
-                        <a href="/image" class="menu-item"><span>🎨</span> Image Generator</a>
-                        <a href="/document" class="menu-item"><span>📄</span> Document Analyzer</a>
-                        <a href="/video" class="menu-item"><span>🎥</span> Video Generator</a>
-                        <a href="/business" class="menu-item"><span>💼</span> Business Solutions</a>
-                        <a href="/startup" class="menu-item"><span>🚀</span> Startup Ideas</a>
-                        <a href="/news" class="menu-item"><span>📰</span> News</a>
-                        <a href="/weather" class="menu-item"><span>⛅</span> Weather</a>
-                        <a href="/contact" class="menu-item"><span>📧</span> Contact Us</a>
-                        <div class="menu-item" id="profileBtn"><span>👤</span> Profile</div>
-                        <div class="menu-item" id="themeToggle"><span>🌓</span> Toggle Theme</div>
-                        <div class="menu-item" id="settingsBtn"><span>⚙️</span> Settings</div>
-                    </div>
-                </div>
-            </nav>
+    <header class="header">
+        <div class="logo">🧠 Brainrack AI</div>
+        <div class="menu-icon" id="menuIcon">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="5" r="2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <circle cx="12" cy="19" r="2"/>
+            </svg>
+        </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="dashboard.html" class="dropdown-item">🏠 Dashboard</a>
+            <a href="index.html" class="dropdown-item">💬 AI Chat</a>
+            <a href="image.html" class="dropdown-item">🎨 Image Generator</a>
+            <a href="document.html" class="dropdown-item">📄 Document Analyzer</a>
+            <a href="video.html" class="dropdown-item">🎬 Video Generator</a>
+            <a href="business.html" class="dropdown-item">💼 Business Solver</a>
+            <a href="startup.html" class="dropdown-item">🚀 Startup Ideas</a>
+            <a href="weather.html" class="dropdown-item">🌤️ Weather</a>
+            <a href="news.html" class="dropdown-item">📰 News</a>
+            <div class="dropdown-item" id="themeToggle">🌓 Toggle Theme</div>
+            <a href="contactus.html" class="dropdown-item">📧 Contact Us</a>
         </div>
     </header>
 
-    <main class="container weather-container">
-        <h1 style="margin-bottom: 1.5rem;">⛅ Weather Forecast</h1>
-
-        <div class="weather-search">
-            <input type="text" id="locationInput" placeholder="Enter city name..." value="London">
-            <button class="btn btn-primary" id="searchBtn">Search</button>
-            <button class="btn btn-secondary" id="locationBtn">📍 My Location</button>
-            <button class="btn btn-secondary" id="notifyWeatherBtn">🔔 Enable Weather Notifications</button>
+    <div class="container" style="max-width: 1200px;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h1 style="font-size: 2.5rem; background: linear-gradient(135deg, #4a90e2, #6dd5ed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                🌤️ Weather Dashboard
+            </h1>
         </div>
 
-        <div id="loadingSpinner" style="display: none;">
-            <div class="loading-spinner"></div>
+        <div style="margin-bottom: 2rem;">
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                <input
+                    type="text"
+                    class="form-input"
+                    id="cityInput"
+                    placeholder="Enter city name..."
+                    style="max-width: 300px;"
+                >
+                <button class="btn-primary" id="searchBtn">Search 🔍</button>
+                <button class="btn-primary" id="locationBtn">Use My Location 📍</button>
+                <button class="notification-btn" id="notifyBtn">Enable Weather Notifications 🔔</button>
+            </div>
         </div>
 
-        <div id="weatherContent">
-            <div class="current-weather" id="currentWeather"></div>
-
-            <h2 style="margin: 2rem 0 1rem;">5-Day Forecast</h2>
-            <div class="forecast-container" id="forecastContainer"></div>
-        </div>
-    </main>
+        <div id="weatherContent"></div>
+    </div>
 
     <script src="script.js"></script>
     <script>
-        const locationInput = document.getElementById('locationInput');
+        const cityInput = document.getElementById('cityInput');
         const searchBtn = document.getElementById('searchBtn');
         const locationBtn = document.getElementById('locationBtn');
-        const notifyWeatherBtn = document.getElementById('notifyWeatherBtn');
-        const currentWeather = document.getElementById('currentWeather');
-        const forecastContainer = document.getElementById('forecastContainer');
-        const loadingSpinner = document.getElementById('loadingSpinner');
+        const notifyBtn = document.getElementById('notifyBtn');
+        const weatherContent = document.getElementById('weatherContent');
 
-        let notificationsEnabled = false;
-        let weatherPollingInterval;
+        let currentLocation = null;
+        let weatherInterval = null;
+        let notificationsEnabled = BrainrackAI.getFromLocalStorage('weatherNotifications', false);
 
-        searchBtn.addEventListener('click', () => loadWeather(locationInput.value));
-        locationInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') loadWeather(locationInput.value);
+        // Update notification button state
+        if (notificationsEnabled) {
+            notifyBtn.classList.add('enabled');
+            notifyBtn.textContent = 'Notifications Enabled ✅';
+        }
+
+        // Initialize - get location on load
+        window.addEventListener('load', () => {
+            getLocationWeather();
         });
 
-        locationBtn.addEventListener('click', () => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        loadWeatherByCoords(position.coords.latitude, position.coords.longitude);
-                    },
-                    (error) => {
-                        alert('Unable to get your location: ' + error.message);
-                    }
-                );
+        // Search button
+        searchBtn.addEventListener('click', () => {
+            const city = cityInput.value.trim();
+            if (city) {
+                getWeatherByCity(city);
             } else {
-                alert('Geolocation is not supported by your browser');
+                BrainrackAI.showToast('Please enter a city name');
             }
         });
 
-        notifyWeatherBtn.addEventListener('click', async () => {
-            if (!('Notification' in window)) {
-                alert('This browser does not support notifications');
-                return;
+        // Enter key for search
+        cityInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchBtn.click();
             }
+        });
+
+        // Location button
+        locationBtn.addEventListener('click', () => {
+            getLocationWeather();
+        });
+
+        // Notification toggle
+        notifyBtn.addEventListener('click', () => {
+            BrainrackAI.requestNotificationPermission();
 
             if (Notification.permission === 'granted') {
                 notificationsEnabled = !notificationsEnabled;
-                updateNotificationBtn();
+                BrainrackAI.saveToLocalStorage('weatherNotifications', notificationsEnabled);
+
                 if (notificationsEnabled) {
-                    startWeatherPolling();
+                    notifyBtn.classList.add('enabled');
+                    notifyBtn.textContent = 'Notifications Enabled ✅';
+                    BrainrackAI.showToast('Weather notifications enabled!');
+                    startWeatherNotifications();
                 } else {
-                    stopWeatherPolling();
+                    notifyBtn.classList.remove('enabled');
+                    notifyBtn.textContent = 'Enable Weather Notifications 🔔';
+                    BrainrackAI.showToast('Weather notifications disabled');
+                    stopWeatherNotifications();
                 }
-            } else if (Notification.permission !== 'denied') {
-                const permission = await Notification.requestPermission();
-                if (permission === 'granted') {
-                    notificationsEnabled = true;
-                    updateNotificationBtn();
-                    startWeatherPolling();
-                }
+            } else {
+                BrainrackAI.showToast('Please allow notifications in your browser');
             }
         });
 
-        function updateNotificationBtn() {
-            if (notificationsEnabled) {
-                notifyWeatherBtn.textContent = '🔕 Disable Weather Notifications';
-            } else {
-                notifyWeatherBtn.textContent = '🔔 Enable Weather Notifications';
-            }
-        }
-
-        function startWeatherPolling() {
-            weatherPollingInterval = setInterval(() => {
-                const location = locationInput.value;
-                loadWeather(location, true);
-            }, 30 * 60 * 1000); // Every 30 minutes
-
-            new Notification('Weather Notifications Enabled', {
-                body: 'You will receive weather updates every 30 minutes',
-                icon: '⛅'
-            });
-        }
-
-        function stopWeatherPolling() {
-            if (weatherPollingInterval) {
-                clearInterval(weatherPollingInterval);
-            }
-        }
-
-        async function loadWeather(location, isNotification = false) {
-            loadingSpinner.style.display = 'block';
-            currentWeather.innerHTML = '';
-            forecastContainer.innerHTML = '';
+        // Get weather by location
+        async function getLocationWeather() {
+            BrainrackAI.showLoading(weatherContent, 'Getting your location...');
 
             try {
-                const response = await fetch(`/api/weather/${encodeURIComponent(location)}`);
-                const data = await response.json();
-
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-
-                displayCurrentWeather(data.current);
-                displayForecast(data.forecast);
-
-                if (isNotification && notificationsEnabled) {
-                    const temp = Math.round(data.current.main.temp);
-                    const condition = data.current.weather[0].description;
-                    new Notification(`Weather Update - ${location}`, {
-                        body: `${temp}°C, ${condition}`,
-                        icon: `https://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`
-                    });
-                }
-
+                const location = await BrainrackAI.getCurrentLocation();
+                currentLocation = location;
+                await getWeather(location.lat, location.lon);
             } catch (error) {
-                console.error('Error loading weather:', error);
-                currentWeather.innerHTML = '<div class="alert alert-error">Failed to load weather data. Please check your OpenWeather API key.</div>';
-            } finally {
-                loadingSpinner.style.display = 'none';
+                console.error('Location error:', error);
+                BrainrackAI.showError(weatherContent, 'Could not get your location. Please search for a city instead.');
             }
         }
 
-        async function loadWeatherByCoords(lat, lon) {
-            loadingSpinner.style.display = 'block';
-            currentWeather.innerHTML = '';
-            forecastContainer.innerHTML = '';
+        // Get weather by city
+        async function getWeatherByCity(city) {
+            BrainrackAI.showLoading(weatherContent, `Getting weather for ${city}...`);
 
             try {
-                const response = await fetch(`/api/weather-coords/${lat}/${lon}`);
+                const response = await fetch(`/api/weather?city=${encodeURIComponent(city)}`);
                 const data = await response.json();
 
-                if (data.error) {
-                    throw new Error(data.error);
+                if (response.ok) {
+                    currentLocation = { lat: data.coord.lat, lon: data.coord.lon };
+                    displayWeather(data);
+                    await getForecast(currentLocation.lat, currentLocation.lon);
+                } else {
+                    throw new Error(data.error || 'City not found');
                 }
-
-                locationInput.value = data.current.name;
-                displayCurrentWeather(data.current);
-                displayForecast(data.forecast);
-
             } catch (error) {
-                console.error('Error loading weather:', error);
-                currentWeather.innerHTML = '<div class="alert alert-error">Failed to load weather data.</div>';
-            } finally {
-                loadingSpinner.style.display = 'none';
+                BrainrackAI.showError(weatherContent, `Could not find weather for "${city}". Please check the city name.`);
+                console.error('Error:', error);
             }
         }
 
-        function displayCurrentWeather(data) {
+        // Get weather by coordinates
+        async function getWeather(lat, lon) {
+            try {
+                const response = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayWeather(data);
+                    await getForecast(lat, lon);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                BrainrackAI.showError(weatherContent, 'Could not fetch weather data. Please try again.');
+                console.error('Error:', error);
+            }
+        }
+
+        // Display weather
+        function displayWeather(data) {
             const temp = Math.round(data.main.temp);
             const feelsLike = Math.round(data.main.feels_like);
-            const condition = data.weather[0].description;
-            const icon = data.weather[0].icon;
-            const humidity = data.main.humidity;
-            const windSpeed = Math.round(data.wind.speed * 3.6); // Convert m/s to km/h
-            const pressure = data.main.pressure;
-            const visibility = Math.round(data.visibility / 1000); // Convert m to km
+            const weatherIcon = getWeatherIcon(data.weather[0].main);
 
-            const iconUrl = `https://openweathermap.org/img/wn/${icon}@4x.png`;
+            weatherContent.innerHTML = `
+                <div class="weather-card">
+                    <div class="weather-main">
+                        <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">${data.name}, ${data.sys.country}</h2>
+                        <div class="weather-temp">${temp}°C</div>
+                        <div style="font-size: 1.5rem; margin-top: 1rem;">${weatherIcon} ${data.weather[0].description}</div>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary-dark);">Feels like ${feelsLike}°C</p>
+                    </div>
 
-            currentWeather.innerHTML = `
-                <img src="${iconUrl}" alt="${condition}" class="weather-icon">
-                <div class="temperature">${temp}°C</div>
-                <p style="font-size: 1.25rem; text-transform: capitalize; margin-bottom: 0.5rem;">${condition}</p>
-                <p style="color: var(--text-secondary);">Feels like ${feelsLike}°C</p>
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">${data.name}, ${data.sys.country}</p>
+                    <div class="weather-details">
+                        <div class="weather-detail-item">
+                            <strong>💨 Wind</strong>
+                            <p>${data.wind.speed} m/s</p>
+                        </div>
+                        <div class="weather-detail-item">
+                            <strong>💧 Humidity</strong>
+                            <p>${data.main.humidity}%</p>
+                        </div>
+                        <div class="weather-detail-item">
+                            <strong>🌡️ Pressure</strong>
+                            <p>${data.main.pressure} hPa</p>
+                        </div>
+                        <div class="weather-detail-item">
+                            <strong>👁️ Visibility</strong>
+                            <p>${(data.visibility / 1000).toFixed(1)} km</p>
+                        </div>
+                        <div class="weather-detail-item">
+                            <strong>🌅 Sunrise</strong>
+                            <p>${new Date(data.sys.sunrise * 1000).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</p>
+                        </div>
+                        <div class="weather-detail-item">
+                            <strong>🌇 Sunset</strong>
+                            <p>${new Date(data.sys.sunset * 1000).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</p>
+                        </div>
+                    </div>
 
-                <div class="weather-details">
-                    <div class="weather-detail-item">
-                        <div style="font-size: 1.5rem;">💧</div>
-                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">Humidity</div>
-                        <div style="font-size: 1.1rem; font-weight: bold; margin-top: 0.25rem;">${humidity}%</div>
-                    </div>
-                    <div class="weather-detail-item">
-                        <div style="font-size: 1.5rem;">💨</div>
-                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">Wind Speed</div>
-                        <div style="font-size: 1.1rem; font-weight: bold; margin-top: 0.25rem;">${windSpeed} km/h</div>
-                    </div>
-                    <div class="weather-detail-item">
-                        <div style="font-size: 1.5rem;">🌡️</div>
-                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">Pressure</div>
-                        <div style="font-size: 1.1rem; font-weight: bold; margin-top: 0.25rem;">${pressure} hPa</div>
-                    </div>
-                    <div class="weather-detail-item">
-                        <div style="font-size: 1.5rem;">👁️</div>
-                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">Visibility</div>
-                        <div style="font-size: 1.1rem; font-weight: bold; margin-top: 0.25rem;">${visibility} km</div>
+                    <div id="forecastContainer" style="margin-top: 2rem;">
+                        <div class="spinner"></div>
                     </div>
                 </div>
             `;
         }
 
-        function displayForecast(data) {
-            // Group by day and take one forecast per day
-            const dailyForecasts = {};
-            data.list.forEach(item => {
-                const date = new Date(item.dt * 1000);
-                const dayKey = date.toLocaleDateString();
+        // Get forecast
+        async function getForecast(lat, lon) {
+            try {
+                const response = await fetch(`/api/weather/forecast?lat=${lat}&lon=${lon}`);
+                const data = await response.json();
 
-                if (!dailyForecasts[dayKey]) {
-                    dailyForecasts[dayKey] = item;
+                if (response.ok) {
+                    displayForecast(data);
+                }
+            } catch (error) {
+                console.error('Forecast error:', error);
+            }
+        }
+
+        // Display forecast
+        function displayForecast(data) {
+            const forecastContainer = document.getElementById('forecastContainer');
+            const dailyForecasts = {};
+
+            // Group by day
+            data.list.forEach(item => {
+                const date = new Date(item.dt * 1000).toLocaleDateString();
+                if (!dailyForecasts[date]) {
+                    dailyForecasts[date] = item;
                 }
             });
 
-            // Display first 5 days
-            Object.values(dailyForecasts).slice(0, 5).forEach(item => {
-                const date = new Date(item.dt * 1000);
+            const forecastHTML = Object.values(dailyForecasts).slice(0, 5).map(forecast => {
+                const date = new Date(forecast.dt * 1000);
                 const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
-                const temp = Math.round(item.main.temp);
-                const icon = item.weather[0].icon;
-                const condition = item.weather[0].description;
-                const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+                const temp = Math.round(forecast.main.temp);
+                const icon = getWeatherIcon(forecast.weather[0].main);
 
-                const forecastItem = document.createElement('div');
-                forecastItem.className = 'forecast-item';
-                forecastItem.innerHTML = `
-                    <h4>${dayName}</h4>
-                    <img src="${iconUrl}" alt="${condition}" style="width: 60px; height: 60px;">
-                    <p style="font-size: 1.25rem; font-weight: bold; margin: 0.5rem 0;">${temp}°C</p>
-                    <p style="font-size: 0.85rem; color: var(--text-secondary); text-transform: capitalize;">${condition}</p>
+                return `
+                    <div class="forecast-item">
+                        <strong>${dayName}</strong>
+                        <div style="font-size: 2rem; margin: 0.5rem 0;">${icon}</div>
+                        <p style="font-size: 1.2rem; font-weight: bold;">${temp}°C</p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary-dark);">${forecast.weather[0].description}</p>
+                    </div>
                 `;
-                forecastContainer.appendChild(forecastItem);
-            });
+            }).join('');
+
+            forecastContainer.innerHTML = `
+                <h3 style="color: var(--accent-blue); margin-bottom: 1rem;">5-Day Forecast</h3>
+                <div class="forecast-container">
+                    ${forecastHTML}
+                </div>
+            `;
         }
 
-        // Load weather for default location
-        loadWeather('London');
+        // Get weather icon
+        function getWeatherIcon(weather) {
+            const icons = {
+                'Clear': '☀️',
+                'Clouds': '☁️',
+                'Rain': '🌧️',
+                'Drizzle': '🌦️',
+                'Thunderstorm': '⛈️',
+                'Snow': '❄️',
+                'Mist': '🌫️',
+                'Fog': '🌫️',
+                'Haze': '🌫️'
+            };
+            return icons[weather] || '🌤️';
+        }
+
+        // Weather notifications
+        function startWeatherNotifications() {
+            if (weatherInterval) {
+                clearInterval(weatherInterval);
+            }
+
+            // Send notification every 3 hours
+            weatherInterval = setInterval(() => {
+                if (currentLocation && notificationsEnabled) {
+                    sendWeatherNotification();
+                }
+            }, 3 * 60 * 60 * 1000); // 3 hours
+
+            // Send initial notification
+            if (currentLocation) {
+                sendWeatherNotification();
+            }
+        }
+
+        function stopWeatherNotifications() {
+            if (weatherInterval) {
+                clearInterval(weatherInterval);
+                weatherInterval = null;
+            }
+        }
+
+        async function sendWeatherNotification() {
+            try {
+                const response = await fetch(`/api/weather?lat=${currentLocation.lat}&lon=${currentLocation.lon}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    const temp = Math.round(data.main.temp);
+                    BrainrackAI.showNotification(
+                        `Weather Update - ${data.name}`,
+                        `${temp}°C - ${data.weather[0].description}. Feels like ${Math.round(data.main.feels_like)}°C`,
+                        '🌤️'
+                    );
+                }
+            } catch (error) {
+                console.error('Notification error:', error);
+            }
+        }
+
+        // Start notifications if enabled
+        if (notificationsEnabled) {
+            startWeatherNotifications();
+        }
     </script>
 </body>
 </html>

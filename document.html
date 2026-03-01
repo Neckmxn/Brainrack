@@ -3,209 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document Analyzer - Brainrack AI</title>
+    <title>Brainrack AI - Document Analyzer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="animated-bg"></div>
-    <header>
-        <div class="header-content">
-            <a href="/dashboard" class="logo"><span>🧠</span> Brainrack AI</a>
-            <nav class="nav-actions">
-                <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
-                <div class="menu-container">
-                    <button class="icon-btn" id="menuBtn"><span>⋮</span></button>
-                    <div class="menu-dropdown" id="menuDropdown">
-                        <a href="/dashboard" class="menu-item"><span>🏠</span> Dashboard</a>
-                        <a href="/chat" class="menu-item"><span>💬</span> AI Chat</a>
-                        <a href="/image" class="menu-item"><span>🎨</span> Image Generator</a>
-                        <a href="/document" class="menu-item"><span>📄</span> Document Analyzer</a>
-                        <a href="/video" class="menu-item"><span>🎥</span> Video Generator</a>
-                        <a href="/business" class="menu-item"><span>💼</span> Business Solutions</a>
-                        <a href="/startup" class="menu-item"><span>🚀</span> Startup Ideas</a>
-                        <a href="/news" class="menu-item"><span>📰</span> News</a>
-                        <a href="/weather" class="menu-item"><span>⛅</span> Weather</a>
-                        <a href="/contact" class="menu-item"><span>📧</span> Contact Us</a>
-                        <div class="menu-item" id="profileBtn"><span>👤</span> Profile</div>
-                        <div class="menu-item" id="themeToggle"><span>🌓</span> Toggle Theme</div>
-                        <div class="menu-item" id="settingsBtn"><span>⚙️</span> Settings</div>
-                    </div>
-                </div>
-            </nav>
+    <header class="header">
+        <div class="logo">🧠 Brainrack AI</div>
+        <div class="menu-icon" id="menuIcon">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="5" r="2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <circle cx="12" cy="19" r="2"/>
+            </svg>
+        </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="dashboard.html" class="dropdown-item">🏠 Dashboard</a>
+            <a href="index.html" class="dropdown-item">💬 AI Chat</a>
+            <a href="image.html" class="dropdown-item">🎨 Image Generator</a>
+            <a href="document.html" class="dropdown-item">📄 Document Analyzer</a>
+            <a href="video.html" class="dropdown-item">🎬 Video Generator</a>
+            <a href="business.html" class="dropdown-item">💼 Business Solver</a>
+            <a href="startup.html" class="dropdown-item">🚀 Startup Ideas</a>
+            <a href="weather.html" class="dropdown-item">🌤️ Weather</a>
+            <a href="news.html" class="dropdown-item">📰 News</a>
+            <div class="dropdown-item" id="themeToggle">🌓 Toggle Theme</div>
+            <a href="contactus.html" class="dropdown-item">📧 Contact Us</a>
         </div>
     </header>
 
-    <main class="container">
-        <div class="document-analyzer">
-            <h1 style="margin-bottom: 2rem;">📄 AI Document Analyzer</h1>
-            
-            <div class="upload-area" id="uploadArea">
-                <div class="upload-icon">📁</div>
-                <h3>Upload Document</h3>
-                <p>Drag & drop or click to upload</p>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Supports: PDF, DOCX, TXT (Max 50MB)</p>
-                <input type="file" id="fileInput" accept=".pdf,.docx,.doc,.txt" style="display: none;">
+    <div class="container">
+        <div class="chat-container">
+            <div class="chat-header">
+                📄 AI Document Analyzer & Solver
             </div>
 
-            <div id="documentContent" style="display: none;">
-                <div class="document-content">
-                    <h3>Document: <span id="fileName"></span></h3>
-                    <div class="document-text" id="documentText"></div>
-                    <div class="form-group">
-                        <label for="questionInput">Ask a question about this document</label>
-                        <input type="text" id="questionInput" placeholder="What is this document about?">
+            <div style="padding: 2rem;">
+                <div class="form-group">
+                    <label>Upload Document</label>
+                    <div class="file-upload" id="docUpload">
+                        <input type="file" id="docFile" accept=".pdf,.doc,.docx,.txt">
+                        <p>📁 Click to upload a document (PDF, DOC, DOCX, TXT)</p>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary-dark); margin-top: 0.5rem;">
+                            Maximum file size: 10MB
+                        </p>
                     </div>
-                    <button class="btn btn-primary" id="askBtn">Ask Question</button>
-                    <button class="btn btn-secondary" id="summarizeBtn">Summarize Document</button>
-                    <button class="btn btn-secondary" id="newDocBtn">Upload New Document</button>
+                    <div id="fileInfo" style="margin-top: 1rem;"></div>
                 </div>
-                <div id="answerSection" style="margin-top: 1.5rem;"></div>
+
+                <div class="form-group">
+                    <label>Analysis Type</label>
+                    <select class="form-select" id="analysisType">
+                        <option value="summary">📋 Document Summary</option>
+                        <option value="question">❓ Specific Question</option>
+                        <option value="key-points">🔑 Key Points Extraction</option>
+                        <option value="sentiment">😊 Sentiment Analysis</option>
+                        <option value="translation">🌐 Translation Summary</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="questionGroup" style="display: none;">
+                    <label>Your Question</label>
+                    <input
+                        type="text"
+                        class="form-input"
+                        id="questionInput"
+                        placeholder="Ask a specific question about the document..."
+                    >
+                </div>
+
+                <button class="btn-primary" id="analyzeBtn" style="width: 100%;" disabled>
+                    Analyze Document 🔍
+                </button>
+
+                <div id="resultArea"></div>
             </div>
         </div>
-    </main>
+    </div>
 
     <script src="script.js"></script>
     <script>
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const documentContent = document.getElementById('documentContent');
-        const documentText = document.getElementById('documentText');
-        const fileName = document.getElementById('fileName');
+        const docUpload = document.getElementById('docUpload');
+        const docFile = document.getElementById('docFile');
+        const fileInfo = document.getElementById('fileInfo');
+        const analysisType = document.getElementById('analysisType');
+        const questionGroup = document.getElementById('questionGroup');
         const questionInput = document.getElementById('questionInput');
-        const askBtn = document.getElementById('askBtn');
-        const summarizeBtn = document.getElementById('summarizeBtn');
-        const newDocBtn = document.getElementById('newDocBtn');
-        const answerSection = document.getElementById('answerSection');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const resultArea = document.getElementById('resultArea');
 
-        let currentDocumentText = '';
+        let uploadedFile = null;
 
-        uploadArea.addEventListener('click', () => fileInput.click());
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            const file = e.dataTransfer.files[0];
-            if (file) handleFileUpload(file);
-        });
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files[0]) handleFileUpload(e.target.files[0]);
+        // File upload handling
+        docUpload.addEventListener('click', () => {
+            docFile.click();
         });
 
-        askBtn.addEventListener('click', askQuestion);
-        summarizeBtn.addEventListener('click', summarizeDocument);
-        newDocBtn.addEventListener('click', () => {
-            documentContent.style.display = 'none';
-            uploadArea.style.display = 'block';
-            currentDocumentText = '';
+        docFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 10 * 1024 * 1024) {
+                    BrainrackAI.showToast('File size exceeds 10MB limit');
+                    return;
+                }
+
+                uploadedFile = file;
+                fileInfo.innerHTML = `
+                    <div style="background: var(--dark-surface); padding: 1rem; border-radius: 8px; border: 2px solid var(--accent-blue);">
+                        <p><strong>File:</strong> ${file.name}</p>
+                        <p><strong>Size:</strong> ${BrainrackAI.formatFileSize(file.size)}</p>
+                        <p><strong>Type:</strong> ${file.type || 'Unknown'}</p>
+                        <p style="color: #2ecc71; margin-top: 0.5rem;">✅ Ready to analyze</p>
+                    </div>
+                `;
+                analyzeBtn.disabled = false;
+            }
         });
 
-        async function handleFileUpload(file) {
-            const formData = new FormData();
-            formData.append('document', file);
+        // Analysis type change
+        analysisType.addEventListener('change', () => {
+            if (analysisType.value === 'question') {
+                questionGroup.style.display = 'block';
+            } else {
+                questionGroup.style.display = 'none';
+            }
+        });
 
-            uploadArea.innerHTML = '<div class="loading-spinner"></div><p>Processing document...</p>';
+        // Analyze document
+        analyzeBtn.addEventListener('click', async () => {
+            if (!uploadedFile) {
+                BrainrackAI.showToast('Please upload a document first');
+                return;
+            }
+
+            const type = analysisType.value;
+            let question = '';
+
+            switch (type) {
+                case 'summary':
+                    question = 'Please provide a comprehensive summary of this document.';
+                    break;
+                case 'question':
+                    question = questionInput.value.trim();
+                    if (!question) {
+                        BrainrackAI.showToast('Please enter a question');
+                        return;
+                    }
+                    break;
+                case 'key-points':
+                    question = 'Extract and list the key points from this document.';
+                    break;
+                case 'sentiment':
+                    question = 'Analyze the sentiment and tone of this document.';
+                    break;
+                case 'translation':
+                    question = 'Provide a summary of this document and identify its main language.';
+                    break;
+            }
+
+            analyzeBtn.disabled = true;
+            analyzeBtn.textContent = 'Analyzing... ⏳';
+            BrainrackAI.showLoading(resultArea, 'Processing your document...');
 
             try {
-                const response = await fetch('/api/upload-document', {
+                const formData = new FormData();
+                formData.append('document', uploadedFile);
+                formData.append('question', question);
+
+                const response = await fetch('/api/analyze-document', {
                     method: 'POST',
                     body: formData
                 });
 
-                const data = await response.json();
-
-                if (data.error) throw new Error(data.error);
-
-                currentDocumentText = data.text;
-                fileName.textContent = data.filename;
-                documentText.textContent = data.text.substring(0, 2000) + (data.text.length > 2000 ? '...' : '');
-                
-                uploadArea.style.display = 'none';
-                documentContent.style.display = 'block';
-
-            } catch (error) {
-                alert('Error processing document: ' + error.message);
-                uploadArea.innerHTML = `
-                    <div class="upload-icon">📁</div>
-                    <h3>Upload Document</h3>
-                    <p>Drag & drop or click to upload</p>
-                    <p style="font-size: 0.85rem; color: var(--text-secondary);">Supports: PDF, DOCX, TXT (Max 50MB)</p>
-                `;
-            }
-        }
-
-        async function askQuestion() {
-            const question = questionInput.value.trim();
-            if (!question) {
-                alert('Please enter a question');
-                return;
-            }
-
-            askBtn.disabled = true;
-            answerSection.innerHTML = '<div class="loading-spinner"></div>';
-
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        messages: [
-                            { role: 'system', content: 'You are a document analysis assistant. Answer questions based on the provided document.' },
-                            { role: 'user', content: `Document content:\n\n${currentDocumentText}\n\nQuestion: ${question}` }
-                        ]
-                    })
-                });
+                if (!response.ok) {
+                    throw new Error('Analysis failed');
+                }
 
                 const data = await response.json();
-                const answer = data.choices[0].message.content;
 
-                answerSection.innerHTML = `
-                    <div class="document-content">
-                        <h3>Answer:</h3>
-                        <p style="line-height: 1.6;">${answer}</p>
+                resultArea.innerHTML = `
+                    <div class="result-container">
+                        <h3>Analysis Results</h3>
+                        <div style="background: var(--dark-surface); padding: 1.5rem; border-radius: 8px; line-height: 1.8; white-space: pre-wrap;">
+                            ${data.analysis}
+                        </div>
+                        <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                            <button class="btn-primary" onclick="copyAnalysis()">
+                                Copy Results 📋
+                            </button>
+                            <button class="btn-primary" onclick="downloadAnalysis()">
+                                Download as TXT 📥
+                            </button>
+                        </div>
                     </div>
                 `;
 
+                // Store analysis for copy/download
+                window.currentAnalysis = data.analysis;
+
+                BrainrackAI.showToast('Document analyzed successfully!');
             } catch (error) {
-                answerSection.innerHTML = `<div class="alert alert-error">Error: ${error.message}</div>`;
+                BrainrackAI.showError(resultArea, 'Failed to analyze document. Please check your file and try again.');
+                console.error('Error:', error);
             } finally {
-                askBtn.disabled = false;
+                analyzeBtn.disabled = false;
+                analyzeBtn.textContent = 'Analyze Document 🔍';
+            }
+        });
+
+        // Copy analysis
+        function copyAnalysis() {
+            if (window.currentAnalysis) {
+                BrainrackAI.copyToClipboard(window.currentAnalysis);
             }
         }
 
-        async function summarizeDocument() {
-            summarizeBtn.disabled = true;
-            answerSection.innerHTML = '<div class="loading-spinner"></div>';
-
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        messages: [
-                            { role: 'system', content: 'You are a document summarization assistant. Provide concise, accurate summaries.' },
-                            { role: 'user', content: `Please provide a comprehensive summary of this document:\n\n${currentDocumentText}` }
-                        ]
-                    })
-                });
-
-                const data = await response.json();
-                const summary = data.choices[0].message.content;
-
-                answerSection.innerHTML = `
-                    <div class="document-content">
-                        <h3>Summary:</h3>
-                        <p style="line-height: 1.6;">${summary}</p>
-                    </div>
-                `;
-
-            } catch (error) {
-                answerSection.innerHTML = `<div class="alert alert-error">Error: ${error.message}</div>`;
-            } finally {
-                summarizeBtn.disabled = false;
+        // Download analysis
+        function downloadAnalysis() {
+            if (window.currentAnalysis) {
+                const blob = new Blob([window.currentAnalysis], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'document-analysis.txt';
+                link.click();
+                URL.revokeObjectURL(url);
+                BrainrackAI.showToast('Analysis downloaded!');
             }
         }
     </script>

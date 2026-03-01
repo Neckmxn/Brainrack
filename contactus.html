@@ -3,137 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - Brainrack AI</title>
+    <title>Brainrack AI - Contact Us</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="animated-bg"></div>
-    <header>
-        <div class="header-content">
-            <a href="/dashboard" class="logo"><span>🧠</span> Brainrack AI</a>
-            <nav class="nav-actions">
-                <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
-                <div class="menu-container">
-                    <button class="icon-btn" id="menuBtn"><span>⋮</span></button>
-                    <div class="menu-dropdown" id="menuDropdown">
-                        <a href="/dashboard" class="menu-item"><span>🏠</span> Dashboard</a>
-                        <a href="/chat" class="menu-item"><span>💬</span> AI Chat</a>
-                        <a href="/image" class="menu-item"><span>🎨</span> Image Generator</a>
-                        <a href="/document" class="menu-item"><span>📄</span> Document Analyzer</a>
-                        <a href="/video" class="menu-item"><span>🎥</span> Video Generator</a>
-                        <a href="/business" class="menu-item"><span>💼</span> Business Solutions</a>
-                        <a href="/startup" class="menu-item"><span>🚀</span> Startup Ideas</a>
-                        <a href="/news" class="menu-item"><span>📰</span> News</a>
-                        <a href="/weather" class="menu-item"><span>⛅</span> Weather</a>
-                        <a href="/contact" class="menu-item"><span>📧</span> Contact Us</a>
-                        <div class="menu-item" id="profileBtn"><span>👤</span> Profile</div>
-                        <div class="menu-item" id="themeToggle"><span>🌓</span> Toggle Theme</div>
-                        <div class="menu-item" id="settingsBtn"><span>⚙️</span> Settings</div>
-                    </div>
-                </div>
-            </nav>
+    <header class="header">
+        <div class="logo">🧠 Brainrack AI</div>
+        <div class="menu-icon" id="menuIcon">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="5" r="2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <circle cx="12" cy="19" r="2"/>
+            </svg>
+        </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="dashboard.html" class="dropdown-item">🏠 Dashboard</a>
+            <a href="index.html" class="dropdown-item">💬 AI Chat</a>
+            <a href="image.html" class="dropdown-item">🎨 Image Generator</a>
+            <a href="document.html" class="dropdown-item">📄 Document Analyzer</a>
+            <a href="video.html" class="dropdown-item">🎬 Video Generator</a>
+            <a href="business.html" class="dropdown-item">💼 Business Solver</a>
+            <a href="startup.html" class="dropdown-item">🚀 Startup Ideas</a>
+            <a href="weather.html" class="dropdown-item">🌤️ Weather</a>
+            <a href="news.html" class="dropdown-item">📰 News</a>
+            <div class="dropdown-item" id="themeToggle">🌓 Toggle Theme</div>
+            <a href="contactus.html" class="dropdown-item">📧 Contact Us</a>
         </div>
     </header>
 
-    <main class="container">
-        <div style="max-width: 800px; margin: 0 auto;">
-            <h1 style="margin-bottom: 1.5rem;">📧 Contact Us</h1>
-
-            <div class="about-section">
-                <h2>Get in Touch</h2>
-                <p>Have questions, suggestions, or feedback? We'd love to hear from you! Fill out the form below and we'll get back to you as soon as possible.</p>
+    <div class="container">
+        <div class="chat-container" style="max-width: 800px; margin: 2rem auto;">
+            <div class="chat-header">
+                📧 Contact Us
             </div>
 
-            <div class="document-content" style="margin-top: 2rem;">
+            <div style="padding: 2rem;">
+                <div style="background: rgba(74, 144, 226, 0.1); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--accent-blue); margin-bottom: 2rem;">
+                    <h3 style="color: var(--accent-blue); margin-bottom: 1rem;">Get in Touch</h3>
+                    <p style="line-height: 1.6; color: var(--text-secondary-dark);">
+                        We'd love to hear from you! Whether you have questions, feedback, or need support,
+                        our team is here to help. Fill out the form below and we'll get back to you as soon as possible.
+                    </p>
+                </div>
+
                 <form id="contactForm">
                     <div class="form-group">
-                        <label for="contactName">Name *</label>
-                        <input type="text" id="contactName" required placeholder="Your full name">
+                        <label>Your Name *</label>
+                        <input
+                            type="text"
+                            class="form-input"
+                            id="name"
+                            placeholder="John Doe"
+                            required
+                        >
                     </div>
 
                     <div class="form-group">
-                        <label for="contactEmail">Email *</label>
-                        <input type="email" id="contactEmail" required placeholder="your.email@example.com">
+                        <label>Email Address *</label>
+                        <input
+                            type="email"
+                            class="form-input"
+                            id="email"
+                            placeholder="john@example.com"
+                            required
+                        >
                     </div>
 
                     <div class="form-group">
-                        <label for="contactSubject">Subject *</label>
-                        <input type="text" id="contactSubject" required placeholder="What is this about?">
+                        <label>Subject *</label>
+                        <select class="form-select" id="subject" required>
+                            <option value="">Select a subject</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Technical Support</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="bug">Bug Report</option>
+                            <option value="business">Business/Partnership</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="other">Other</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="contactMessage">Message *</label>
-                        <textarea id="contactMessage" rows="6" required placeholder="Tell us more about your inquiry..."></textarea>
+                        <label>Message *</label>
+                        <textarea
+                            class="form-textarea"
+                            id="message"
+                            placeholder="Tell us what's on your mind..."
+                            style="min-height: 150px;"
+                            required
+                        ></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Send Message</button>
+                    <button type="submit" class="btn-primary" style="width: 100%;">
+                        Send Message 📨
+                    </button>
                 </form>
 
-                <div id="formResponse" style="margin-top: 1.5rem;"></div>
-            </div>
+                <div id="responseArea" style="margin-top: 2rem;"></div>
 
-            <div class="features-grid" style="margin-top: 3rem;">
-                <div class="feature-card" style="cursor: default;">
-                    <span class="feature-icon">📧</span>
-                    <h3>Email</h3>
-                    <p>support@brainrackai.com</p>
+                <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-dark);">
+                    <h3 style="color: var(--accent-blue); margin-bottom: 1.5rem; text-align: center;">Other Ways to Reach Us</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                        <div style="background: var(--dark-surface); padding: 1.5rem; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">📧</div>
+                            <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">Email</h4>
+                            <p style="color: var(--text-secondary-dark);">support@brainrackai.com</p>
+                        </div>
+
+                        <div style="background: var(--dark-surface); padding: 1.5rem; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">💬</div>
+                            <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">Live Chat</h4>
+                            <p style="color: var(--text-secondary-dark);">Available 24/7</p>
+                        </div>
+
+                        <div style="background: var(--dark-surface); padding: 1.5rem; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">🐦</div>
+                            <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">Twitter</h4>
+                            <p style="color: var(--text-secondary-dark);">@BrainrackAI</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="feature-card" style="cursor: default;">
-                    <span class="feature-icon">🌐</span>
-                    <h3>Website</h3>
-                    <p>www.brainrackai.com</p>
-                </div>
-
-                <div class="feature-card" style="cursor: default;">
-                    <span class="feature-icon">💬</span>
-                    <h3>Support</h3>
-                    <p>24/7 AI Chat Support Available</p>
+                <div style="margin-top: 2rem; padding: 1.5rem; background: var(--dark-surface); border-radius: 12px;">
+                    <h4 style="color: var(--accent-blue); margin-bottom: 1rem;">Frequently Asked Questions</h4>
+                    <div style="line-height: 1.8; color: var(--text-secondary-dark);">
+                        <p><strong>Q: How do I get API access?</strong><br>
+                        A: You need to set up your OpenRouter API key in the .env file. Visit openrouter.ai to get your key.</p>
+                        
+                        <p style="margin-top: 1rem;"><strong>Q: Is my data secure?</strong><br>
+                        A: Yes, we take security seriously. All data is encrypted and we follow industry best practices.</p>
+                        
+                        <p style="margin-top: 1rem;"><strong>Q: Can I use Brainrack AI for commercial purposes?</strong><br>
+                        A: Yes, Brainrack AI can be used for both personal and commercial projects.</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 
     <script src="script.js"></script>
     <script>
         const contactForm = document.getElementById('contactForm');
-        const formResponse = document.getElementById('formResponse');
+        const responseArea = document.getElementById('responseArea');
 
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const formData = {
-                name: document.getElementById('contactName').value,
-                email: document.getElementById('contactEmail').value,
-                subject: document.getElementById('contactSubject').value,
-                message: document.getElementById('contactMessage').value
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
             };
 
-            formResponse.innerHTML = '<div class="loading-spinner"></div>';
-
-            try {
-                const response = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    formResponse.innerHTML = '<div class="alert alert-success">✓ Message sent successfully! We\'ll get back to you soon.</div>';
-                    contactForm.reset();
-                } else {
-                    throw new Error(data.error || 'Failed to send message');
-                }
-
-            } catch (error) {
-                console.error('Error:', error);
-                formResponse.innerHTML = '<div class="alert alert-error">Failed to send message. Please try again or email us directly.</div>';
+            // Validate form
+            if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+                BrainrackAI.showToast('Please fill in all required fields');
+                return;
             }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                BrainrackAI.showToast('Please enter a valid email address');
+                return;
+            }
+
+            // Show loading
+            BrainrackAI.showLoading(responseArea, 'Sending your message...');
+
+            // Simulate sending (in production, this would call a backend API)
+            setTimeout(() => {
+                responseArea.innerHTML = `
+                    <div style="background: rgba(46, 204, 113, 0.1); border: 2px solid #2ecc71; border-radius: 12px; padding: 2rem; text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                        <h3 style="color: #2ecc71; margin-bottom: 1rem;">Message Sent Successfully!</h3>
+                        <p style="color: var(--text-secondary-dark); line-height: 1.6;">
+                            Thank you for reaching out, ${formData.name}! We've received your message and will get back to you
+                            at ${formData.email} within 24 hours.
+                        </p>
+                        <button class="btn-primary" onclick="resetForm()" style="margin-top: 1.5rem;">
+                            Send Another Message 📨
+                        </button>
+                    </div>
+                `;
+
+                // Reset form
+                contactForm.reset();
+
+                BrainrackAI.showToast('Message sent successfully!');
+
+                // Store in localStorage for reference
+                const messages = BrainrackAI.getFromLocalStorage('contactMessages', []);
+                messages.push({
+                    ...formData,
+                    timestamp: new Date().toISOString()
+                });
+                BrainrackAI.saveToLocalStorage('contactMessages', messages);
+            }, 1500);
         });
+
+        function resetForm() {
+            document.getElementById('responseArea').innerHTML = '';
+            contactForm.reset();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     </script>
 </body>
 </html>
