@@ -3,267 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Brainrack AI - Your all-in-one AI-powered assistant for chat, image generation, document analysis, and more">
     <title>Brainrack AI - Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1e3c72">
 </head>
 <body>
-    <div class="animated-bg"></div>
-
-    <header>
-        <div class="header-content">
-            <a href="/dashboard" class="logo">
-                <span>🧠</span> Brainrack AI
-            </a>
-            <nav class="nav-actions">
-                <div class="menu-container">
-                    <button class="icon-btn" id="menuBtn" aria-label="Menu">
-                        <span>⋮</span>
-                    </button>
-                    <div class="menu-dropdown" id="menuDropdown">
-                        <a href="/dashboard" class="menu-item">
-                            <span>🏠</span> Dashboard
-                        </a>
-                        <a href="/chat" class="menu-item">
-                            <span>💬</span> AI Chat
-                        </a>
-                        <a href="/image" class="menu-item">
-                            <span>🎨</span> Image Generator
-                        </a>
-                        <a href="/document" class="menu-item">
-                            <span>📄</span> Document Analyzer
-                        </a>
-                        <a href="/video" class="menu-item">
-                            <span>🎥</span> Video Generator
-                        </a>
-                        <a href="/business" class="menu-item">
-                            <span>💼</span> Business Solutions
-                        </a>
-                        <a href="/startup" class="menu-item">
-                            <span>🚀</span> Startup Ideas
-                        </a>
-                        <a href="/news" class="menu-item">
-                            <span>📰</span> News
-                        </a>
-                        <a href="/weather" class="menu-item">
-                            <span>⛅</span> Weather
-                        </a>
-                        <a href="/contact" class="menu-item">
-                            <span>📧</span> Contact Us
-                        </a>
-                        <div class="menu-item" id="profileBtn">
-                            <span>👤</span> Profile
-                        </div>
-                        <div class="menu-item" id="themeToggle">
-                            <span>🌓</span> Toggle Theme
-                        </div>
-                        <div class="menu-item" id="settingsBtn">
-                            <span>⚙️</span> Settings
-                        </div>
-                        <div class="menu-item" id="downloadAppBtn">
-                            <span>📱</span> Download App
-                        </div>
-                    </div>
-                </div>
-            </nav>
+    <header class="header">
+        <div class="logo">🧠 Brainrack AI</div>
+        <div class="menu-icon" id="menuIcon">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="5" r="2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <circle cx="12" cy="19" r="2"/>
+            </svg>
+        </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="dashboard.html" class="dropdown-item">🏠 Dashboard</a>
+            <a href="index.html" class="dropdown-item">💬 AI Chat</a>
+            <a href="image.html" class="dropdown-item">🎨 Image Generator</a>
+            <a href="document.html" class="dropdown-item">📄 Document Analyzer</a>
+            <a href="video.html" class="dropdown-item">🎬 Video Generator</a>
+            <a href="business.html" class="dropdown-item">💼 Business Solver</a>
+            <a href="startup.html" class="dropdown-item">🚀 Startup Ideas</a>
+            <a href="weather.html" class="dropdown-item">🌤️ Weather</a>
+            <a href="news.html" class="dropdown-item">📰 News</a>
+            <div class="dropdown-item" id="themeToggle">🌓 Toggle Theme</div>
+            <a href="contactus.html" class="dropdown-item">📧 Contact Us</a>
         </div>
     </header>
 
-    <main class="container">
-        <section class="dashboard">
+    <div class="container">
+        <div class="dashboard">
             <div class="about-section">
-                <h1>Welcome to Brainrack AI</h1>
-                <p><strong>Your All-in-One AI-Powered Assistant</strong></p>
+                <h2>Welcome to Brainrack AI</h2>
                 <p>
-                    Brainrack AI is a comprehensive platform that leverages cutting-edge artificial intelligence 
-                    to solve your everyday problems. From intelligent conversations to image generation, 
-                    document analysis, and business solutions - we've got you covered.
+                    <strong>Brainrack AI</strong> is your comprehensive artificial intelligence platform designed to revolutionize 
+                    the way you work, create, and innovate. We combine cutting-edge AI technology with an intuitive, 
+                    beautiful interface to bring you powerful tools that enhance productivity and creativity.
                 </p>
                 <p>
-                    <strong>Our Mission:</strong> To democratize AI technology and make advanced AI capabilities 
-                    accessible to everyone. We believe in empowering individuals and businesses with intelligent 
-                    tools that enhance productivity and creativity.
+                    <strong>Our Mission:</strong> To democratize AI technology and make advanced artificial intelligence 
+                    accessible to everyone. We believe that AI should empower individuals and businesses to achieve more, 
+                    think bigger, and solve complex problems with ease.
                 </p>
                 <p>
-                    <strong>Developer:</strong> Built with passion by the Brainrack AI Team. We're committed to 
-                    continuous improvement and adding new features based on user feedback.
+                    <strong>What We Offer:</strong> From intelligent chat assistants and image generation to document analysis, 
+                    video content creation, business problem-solving, and real-time information services, Brainrack AI is your 
+                    all-in-one AI companion.
                 </p>
                 <p>
-                    <strong>Technology:</strong> Powered by OpenRouter AI, OpenWeather API, and NewsAPI, bringing 
-                    you real-time data and state-of-the-art AI models.
+                    <strong>Developer Information:</strong> Brainrack AI is developed by a passionate team of AI researchers, 
+                    software engineers, and UX designers committed to creating the best AI experience. We continuously update 
+                    and improve our platform based on user feedback and the latest AI advancements.
+                </p>
+                <p>
+                    <strong>Technology Stack:</strong> Powered by state-of-the-art language models, computer vision systems, 
+                    and real-time data APIs, ensuring you get the most accurate and helpful responses.
                 </p>
             </div>
 
+            <h2 style="text-align: center; margin-bottom: 2rem; background: linear-gradient(135deg, #4a90e2, #6dd5ed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                Explore Our Features
+            </h2>
+
             <div class="features-grid">
-                <a href="/chat" class="feature-card">
-                    <span class="feature-icon">💬</span>
+                <a href="index.html" class="feature-card">
+                    <div class="feature-icon">💬</div>
                     <h3>AI Chat</h3>
-                    <p>Engage in intelligent conversations with our advanced AI assistant. Get answers, brainstorm ideas, or just have a chat.</p>
+                    <p>Engage in intelligent conversations with our advanced AI assistant. Get answers, insights, and creative ideas instantly.</p>
                 </a>
 
-                <a href="/image" class="feature-card">
-                    <span class="feature-icon">🎨</span>
-                    <h3>Image Generator</h3>
-                    <p>Create stunning AI-generated images from text descriptions. Bring your imagination to life with DALL-E 3.</p>
+                <a href="image.html" class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Image Generator & Enhancer</h3>
+                    <p>Create stunning images from text descriptions and enhance existing images with AI-powered tools.</p>
                 </a>
 
-                <a href="/document" class="feature-card">
-                    <span class="feature-icon">📄</span>
+                <a href="document.html" class="feature-card">
+                    <div class="feature-icon">📄</div>
                     <h3>Document Analyzer</h3>
-                    <p>Upload PDFs, Word documents, or text files for instant analysis, summarization, and question answering.</p>
+                    <p>Upload PDFs and documents to get summaries, answers to specific questions, and detailed analysis.</p>
                 </a>
 
-                <a href="/video" class="feature-card">
-                    <span class="feature-icon">🎥</span>
+                <a href="video.html" class="feature-card">
+                    <div class="feature-icon">🎬</div>
                     <h3>Video Generator</h3>
-                    <p>Generate creative video concepts and scripts powered by AI. Perfect for content creators and marketers.</p>
+                    <p>Generate creative video scripts, storyboards, and content ideas for your video projects.</p>
                 </a>
 
-                <a href="/business" class="feature-card">
-                    <span class="feature-icon">💼</span>
-                    <h3>Business Solutions</h3>
-                    <p>Solve complex business problems with AI-powered insights and recommendations tailored to your needs.</p>
+                <a href="business.html" class="feature-card">
+                    <div class="feature-icon">💼</div>
+                    <h3>Business Problem Solver</h3>
+                    <p>Get expert advice and solutions for your business challenges from strategy to operations.</p>
                 </a>
 
-                <a href="/startup" class="feature-card">
-                    <span class="feature-icon">🚀</span>
+                <a href="startup.html" class="feature-card">
+                    <div class="feature-icon">🚀</div>
                     <h3>Startup Ideas</h3>
-                    <p>Discover innovative startup ideas and business opportunities with AI-driven market analysis.</p>
+                    <p>Discover innovative startup ideas tailored to your interests, budget, and industry preferences.</p>
                 </a>
 
-                <a href="/news" class="feature-card">
-                    <span class="feature-icon">📰</span>
-                    <h3>Real-Time News</h3>
-                    <p>Stay updated with the latest news from around the world. Get headlines, sports, entertainment, and more.</p>
+                <a href="weather.html" class="feature-card">
+                    <div class="feature-icon">🌤️</div>
+                    <h3>Weather</h3>
+                    <p>Get real-time weather updates, forecasts, and location-based weather information with notifications.</p>
                 </a>
 
-                <a href="/weather" class="feature-card">
-                    <span class="feature-icon">⛅</span>
-                    <h3>Weather Forecast</h3>
-                    <p>Check real-time weather conditions and forecasts for any location worldwide with detailed insights.</p>
+                <a href="news.html" class="feature-card">
+                    <div class="feature-icon">📰</div>
+                    <h3>News</h3>
+                    <p>Stay updated with the latest news from around the world across various categories with real-time notifications.</p>
                 </a>
 
-                <a href="/contact" class="feature-card">
-                    <span class="feature-icon">📧</span>
+                <a href="contactus.html" class="feature-card">
+                    <div class="feature-icon">📧</div>
                     <h3>Contact Us</h3>
                     <p>Have questions or feedback? Get in touch with our team. We'd love to hear from you!</p>
                 </a>
             </div>
-        </section>
-    </main>
-
-    <!-- Settings Modal -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Settings</h2>
-                <button class="close-modal" id="closeSettings">&times;</button>
-            </div>
-            <div class="settings-group">
-                <h3>Voice Settings</h3>
-                <div class="form-group">
-                    <label for="voiceModel">Voice Model</label>
-                    <select id="voiceModel" class="form-control">
-                        <option value="alloy">Alloy (Neutral)</option>
-                        <option value="echo">Echo (Male)</option>
-                        <option value="fable">Fable (British Male)</option>
-                        <option value="onyx">Onyx (Deep Male)</option>
-                        <option value="nova">Nova (Female)</option>
-                        <option value="shimmer">Shimmer (Soft Female)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="voiceSpeed">Speed: <span class="slider-value" id="speedValue">1.0</span></label>
-                    <input type="range" id="voiceSpeed" class="slider" min="0.5" max="2.0" step="0.1" value="1.0">
-                </div>
-                <div class="form-group">
-                    <label for="voicePitch">Pitch: <span class="slider-value" id="pitchValue">1.0</span></label>
-                    <input type="range" id="voicePitch" class="slider" min="0.5" max="2.0" step="0.1" value="1.0">
-                </div>
-                <div class="form-group">
-                    <label for="voiceVolume">Volume: <span class="slider-value" id="volumeValue">1.0</span></label>
-                    <input type="range" id="voiceVolume" class="slider" min="0" max="1" step="0.1" value="1.0">
-                </div>
-            </div>
-            <div class="settings-group">
-                <h3>AI Model</h3>
-                <div class="form-group">
-                    <label for="aiModel">Select AI Model</label>
-                    <select id="aiModel" class="form-control">
-                        <option value="anthropic/claude-3.5-sonnet">Claude 3.5 Sonnet (Best)</option>
-                        <option value="openai/gpt-4-turbo">GPT-4 Turbo</option>
-                        <option value="openai/gpt-3.5-turbo">GPT-3.5 Turbo (Fast)</option>
-                        <option value="google/gemini-pro">Gemini Pro</option>
-                    </select>
-                </div>
-            </div>
-            <button class="btn btn-primary" id="saveSettings">Save Settings</button>
-        </div>
-    </div>
-
-    <!-- Profile Modal -->
-    <div class="modal" id="profileModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Profile</h2>
-                <button class="close-modal" id="closeProfile">&times;</button>
-            </div>
-            <div class="form-group">
-                <label for="userName">Name</label>
-                <input type="text" id="userName" placeholder="Enter your name">
-            </div>
-            <div class="form-group">
-                <label for="userEmail">Email</label>
-                <input type="email" id="userEmail" placeholder="Enter your email">
-            </div>
-            <div class="form-group">
-                <label for="userLanguage">Preferred Language</label>
-                <select id="userLanguage">
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="fr">French</option>
-                    <option value="de">German</option>
-                    <option value="zh">Chinese</option>
-                    <option value="ja">Japanese</option>
-                    <option value="hi">Hindi</option>
-                    <option value="ar">Arabic</option>
-                </select>
-            </div>
-            <button class="btn btn-primary" id="saveProfile">Save Profile</button>
         </div>
     </div>
 
     <script src="script.js"></script>
-    <script>
-        // Page-specific initialization
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('Dashboard loaded');
-            
-            // Check if service worker is supported
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js').then(registration => {
-                    console.log('Service Worker registered:', registration);
-                }).catch(error => {
-                    console.log('Service Worker registration failed:', error);
-                });
-            }
-        });
-
-        // Download App functionality
-        document.getElementById('downloadAppBtn')?.addEventListener('click', () => {
-            // Show download options
-            const options = confirm('Download Brainrack AI as:\n\nOK - Android APK\nCancel - Windows App');
-            
-            if (options) {
-                // Android APK
-                alert('Android APK download:\n\nTo install on Android:\n1. Open this website on your mobile browser\n2. Tap the menu (⋮)\n3. Select "Add to Home Screen"\n4. The app will be installed on your device\n\nAlternatively, use a PWA to APK converter tool like PWABuilder.com');
-            } else {
-                // Windows App
-                alert('Windows App download:\n\nTo install on Windows:\n1. Open this website in Edge or Chrome\n2. Click the install icon (⊕) in the address bar\n3. Click "Install"\n\nThe app will be installed on your Windows device');
-            }
-        });
-    </script>
 </body>
 </html>
